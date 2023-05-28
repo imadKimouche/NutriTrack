@@ -49,7 +49,7 @@ export const MainNavigator = () => {
   }
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       {state.userToken == null ? (
         <>
           <Stack.Screen name="SignIn" component={SignInScreen} />

@@ -1,18 +1,50 @@
 import {createTheme} from '@shopify/restyle';
 
-const palette = {
+const p = {
   orange: '#DE6B48',
   green: '#18F0B7',
   red: '#FF647C',
 
   black: '#121212',
   white: '#FFFFFF',
+  white1: '#f0f0f0',
+  white2: '#E7E7E7',
+  grey: '#6666663',
 };
 
 const theme = createTheme({
   colors: {
-    mainBackground: palette.white,
-    cardPrimaryBackground: palette.orange,
+    white: p.white,
+    black: p.black,
+    red: p.red,
+    // blue: p.blue,
+    // yellow: p.yellow,
+    //
+    $primary: p.orange,
+    $windowBackground: p.white2,
+    $textInputBackground: p.white,
+    $textInputBorderColor: p.grey,
+    // $background: p.paper10,
+    // $foreground: p.paper900,
+    // $navbarBackground: p.paper10,
+    // $navbarBorderBottom: p.paper100,
+    // $sidebarBackground: p.navy20,
+    // $sidebarForeground: p.navy900,
+    // $sidebarSeparator: p.paper00 + '20',
+    // $headerBarBackground: p.paper20,
+    // $fieldInputBackground: p.paper00,
+    // $fieldInputPlaceholderTextColor: p.paper300,
+  },
+  borderRadii: {
+    xs: 4,
+    sm: 16,
+    md: 24,
+    lg: 64,
+    hg: 128,
+  },
+  breakpoints: {
+    phone: 0,
+    tablet: 768,
   },
   spacing: {
     s: 8,
@@ -71,13 +103,13 @@ const theme = createTheme({
   },
   inputVariants: {
     default: {
-      color: palette.orange,
+      color: p.orange,
     },
     error: {
-      color: palette.red,
+      color: p.red,
     },
     success: {
-      color: palette.green,
+      color: p.green,
     },
   },
 });

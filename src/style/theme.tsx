@@ -6,10 +6,17 @@ const p = {
   red: '#FF647C',
 
   black: '#121212',
+  black100: '#E6E6E6',
+  black200: '#CCCCCC',
+  black300: '#B3B3B3',
+  black20P: 'rgba(102, 102, 102, 0.24)',
+  black40P: 'rgba(102, 102, 102, 0.4)',
+  black80P: 'rgba(102, 102, 102, 0.8)',
   white: '#FFFFFF',
   white1: '#f0f0f0',
   white2: '#E7E7E7',
-  grey: '#6666663',
+  grey: '#666666',
+  transparent: 'transparent',
 };
 
 const theme = createTheme({
@@ -17,13 +24,17 @@ const theme = createTheme({
     white: p.white,
     black: p.black,
     red: p.red,
+    transparent: p.transparent,
     // blue: p.blue,
     // yellow: p.yellow,
     //
     $primary: p.orange,
-    $windowBackground: p.white2,
+    $windowBackground: p.white,
     $textInputBackground: p.white,
-    $textInputBorderColor: p.grey,
+    $textInputBorderColor: p.black20P,
+    $textInputColor: p.black100,
+    $labelSmall: p.black80P,
+    $inputFocusColor: p.black,
     // $background: p.paper10,
     // $foreground: p.paper900,
     // $navbarBackground: p.paper10,
@@ -89,6 +100,10 @@ const theme = createTheme({
       fontSize: 19.2,
       lineHeight: 24,
     },
+    labelSmall: {
+      fontSize: 13.33,
+      color: '$labelSmall',
+    },
     defaults: {},
   },
   cardVariants: {
@@ -105,11 +120,22 @@ const theme = createTheme({
     default: {
       color: p.orange,
     },
+    focused: {
+      color: '$inputFocusColor',
+    },
     error: {
       color: p.red,
     },
     success: {
       color: p.green,
+    },
+  },
+  iconVariants: {
+    default: {
+      color: p.black,
+    },
+    input: {
+      color: p.grey,
     },
   },
 });

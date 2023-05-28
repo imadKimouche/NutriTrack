@@ -49,7 +49,6 @@ import {Theme} from '../style/theme';
 type RestyleProps = VariantProps<Theme, 'inputVariants'> &
   SpacingProps<Theme> &
   BorderProps<Theme> &
-  BackgroundColorProps<Theme> &
   LayoutProps<Theme> &
   BackgroundColorProps<Theme> &
   BackgroundColorShorthandProps<Theme> &

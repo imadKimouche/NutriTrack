@@ -14,20 +14,6 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, ...rest}) => {
   const presetProps = inputPropPresets
     ? defaultInputProps[inputPropPresets]
     : {};
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [value, setValue] = useState<string>('');
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
-
-  const handleTextChange = value => {
-    setValue(value);
-  };
 
   return (
     <Box
@@ -36,27 +22,15 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, ...rest}) => {
       alignItems={'center'}
       paddingRight={'m'}
       paddingLeft={'m'}
+      marginBottom={'s'}
       borderStyle={'solid'}
       borderWidth={1}
       borderRadius={'xs'}
       borderColor={'$textInputBorderColor'}>
-      <Icon
-        name={icon}
-        size={28}
-        color={
-          value.length
-            ? '$inputFocusColor'
-            : isFocused
-            ? '$inputFocusColor'
-            : '$textInputColor'
-        }
-      />
+      <Icon name={icon} size={28} color={'$textInputColor'} />
       <Input
         {...rest}
         {...presetProps}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onChangeText={handleTextChange}
         bg={'$textInputBackground'}
         borderColor={'transparent'}
         paddingLeft={'s'}

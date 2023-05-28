@@ -1,5 +1,4 @@
 import React from 'react';
-import {Button} from 'react-native';
 import DishImage from '../assets/dish-illustration.svg';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
@@ -16,14 +15,16 @@ type FormData = {
 export const SignInScreen = () => {
   const {
     control,
-    register,
-    setValue,
     watch,
     handleSubmit,
     formState: {errors},
   } = useForm<FormData>();
 
-  const onSubmit = handleSubmit(data => console.log(data));
+  const onSubmit = handleSubmit(data => {
+    const {email, password, confirmPassword} = data;
+    console.log(email);
+  });
+
   const password = watch('password', ''); // Retrieve value of the 'password' field
 
   return (

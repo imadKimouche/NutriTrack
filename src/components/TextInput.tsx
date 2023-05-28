@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
 import Input, {InputProps} from '../atoms/Input';
-import {LayoutChangeEvent, TextInputProps} from 'react-native';
+import {TextInputProps} from 'react-native';
 import Box from '../atoms/Box';
-import Icon from 'react-native-vector-icons/Feather';
-import {useTheme} from '@shopify/restyle';
-import {Theme} from '../style/theme';
+import Icon from '../components/Icon';
 
-type Props = TextInputProps & InputProps & {icon: string};
+type Props = TextInputProps &
+  InputProps & {
+    icon: string;
+    inputPropPresets?: keyof typeof defaultInputProps;
+  };
 
-const TextInput: React.FC<Props> = ({placeholder, icon, ...rest}) => {
-  const theme = useTheme<Theme>();
-  const {$textInputColor, $inputFocusColor} = theme.colors;
+const TextInput: React.FC<Props> = ({icon, inputPropPresets, ...rest}) => {
+  const presetProps = inputPropPresets
+    ? defaultInputProps[inputPropPresets]
+    : {};
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [value, setValue] = useState<string>('');
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -21,9 +25,12 @@ const TextInput: React.FC<Props> = ({placeholder, icon, ...rest}) => {
     setIsFocused(false);
   };
 
+  const handleTextChange = value => {
+    setValue(value);
+  };
+
   return (
     <Box
-      {...rest}
       flexDirection={'row'}
       justifyContent={'flex-start'}
       alignItems={'center'}
@@ -36,13 +43,20 @@ const TextInput: React.FC<Props> = ({placeholder, icon, ...rest}) => {
       <Icon
         name={icon}
         size={28}
-        color={isFocused ? $inputFocusColor : $textInputColor}
+        color={
+          value.length
+            ? '$inputFocusColor'
+            : isFocused
+            ? '$inputFocusColor'
+            : '$textInputColor'
+        }
       />
       <Input
+        {...rest}
+        {...presetProps}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        variant={isFocused ? 'success' : 'default'}
-        placeholder={placeholder}
+        onChangeText={handleTextChange}
         bg={'$textInputBackground'}
         borderColor={'transparent'}
         paddingLeft={'s'}
@@ -51,5 +65,57 @@ const TextInput: React.FC<Props> = ({placeholder, icon, ...rest}) => {
     </Box>
   );
 };
+
+const defaultInputProps: {[id: string]: Partial<InputProps>} = {
+  firstName: {
+    autoCapitalize: 'words',
+    autoCorrect: false,
+    autoComplete: 'name-given',
+    textContentType: 'givenName',
+  },
+  lastName: {
+    autoCapitalize: 'words',
+    autoCorrect: false,
+    autoComplete: 'name-family',
+    textContentType: 'familyName',
+  },
+  businessName: {
+    autoCapitalize: 'words',
+    autoCorrect: false,
+    textContentType: 'organizationName',
+  },
+  password: {
+    autoCapitalize: 'none',
+    autoCorrect: false,
+    autoComplete: 'password',
+    textContentType: 'password',
+  },
+  newPassword: {
+    autoCapitalize: 'none',
+    autoCorrect: false,
+    autoComplete: 'password-new',
+    secureTextEntry: true,
+    textContentType: Platform.OS === 'ios' ? undefined : 'newPassword',
+    passwordRules:
+      'minlength: 8; required: lower; required: upper; required: digit;',
+  },
+  email: {
+    autoCapitalize: 'none',
+    autoCorrect: false,
+    autoComplete: 'email',
+    inputMode: 'email',
+    keyboardType: 'email-address',
+    textContentType: 'emailAddress',
+  },
+  phoneNumber: {
+    autoComplete: 'tel',
+    inputMode: 'tel',
+    keyboardType: 'phone-pad',
+    textContentType: 'telephoneNumber',
+  },
+  positiveNumber: {
+    keyboardType: 'number-pad',
+  },
+} as const;
 
 export default TextInput;

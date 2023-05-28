@@ -5,33 +5,15 @@ import {
   BackgroundColorShorthandProps,
   border,
   BorderProps,
-  color,
-  ColorProps,
   composeRestyleFunctions,
-  createRestyleComponent,
-  createVariant,
   layout,
   LayoutProps,
-  ResponsiveValue,
-  shadow,
-  ShadowProps,
   spacing,
   SpacingProps,
-  spacingShorthand,
-  SpacingShorthandProps,
-  typography,
-  TypographyProps,
-  useResponsiveProp,
   useRestyle,
-  useTheme,
   VariantProps,
 } from '@shopify/restyle';
-import React, {forwardRef} from 'react';
-import {
-  TextInput as RNTextInput,
-  TextInput,
-  TextInputProps,
-} from 'react-native';
+import {TextInput, TextInputProps} from 'react-native';
 import {Theme} from '../style/theme';
 
 // type RestyleProps = VariantProps<Theme, 'inputVariants'> &
@@ -58,6 +40,8 @@ const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
   spacing,
   border,
   backgroundColor,
+  backgroundColorShorthand,
+  layout,
 ]);
 
 export type InputProps = RestyleProps;

@@ -3,27 +3,18 @@ import DishImage from '../assets/dish-illustration.svg';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
-import {useForm, Controller} from 'react-hook-form';
-import Touchable from '../atoms/Touchable';
-
-type FormData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import {Controller} from 'react-hook-form';
+import {useSignup} from '../hooks/auth';
+import Button from '../components/Button';
 
 export const SignInScreen = () => {
+  const {form, onSubmit} = useSignup();
+
   const {
     control,
     watch,
-    handleSubmit,
     formState: {errors},
-  } = useForm<FormData>();
-
-  const onSubmit = handleSubmit(data => {
-    const {email, password, confirmPassword} = data;
-    console.log(email);
-  });
+  } = form;
 
   const password = watch('password', ''); // Retrieve value of the 'password' field
 
@@ -46,7 +37,10 @@ export const SignInScreen = () => {
                 message: 'Invalid email address',
               },
             }}
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({
+              field: {onChange, onBlur, value},
+              fieldState: {error},
+            }) => (
               <TextInput
                 inputPropPresets={'email'}
                 icon={'mail'}
@@ -55,11 +49,11 @@ export const SignInScreen = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                error={error?.message}
               />
             )}
             name="email"
           />
-          {errors.email && <Text>{errors.email?.message}</Text>}
 
           <Controller
             control={control}
@@ -74,7 +68,10 @@ export const SignInScreen = () => {
                 message: 'Password must not exceed 20 characters',
               },
             }}
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({
+              field: {onChange, onBlur, value},
+              fieldState: {error},
+            }) => (
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
@@ -83,11 +80,11 @@ export const SignInScreen = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                error={error?.message}
               />
             )}
             name="password"
           />
-          {errors.password && <Text>{errors.password.message}</Text>}
 
           <Controller
             control={control}
@@ -95,7 +92,10 @@ export const SignInScreen = () => {
               required: 'Confirm Password is required',
               validate: value => value === password || 'Passwords do not match',
             }}
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({
+              field: {onChange, onBlur, value},
+              fieldState: {error},
+            }) => (
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
@@ -104,13 +104,11 @@ export const SignInScreen = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                error={error?.message}
               />
             )}
             name="confirmPassword"
           />
-          {errors.confirmPassword && (
-            <Text>{errors.confirmPassword.message}</Text>
-          )}
 
           <Text
             variant={'labelSmall'}
@@ -121,16 +119,7 @@ export const SignInScreen = () => {
         </Box>
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Touchable
-          bg={'$primary'}
-          width={320}
-          height={52}
-          justifyContent={'center'}
-          alignItems={'center'}
-          borderRadius={'md'}
-          onPress={onSubmit}>
-          <Text color={'$background'}>Créer un compte</Text>
-        </Touchable>
+        <Button label="Créer un compte" onPress={onSubmit} />
       </Box>
     </Box>
   );

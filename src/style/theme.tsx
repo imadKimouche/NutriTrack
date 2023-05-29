@@ -37,6 +37,7 @@ const theme = createTheme({
     $textInputColor: p.black100,
     $labelSmall: p.black80P,
     $inputFocusColor: p.black,
+    $textError: p.red,
     // $navbarBackground: p.paper10,
     // $navbarBorderBottom: p.paper100,
     // $sidebarBackground: p.navy20,
@@ -128,6 +129,11 @@ const theme = createTheme({
     },
     success: {
       color: p.green,
+    },
+  },
+  buttonVariants: {
+    default: {
+      backgroundColor: '$primary',
     },
   },
   iconVariants: {

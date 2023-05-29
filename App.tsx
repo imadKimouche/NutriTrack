@@ -4,13 +4,18 @@ import {ThemeProvider} from '@shopify/restyle';
 
 import theme from './src/style/theme';
 import {MainNavigator} from './src/navigation/MainNavigator';
+import {QueryClient, QueryClientProvider} from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <MainNavigator />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <MainNavigator />
+        </NavigationContainer>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

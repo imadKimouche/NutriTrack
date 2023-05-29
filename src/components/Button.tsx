@@ -1,15 +1,22 @@
 import React from 'react';
-import {TouchableOpacity, TouchableOpacityProps} from 'react-native/types';
 import Text from '../atoms/Text';
+import {TouchableOpacity, TouchableOpacityProps} from '../atoms/Touchable';
 
 type Props = TouchableOpacityProps & {
-  title: string;
+  label: string;
 };
 
-const Button = ({title, ...rest}: Props) => {
+const Button = ({label, ...rest}: Props) => {
   return (
-    <TouchableOpacity {...rest}>
-      <Text>{title}</Text>
+    <TouchableOpacity
+      {...rest}
+      bg={'$primary'} // replace with variants
+      width={320}
+      height={52}
+      justifyContent={'center'}
+      alignItems={'center'}
+      borderRadius={'md'}>
+      <Text color={'$background'}>{label}</Text>
     </TouchableOpacity>
   );
 };

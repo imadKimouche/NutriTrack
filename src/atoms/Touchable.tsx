@@ -30,7 +30,7 @@ const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
   opacity,
 ]);
 
-interface Props extends PressableProps {
+export interface TouchableOpacityProps extends PressableProps {
   pressed?: RestyleProps;
   rippleColor?: ResponsiveValue<keyof Theme['colors'], Theme>;
   rippleBorderless?: boolean;
@@ -42,7 +42,7 @@ const Touchable = ({
   rippleBorderless,
   style,
   ...rest
-}: Props) => {
+}: TouchableOpacityProps) => {
   const {style: pressedStyle} = pressed
     ? useRestyle(restyleFunctions, pressed)
     : {style: undefined};
@@ -62,7 +62,7 @@ const Touchable = ({
   );
 };
 
-export const TouchableOpacity: React.FC<Props> = props => (
+export const TouchableOpacity: React.FC<TouchableOpacityProps> = props => (
   <Touchable
     rippleColor="$foreground"
     {...props}

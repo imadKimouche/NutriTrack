@@ -9,7 +9,7 @@ type Props = Omit<IconProps, 'color'> & ColorProps<Theme>;
 const Icon: React.FC<Props> = ({color = '$foreground', ...rest}) => {
   const theme = useTheme<Theme>();
   const colorProp = useResponsiveProp(color);
-  const vColor = theme.colors[colorProp || '$foreground'];
+  const vColor = theme.colors[colorProp || '$iconColor'];
   return <Feather {...rest} color={vColor} />;
 };
 

@@ -1,63 +1,90 @@
 import React from 'react';
-import {Text, View} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SignUpScreen} from '../screens/SignUpScreen';
+import Box from '../atoms/Box';
+import Text from '../atoms/Text';
 import {SignInScreen} from '../screens/SignInScreen';
+import {signOut, useAuth} from '../hooks/auth';
+import Button from '../components/Button';
+import {UserSetupScreen} from '../screens/UserSetupScreen';
 
-const Stack = createNativeStackNavigator();
-
-const state = {
-  isLoading: false,
-  userToken: null,
-  isSignout: false,
+export type RootStackParamList = {
+  Home: undefined;
+  SignUp: undefined;
+  UserSetup: undefined;
+  SignIn: undefined;
+  ResetPassword: undefined;
 };
 
-const SplashScreen = () => {
-  return (
-    <View>
-      <Text>Splash</Text>
-    </View>
-  );
-};
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const SignUpScreen = () => {
-  return (
-    <View>
-      <Text>SignUp</Text>
-    </View>
-  );
-};
+// type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+// type HomeScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'Home'
+// >;
+//
+// type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
+// type SignUpScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'SignUp'
+// >;
+//
+//
+// type ResetPasswordScreenRouteProp = RouteProp<
+//   RootStackParamList,
+//   'ResetPassword'
+// >;
+// type ResetPasswordScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'ResetPassword'
+// >;
+// const SplashScreen = () => {
+//   return (
+//     <Box>
+//       <Text>Splash</Text>
+//     </Box>
+//   );
+// };
 
 const ResetPassword = () => {
   return (
-    <View>
+    <Box>
       <Text>SignUp</Text>
-    </View>
+    </Box>
   );
 };
 
 const HomeScreen = () => {
+  async function logout() {
+    await signOut();
+  }
   return (
-    <View>
+    <Box flex={1} justifyContent={'center'} alignItems={'center'}>
       <Text>Home</Text>
-    </View>
+      <Button label="Se déco" onPress={logout} />
+    </Box>
   );
 };
 
 export const MainNavigator = () => {
-  if (state.isLoading) {
-    return <SplashScreen />;
-  }
+  const {user} = useAuth();
+
+  // if (state.isLoading) {
+  //   return <SplashScreen />;
+  // }
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      {state.userToken == null ? (
+      {user ? (
+        <Stack.Screen name="Home" component={HomeScreen} />
+      ) : (
         <>
-          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="UserSetup" component={UserSetupScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} />
         </>
-      ) : (
-        <Stack.Screen name="Home" component={HomeScreen} />
       )}
     </Stack.Navigator>
   );

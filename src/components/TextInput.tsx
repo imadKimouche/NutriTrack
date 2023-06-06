@@ -11,7 +11,7 @@ import Text from '../atoms/Text';
 
 type Props = TextInputProps &
   InputProps & {
-    icon: string;
+    icon?: string;
     inputPropPresets?: keyof typeof defaultInputProps;
     error?: string;
   };

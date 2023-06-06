@@ -1,39 +1,78 @@
+import {useEffect, useState} from 'react';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut as fireSignOut,
+  User,
+} from 'firebase/auth';
 import {useMutation} from 'react-query';
-import {signup} from '../api/api';
 import {useForm} from 'react-hook-form';
+import app from '../config/firebase';
 
-type FormData = {
+const auth = getAuth();
+
+console.log(app);
+
+type SignupFormData = {
   email: string;
   password: string;
   confirmPassword: string;
 };
+
+type SigninFormData = Omit<SignupFormData, 'confirmPassword'>;
 
 type MutationData = {
   email: string;
   password: string;
 };
 
-export const useSignup = () => {
-  const form = useForm<FormData>();
+export function signOut() {
+  return fireSignOut(auth);
+}
 
+export function useAuth() {
+  const [user, setUser] = useState<User>();
+  useEffect(() => {
+    const unsubscribeFromAuthStateChanged = onAuthStateChanged(
+      auth,
+      fireUser => {
+        if (fireUser) {
+          setUser(fireUser);
+        } else {
+          setUser(undefined);
+        }
+      },
+    );
+    return unsubscribeFromAuthStateChanged;
+  }, []);
+
+  return {
+    user,
+  };
+}
+
+export function useSignup() {
+  const form = useForm<SignupFormData>();
   const mutation = useMutation((data: MutationData) =>
-    signup(data.email, data.password),
+    createUserWithEmailAndPassword(auth, data.email, data.password),
   );
 
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
-
     mutation.mutate({email: email, password: password});
   });
 
   return {form, onSubmit, mutation};
-};
+}
 
 export const useSignin = () => {
-  const form = useForm<FormData>();
+  const form = useForm<SigninFormData>();
 
   const mutation = useMutation(
-    (data: MutationData) => signup(data.email, data.password),
+    (data: MutationData) =>
+      signInWithEmailAndPassword(auth, data.email, data.password),
     {
       onSuccess: result => {
         console.log('success result', result);
@@ -47,5 +86,5 @@ export const useSignin = () => {
     mutation.mutate({email: email, password: password});
   });
 
-  return {form, onSubmit};
+  return {form, onSubmit, mutation};
 };

@@ -4,26 +4,20 @@ import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
-import {useSignin} from '../hooks/auth';
+import {useSignup} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/MainNavigator';
+import {useNavigation} from '@react-navigation/native';
 
-// type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
-type SignInScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'SignIn'
->;
+export const SignUpScreen = () => {
+  const {form, onSubmit} = useSignup();
+  const navigation = useNavigation();
+  const {control, watch} = form;
 
-export const SignInScreen = () => {
-  const {form, onSubmit} = useSignin();
-  const navigation = useNavigation<SignInScreenNavigationProp>();
-  const {control} = form;
+  const password = watch('password', ''); // Retrieve value of the 'password' field
 
-  const goToSignupSceen = () => {
-    navigation.navigate('SignUp');
+  const goToSigninSceen = () => {
+    navigation.navigate('SignIn');
   };
 
   return (
@@ -94,18 +88,42 @@ export const SignInScreen = () => {
             name="password"
           />
 
-          <TouchableOpacity onPress={goToSignupSceen}>
+          <Controller
+            control={control}
+            rules={{
+              required: 'Confirm Password is required',
+              validate: value => value === password || 'Passwords do not match',
+            }}
+            render={({
+              field: {onChange, onBlur, value},
+              fieldState: {error},
+            }) => (
+              <TextInput
+                inputPropPresets={'newPassword'}
+                icon={'lock'}
+                height={56}
+                placeholder="Confirmer mot de passe"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={error?.message}
+              />
+            )}
+            name="confirmPassword"
+          />
+
+          <TouchableOpacity onPress={goToSigninSceen}>
             <Text
               variant={'labelSmall'}
               textAlign={'right'}
               paddingVertical={'s'}>
-              Créer un compte
+              J'ai déjà un compte
             </Text>
           </TouchableOpacity>
         </Box>
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button label="Se connecter" onPress={onSubmit} />
+        <Button label="Créer un compte" onPress={onSubmit} />
       </Box>
     </Box>
   );

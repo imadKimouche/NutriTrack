@@ -9,6 +9,7 @@ const p = {
   black100: '#E6E6E6',
   black200: '#CCCCCC',
   black300: '#B3B3B3',
+  black900: '#A1A1A1',
   black20P: 'rgba(102, 102, 102, 0.24)',
   black40P: 'rgba(102, 102, 102, 0.4)',
   black80P: 'rgba(102, 102, 102, 0.8)',
@@ -31,6 +32,7 @@ const theme = createTheme({
     $primary: p.orange,
     $windowBackground: p.white,
     $background: p.white,
+    $slideTabBackground: p.black100,
     $foreground: p.black,
     $textInputBackground: p.white,
     $textInputBorderColor: p.black20P,
@@ -38,6 +40,9 @@ const theme = createTheme({
     $labelSmall: p.black80P,
     $inputFocusColor: p.black,
     $textError: p.red,
+    $listItemDivider: p.black100,
+    $iconColor: p.black900,
+    $buttonTextPrimary: p.white,
     // $navbarBackground: p.paper10,
     // $navbarBorderBottom: p.paper100,
     // $sidebarBackground: p.navy20,
@@ -63,6 +68,34 @@ const theme = createTheme({
     m: 16,
     l: 24,
     xl: 40,
+  },
+  buttonVariants: {
+    defaults: {
+      backgroundColor: '$primary',
+      borderRadius: 'md',
+    },
+    primary: {
+      backgroundColor: '$primary',
+    },
+    outlined: {
+      backgroundColor: '$background',
+      borderColor: '$primary',
+      borderStyle: 'solid',
+      borderWidth: 1,
+    },
+    // link: {},
+  },
+  textButtonVariants: {
+    defaults: {
+      backgroundColor: '$primary',
+      borderRadius: 'md',
+    },
+    primary: {
+      color: '$buttonTextPrimary',
+    },
+    outlined: {
+      backgroundColor: '$background',
+    },
   },
   textVariants: {
     h1: {
@@ -118,7 +151,7 @@ const theme = createTheme({
     },
   },
   inputVariants: {
-    default: {
+    defaults: {
       color: p.orange,
     },
     focused: {
@@ -131,13 +164,8 @@ const theme = createTheme({
       color: p.green,
     },
   },
-  buttonVariants: {
-    default: {
-      backgroundColor: '$primary',
-    },
-  },
   iconVariants: {
-    default: {
+    defaults: {
       color: p.black,
     },
     input: {

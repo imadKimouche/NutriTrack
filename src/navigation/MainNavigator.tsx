@@ -80,8 +80,8 @@ export const MainNavigator = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
       ) : (
         <>
-          <Stack.Screen name="UserSetup" component={UserSetupScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="UserSetup" component={UserSetupScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} />
         </>

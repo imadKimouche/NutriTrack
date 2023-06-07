@@ -25,7 +25,13 @@ export const TabScreenBase: React.FC<TabScreenBaseProps> = ({
         {children}
       </Box>
       <Box flex={1} justifyContent={'center'}>
-        <Button label={buttonTitle} onPress={onPress} variant="primary" />
+        <Button
+          width={'32%'}
+          label={buttonTitle}
+          onPress={onPress}
+          variant="primary"
+          icon="chevron-right"
+        />
       </Box>
     </Box>
   );

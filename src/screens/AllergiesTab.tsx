@@ -13,6 +13,7 @@ import NoSoy from '../assets/soja.svg';
 import NoEggs from '../assets/des-oeufs.svg';
 import NoGrain from '../assets/farine.svg';
 import {SvgProps} from 'react-native-svg';
+import Icon from '../components/Icon';
 
 const ICONS: {[key: string]: React.FC<SvgProps>} = {
   'no-gluten': NoGlutenImage,
@@ -25,36 +26,44 @@ const ICONS: {[key: string]: React.FC<SvgProps>} = {
 };
 
 type AllergyItem = {
+  id: string;
   name: string;
   icon: string;
 };
 
-const ALLERGIES = [
+const ALLERGIES: AllergyItem[] = [
   {
+    id: 'gluten',
     name: 'Allergie au gluten',
     icon: 'no-gluten',
   },
   {
+    id: 'diary',
     name: 'Allergie aux produits laitiers',
     icon: 'no-diary',
   },
   {
+    id: 'nut',
     name: 'Allergie aux fruits à coque',
     icon: 'no-nut',
   },
   {
+    id: 'shellfish',
     name: 'Allergie aux crustacés et aux poissons',
     icon: 'no-shellfish',
   },
   {
+    id: 'eggs',
     name: 'Allergie aux œufs',
     icon: 'no-eggs',
   },
   {
+    id: 'soy',
     name: 'Allergie au soja',
     icon: 'no-soy',
   },
   {
+    id: 'grain',
     name: 'Allergie au sésame',
     icon: 'no-grain',
   },
@@ -64,11 +73,20 @@ export const AllergiesTab: React.FC<{
   navigation: TabNavigationProp;
 }> = ({navigation}) => {
   const {userSetup, setUserSetup} = useUserSetupContext();
-  const [selectedAllergies, setSelectedAllergies] = useState([]);
+  const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
 
   function gotToHomeScreen() {
     setUserSetup({...userSetup, allergies: selectedAllergies});
-    console.log('go to mesure', userSetup);
+  }
+
+  function onAllergyItemSelected(allergyId: string) {
+    if (selectedAllergies.includes(allergyId)) {
+      setSelectedAllergies(
+        selectedAllergies.filter(selectedItem => selectedItem !== allergyId),
+      );
+    } else {
+      setSelectedAllergies([...selectedAllergies, allergyId]);
+    }
   }
 
   const renderObjectiveItem = ({
@@ -82,17 +100,7 @@ export const AllergiesTab: React.FC<{
     return (
       <Pressable
         key={index}
-        onPress={() => {
-          if (selectedAllergies.includes(item.name)) {
-            setSelectedAllergies(
-              selectedAllergies.filter(
-                selectedItem => selectedItem !== item.name,
-              ),
-            );
-          } else {
-            setSelectedAllergies([...selectedAllergies, item.name]);
-          }
-        }}
+        onPress={() => onAllergyItemSelected(item.id)}
         flexDirection={'row'}
         alignItems={'center'}
         height={56}
@@ -101,7 +109,12 @@ export const AllergiesTab: React.FC<{
         borderStyle={'solid'}>
         <Box flex={1} flexDirection={'row'} alignItems={'center'}>
           <Image width={32} height={32} />
-          <Text paddingHorizontal={'m'}>{item.name}</Text>
+          <Box flex={1}>
+            <Text paddingHorizontal={'m'}>{item.name}</Text>
+          </Box>
+          {selectedAllergies.includes(item.id) && (
+            <Icon name="check" size={20} />
+          )}
         </Box>
       </Pressable>
     );
@@ -109,7 +122,7 @@ export const AllergiesTab: React.FC<{
 
   return (
     <TabScreenBase
-      title="Quel est votre objectif fitness?"
+      title="Avez vous des allérgies?"
       buttonTitle="Suivant"
       onPress={gotToHomeScreen}>
       <Box paddingHorizontal={'xl'}>

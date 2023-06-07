@@ -123,7 +123,11 @@ export const SignUpScreen = () => {
         </Box>
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button label="Créer un compte" onPress={onSubmit} />
+        <Button
+          label="Créer un compte"
+          onPress={onSubmit}
+          variant={'primary'}
+        />
       </Box>
     </Box>
   );

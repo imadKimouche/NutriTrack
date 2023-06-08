@@ -77,6 +77,7 @@ export const AllergiesTab: React.FC<{
 
   function gotToHomeScreen() {
     setUserSetup({...userSetup, allergies: selectedAllergies});
+    navigation.navigate('Home', {userSetup});
   }
 
   function onAllergyItemSelected(allergyId: string) {

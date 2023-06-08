@@ -1,5 +1,4 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {ThemeProvider} from '@shopify/restyle';
 
 import theme from './src/style/theme';
@@ -12,9 +11,7 @@ function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <MainNavigator />
-        </NavigationContainer>
+        <MainNavigator />
       </QueryClientProvider>
     </ThemeProvider>
   );

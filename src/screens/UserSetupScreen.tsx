@@ -93,7 +93,7 @@ const LOTabBar: React.FC<MaterialTopTabBarProps> = ({
   );
 };
 
-type UserSetupContextProps = {
+export type UserSetupContextProps = {
   goal: string;
   height: string;
   weight: string;

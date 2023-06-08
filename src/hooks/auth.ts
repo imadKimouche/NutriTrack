@@ -34,12 +34,18 @@ export function signOut() {
 
 export function useAuth() {
   const [user, setUser] = useState<User>();
+  const [isNewUser, setIsNewUser] = useState<boolean>();
+
   useEffect(() => {
     const unsubscribeFromAuthStateChanged = onAuthStateChanged(
       auth,
       fireUser => {
         if (fireUser) {
           setUser(fireUser);
+          setIsNewUser(
+            auth.currentUser?.metadata.lastSignInTime ===
+              fireUser.metadata.creationTime,
+          );
         } else {
           setUser(undefined);
         }
@@ -50,6 +56,7 @@ export function useAuth() {
 
   return {
     user,
+    isNewUser,
   };
 }
 

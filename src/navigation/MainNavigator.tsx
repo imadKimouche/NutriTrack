@@ -7,7 +7,7 @@ import {SignInScreen} from '../screens/SignInScreen';
 import {useAuth} from '../hooks/auth';
 import {UserSetupScreen} from '../screens/UserSetupScreen';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeNavigator from '../screens/HomeNavigator';
+import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useUserData} from '../hooks/userData';
 
@@ -58,7 +58,7 @@ const Landing = () => {
   }
 
   if (data) {
-    return <HomeNavigator />;
+    return <HomeStackNavigator />;
   }
 
   return <UserSetupScreen />;

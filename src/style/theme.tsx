@@ -3,9 +3,10 @@ import {createTheme} from '@shopify/restyle';
 const p = {
   orange: '#DE6B48',
   orange400: '#DE9A85',
+  orange16P: 'rgba(222, 107, 72, 0.16)',
   green: '#18F0B7',
   red: '#FF647C',
-
+  red16P: 'rgba(255, 100, 124, 0.16)',
   black: '#121212',
   black100: '#E6E6E6',
   black200: '#CCCCCC',
@@ -51,6 +52,8 @@ const theme = createTheme({
     $tabBarInactiveTint: p.black300,
     $buttonLoaderPrimary: p.white,
     $error: p.red,
+    $logoutIconBackground: p.red16P,
+    $logoutIcon: p.red,
     // $navbarBackground: p.paper10,
     // $navbarBorderBottom: p.paper100,
     // $sidebarBackground: p.navy20,
@@ -160,6 +163,10 @@ const theme = createTheme({
     errorSmall: {
       fontSize: 13.33,
       color: '$error',
+    },
+    buttonLabel: {
+      fontSize: 16,
+      fontWeight: 'bold',
     },
     defaults: {},
   },

@@ -8,6 +8,8 @@ import {Theme} from '../style/theme';
 import HomeScreen from './HomeScreen';
 import RecipesScreen from './RecipesScreen';
 import HeaderWithSettings from '../components/HeaderWithSettings';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import SettingsScreen from './SettingsScreen';
 
 // type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
 // type HomeScreenNavigationProp = NativeStackNavigationProp<
@@ -19,9 +21,24 @@ const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; s
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
 };
 
-const Tab = createBottomTabNavigator();
+type HomeStackParamList = {
+  HomeTabNavigator: undefined;
+  Settings: undefined;
+};
 
-function HomeNavigator() {
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator<HomeStackParamList>();
+
+const HomeStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen options={{headerShown: false}} name="HomeTabNavigator" component={HomeTabNavigator} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const HomeTabNavigator = () => {
   const {colors} = useTheme<Theme>();
 
   return (
@@ -52,6 +69,6 @@ function HomeNavigator() {
       />
     </Tab.Navigator>
   );
-}
+};
 
-export default HomeNavigator;
+export default HomeStackNavigator;

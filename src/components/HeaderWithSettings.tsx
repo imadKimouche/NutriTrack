@@ -3,7 +3,7 @@ import {BottomTabHeaderProps} from '@react-navigation/bottom-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
-import {signOut, useAuth} from '../hooks/auth';
+import {useAuth} from '../hooks/auth';
 import useNotificationBadge from '../hooks/notificationBadge';
 import Pressable from '../atoms/Pressable';
 
@@ -31,10 +31,8 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, 
     return extractInitials(user?.email);
   }, [user?.email]);
 
-  function logout() {
-    console.log('logout');
-
-    signOut();
+  function openSettings() {
+    navigation.navigate('Settings');
   }
 
   return (
@@ -51,7 +49,7 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, 
         <Text variant={'h6'}>{route && HEADER_TITLES[route.name]}</Text>
       </Box>
       <Pressable
-        onPress={logout}
+        onPress={openSettings}
         width={40}
         height={40}
         borderRadius={'lg'}
@@ -64,7 +62,9 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, 
         <Text variant={'bodyLarge'} color={'$buttonTextPrimary'}>
           {initials}
         </Text>
-        {showBadge && <Box bg={'$primary'} width={16} height={16} borderRadius={'md'} position={'absolute'} top={-5} right={0} zIndex={1} />}
+        {showBadge && (
+          <Box bg={'$primary'} width={16} height={16} borderRadius={'md'} position={'absolute'} top={-5} right={0} zIndex={1} />
+        )}
       </Pressable>
     </Box>
   );

@@ -7,13 +7,15 @@ import {Controller} from 'react-hook-form';
 import {useSignup} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
-import {useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/MainNavigator';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-export const SignUpScreen = () => {
-  const {form, onSubmit} = useSignup();
-  const navigation = useNavigation();
+// type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
+type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
+
+export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationProp}) => {
+  const {form, onSubmit, mutation: submitMutation} = useSignup();
   const {control, watch} = form;
-
   const password = watch('password', ''); // Retrieve value of the 'password' field
 
   const goToSigninSceen = () => {
@@ -39,10 +41,7 @@ export const SignUpScreen = () => {
                 message: 'Invalid email address',
               },
             }}
-            render={({
-              field: {onChange, onBlur, value},
-              fieldState: {error},
-            }) => (
+            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'email'}
                 icon={'mail'}
@@ -70,10 +69,7 @@ export const SignUpScreen = () => {
                 message: 'Password must not exceed 20 characters',
               },
             }}
-            render={({
-              field: {onChange, onBlur, value},
-              fieldState: {error},
-            }) => (
+            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
@@ -94,10 +90,7 @@ export const SignUpScreen = () => {
               required: 'Confirm Password is required',
               validate: value => value === password || 'Passwords do not match',
             }}
-            render={({
-              field: {onChange, onBlur, value},
-              fieldState: {error},
-            }) => (
+            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
@@ -113,21 +106,19 @@ export const SignUpScreen = () => {
           />
 
           <TouchableOpacity onPress={goToSigninSceen}>
-            <Text
-              variant={'labelSmall'}
-              textAlign={'right'}
-              paddingVertical={'s'}>
+            <Text variant={'labelSmall'} textAlign={'right'} paddingVertical={'s'}>
               J'ai déjà un compte
             </Text>
           </TouchableOpacity>
         </Box>
+        {submitMutation.error && (
+          <Box>
+            <Text variant={'errorSmall'}>{submitMutation.error.message}</Text>
+          </Box>
+        )}
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button
-          label="Créer un compte"
-          onPress={onSubmit}
-          variant={'primary'}
-        />
+        <Button label="Créer un compte" onPress={onSubmit} variant={'primary'} loading={submitMutation.isLoading} />
       </Box>
     </Box>
   );

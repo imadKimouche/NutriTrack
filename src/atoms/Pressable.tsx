@@ -1,7 +1,4 @@
-import {
-  Pressable as NativePressable,
-  PressableProps as NativePressableProps,
-} from 'react-native';
+import {Pressable as NativePressable, PressableProps as NativePressableProps} from 'react-native';
 import {createBox} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 

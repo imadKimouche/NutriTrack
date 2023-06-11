@@ -49,6 +49,8 @@ const theme = createTheme({
     $headerButtonBorder: p.black24P,
     $tabBarBackground: p.black800,
     $tabBarInactiveTint: p.black300,
+    $buttonLoaderPrimary: p.white,
+    $error: p.red,
     // $navbarBackground: p.paper10,
     // $navbarBorderBottom: p.paper100,
     // $sidebarBackground: p.navy20,
@@ -103,6 +105,17 @@ const theme = createTheme({
       backgroundColor: '$background',
     },
   },
+  loaderButtonVariants: {
+    defaults: {
+      color: '$buttonLoaderPrimary',
+    },
+    primary: {
+      color: '$buttonLoaderPrimary',
+    },
+    outlined: {
+      backgroundColor: '$primary',
+    },
+  },
   textVariants: {
     h1: {
       fontWeight: 'bold',
@@ -143,6 +156,10 @@ const theme = createTheme({
     labelSmall: {
       fontSize: 13.33,
       color: '$labelSmall',
+    },
+    errorSmall: {
+      fontSize: 13.33,
+      color: '$error',
     },
     defaults: {},
   },

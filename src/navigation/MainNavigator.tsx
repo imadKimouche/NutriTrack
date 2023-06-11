@@ -14,18 +14,11 @@ import {useUserData} from '../hooks/userData';
 export type RootStackParamList = {
   Landing: undefined;
   SignUp: undefined;
-  // UserSetup: undefined;
   SignIn: undefined;
   ResetPassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-// type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
-// type SignUpScreenNavigationProp = NativeStackNavigationProp<
-//   RootStackParamList,
-//   'SignUp'
-// >;
 //
 //
 // type ResetPasswordScreenRouteProp = RouteProp<

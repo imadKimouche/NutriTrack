@@ -1,8 +1,17 @@
 import {useEffect, useState} from 'react';
-import {createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut as fireSignOut, User} from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut as fireSignOut,
+  User,
+  UserCredential,
+} from 'firebase/auth';
 import {useMutation} from 'react-query';
 import {useForm} from 'react-hook-form';
 import app from '../config/firebase';
+import {FirebaseError} from 'firebase/app';
 
 const auth = getAuth();
 
@@ -46,11 +55,13 @@ export function useAuth() {
 
 export function useSignup() {
   const form = useForm<SignupFormData>();
-  const mutation = useMutation((data: MutationData) => createUserWithEmailAndPassword(auth, data.email, data.password));
+  const mutation = useMutation<UserCredential, FirebaseError, MutationData>((data: MutationData) =>
+    createUserWithEmailAndPassword(auth, data.email, data.password),
+  );
 
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
-    mutation.mutate({email: email, password: password});
+    mutation.mutate({email, password});
   });
 
   return {form, onSubmit, mutation};

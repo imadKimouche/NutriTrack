@@ -24,13 +24,7 @@ type RestyleProps = SpacingProps<Theme> &
   ColorProps<Theme> &
   LayoutProps<Theme>;
 
-const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
-  spacing,
-  border,
-  backgroundColor,
-  color,
-  layout,
-]);
+const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([spacing, border, backgroundColor, color, layout]);
 
 type Props = Omit<IconProps, 'color'> & RestyleProps;
 

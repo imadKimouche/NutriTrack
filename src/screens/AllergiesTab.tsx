@@ -75,7 +75,6 @@ export const AllergiesTab: React.FC = () => {
   const {userSetup, setUserSetup} = useUserSetupContext();
 
   function gotToHomeScreen() {
-    console.log('allergies', userSetup.allergies);
     saveUserData(userSetup);
   }
 

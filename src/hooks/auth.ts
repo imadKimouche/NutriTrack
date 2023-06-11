@@ -70,11 +70,14 @@ export function useSignup() {
 export const useSignin = () => {
   const form = useForm<SigninFormData>();
 
-  const mutation = useMutation((data: MutationData) => signInWithEmailAndPassword(auth, data.email, data.password), {
-    onSuccess: result => {
-      console.log('user logged in', result.user.uid);
+  const mutation = useMutation<UserCredential, FirebaseError, MutationData>(
+    (data: MutationData) => signInWithEmailAndPassword(auth, data.email, data.password),
+    {
+      onSuccess: result => {
+        console.log('user logged in', result.user.uid);
+      },
     },
-  });
+  );
 
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;

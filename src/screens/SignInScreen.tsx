@@ -7,18 +7,15 @@ import {Controller} from 'react-hook-form';
 import {useSignin} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
-import {RouteProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainNavigator';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
-type SignInScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'SignIn'
->;
+type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 export const SignInScreen = () => {
-  const {form, onSubmit} = useSignin();
+  const {form, onSubmit, mutation: submitMutation} = useSignin();
   const navigation = useNavigation<SignInScreenNavigationProp>();
   const {control} = form;
 
@@ -45,10 +42,7 @@ export const SignInScreen = () => {
                 message: 'Invalid email address',
               },
             }}
-            render={({
-              field: {onChange, onBlur, value},
-              fieldState: {error},
-            }) => (
+            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'email'}
                 icon={'mail'}
@@ -76,10 +70,7 @@ export const SignInScreen = () => {
                 message: 'Password must not exceed 20 characters',
               },
             }}
-            render={({
-              field: {onChange, onBlur, value},
-              fieldState: {error},
-            }) => (
+            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
@@ -95,17 +86,19 @@ export const SignInScreen = () => {
           />
 
           <TouchableOpacity onPress={goToSignupSceen}>
-            <Text
-              variant={'labelSmall'}
-              textAlign={'right'}
-              paddingVertical={'s'}>
+            <Text variant={'labelSmall'} textAlign={'right'} paddingVertical={'s'}>
               Créer un compte
             </Text>
           </TouchableOpacity>
         </Box>
+        {submitMutation.error && (
+          <Box>
+            <Text variant={'errorSmall'}>{submitMutation.error.message}</Text>
+          </Box>
+        )}
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button variant={'primary'} label="Se connecter" onPress={onSubmit} />
+        <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
       </Box>
     </Box>
   );

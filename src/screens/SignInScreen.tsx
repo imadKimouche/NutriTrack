@@ -105,7 +105,7 @@ export const SignInScreen = () => {
         </Box>
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button label="Se connecter" onPress={onSubmit} />
+        <Button variant={'primary'} label="Se connecter" onPress={onSubmit} />
       </Box>
     </Box>
   );

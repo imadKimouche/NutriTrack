@@ -1,12 +1,5 @@
 import {useEffect, useState} from 'react';
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut as fireSignOut,
-  User,
-} from 'firebase/auth';
+import {createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut as fireSignOut, User} from 'firebase/auth';
 import {useMutation} from 'react-query';
 import {useForm} from 'react-hook-form';
 import app from '../config/firebase';
@@ -34,37 +27,26 @@ export function signOut() {
 
 export function useAuth() {
   const [user, setUser] = useState<User>();
-  const [isNewUser, setIsNewUser] = useState<boolean>();
 
   useEffect(() => {
-    const unsubscribeFromAuthStateChanged = onAuthStateChanged(
-      auth,
-      fireUser => {
-        if (fireUser) {
-          setUser(fireUser);
-          setIsNewUser(
-            auth.currentUser?.metadata.lastSignInTime ===
-              fireUser.metadata.creationTime,
-          );
-        } else {
-          setUser(undefined);
-        }
-      },
-    );
+    const unsubscribeFromAuthStateChanged = onAuthStateChanged(auth, fireUser => {
+      if (fireUser) {
+        setUser(fireUser);
+      } else {
+        setUser(undefined);
+      }
+    });
     return unsubscribeFromAuthStateChanged;
   }, []);
 
   return {
     user,
-    isNewUser,
   };
 }
 
 export function useSignup() {
   const form = useForm<SignupFormData>();
-  const mutation = useMutation((data: MutationData) =>
-    createUserWithEmailAndPassword(auth, data.email, data.password),
-  );
+  const mutation = useMutation((data: MutationData) => createUserWithEmailAndPassword(auth, data.email, data.password));
 
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
@@ -77,15 +59,11 @@ export function useSignup() {
 export const useSignin = () => {
   const form = useForm<SigninFormData>();
 
-  const mutation = useMutation(
-    (data: MutationData) =>
-      signInWithEmailAndPassword(auth, data.email, data.password),
-    {
-      onSuccess: result => {
-        console.log('success result', result);
-      },
+  const mutation = useMutation((data: MutationData) => signInWithEmailAndPassword(auth, data.email, data.password), {
+    onSuccess: result => {
+      console.log('user logged in', result.user.uid);
     },
-  );
+  });
 
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;

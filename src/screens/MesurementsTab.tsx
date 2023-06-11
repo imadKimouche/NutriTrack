@@ -1,13 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import Picker from '../components/Picker';
+import {useUserSetupContext} from '../context/userSetup';
 import {TabScreenBase} from './TabScreenBase';
-import {
-  TabNavigationProp,
-  TabRouteProp,
-  useUserSetupContext,
-} from './UserSetupScreen';
+import {TabNavigationProp} from './UserSetupScreen';
 
 function generateHeightOptions(min: number, max: number, increment: number) {
   const options = [];
@@ -30,26 +27,16 @@ export const MesurementsTab: React.FC<{
   navigation: TabNavigationProp;
 }> = ({navigation}) => {
   const {userSetup, setUserSetup} = useUserSetupContext();
-  const [selectedHeight, setSelectedHeight] = useState('150');
-  const [selectedWeight, setSelectedWeight] = useState('55');
 
   const heightOptions = generateHeightOptions(120, 230, 1);
   const weightOptions = generateWeightOptions(30, 180, 1);
 
   function goToAllergiesScreen() {
-    setUserSetup({
-      ...userSetup,
-      height: selectedHeight,
-      weight: selectedWeight,
-    });
     navigation.navigate('Allergies');
   }
 
   return (
-    <TabScreenBase
-      title="Renseingez vos mensurations"
-      buttonTitle="Suivant"
-      onPress={goToAllergiesScreen}>
+    <TabScreenBase title="Renseingez vos mensurations" buttonTitle="Suivant" onPress={goToAllergiesScreen}>
       <Box paddingHorizontal={'xl'}>
         <Box>
           <Text variant={'bodyRegular'}>Taille</Text>
@@ -57,18 +44,10 @@ export const MesurementsTab: React.FC<{
             <Box flex={1}>
               <Picker
                 itemStyle={{height: 110}}
-                selectedValue={selectedHeight}
-                onValueChange={itemValue =>
-                  setSelectedHeight(itemValue.toString())
-                }>
+                selectedValue={userSetup.height}
+                onValueChange={itemValue => setUserSetup({...userSetup, height: itemValue.toString()})}>
                 {heightOptions.map(option => {
-                  return (
-                    <Picker.Item
-                      key={option.label}
-                      label={option.label}
-                      value={option.value}
-                    />
-                  );
+                  return <Picker.Item key={option.label} label={option.label} value={option.value} />;
                 })}
               </Picker>
             </Box>
@@ -80,18 +59,10 @@ export const MesurementsTab: React.FC<{
             <Box flex={1}>
               <Picker
                 itemStyle={{height: 110}}
-                selectedValue={selectedWeight}
-                onValueChange={itemValue =>
-                  setSelectedWeight(itemValue.toString())
-                }>
+                selectedValue={userSetup.weight}
+                onValueChange={itemValue => setUserSetup({...userSetup, weight: itemValue.toString()})}>
                 {weightOptions.map(option => {
-                  return (
-                    <Picker.Item
-                      key={option.label}
-                      label={option.label}
-                      value={option.value}
-                    />
-                  );
+                  return <Picker.Item key={option.label} label={option.label} value={option.value} />;
                 })}
               </Picker>
             </Box>

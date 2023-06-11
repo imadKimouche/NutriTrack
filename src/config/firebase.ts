@@ -1,4 +1,6 @@
 import {initializeApp} from 'firebase/app';
+import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore';
+import {UserData} from '../hooks/userData';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC1VPYajPNE1OcNoQjdQAuL6-cGoFSbuBI',
@@ -11,5 +13,21 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+export async function fetchUserData(userId: string) {
+  const docRef = doc(db, 'users', userId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    throw new Error(`No user document for id  ${userId}`);
+  }
+}
+
+export function pushUserData(userId: string, userData: UserData) {
+  return setDoc(doc(db, 'users', userId), userData);
+}
 
 export default app;

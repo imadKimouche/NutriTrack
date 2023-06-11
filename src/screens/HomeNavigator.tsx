@@ -1,0 +1,57 @@
+/* eslint react/no-unstable-nested-components: 0 */ // --> OFF
+//https://github.com/react-navigation/react-navigation/issues/11371
+import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Icon from '../components/Icon';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '../style/theme';
+import HomeScreen from './HomeScreen';
+import RecipesScreen from './RecipesScreen';
+import HeaderWithSettings from '../components/HeaderWithSettings';
+
+// type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+// type HomeScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'Home'
+// >;
+
+const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
+  return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
+};
+
+const Tab = createBottomTabNavigator();
+
+function HomeNavigator() {
+  const {colors} = useTheme<Theme>();
+
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        header: props => <HeaderWithSettings {...props} />,
+        tabBarStyle: {backgroundColor: colors.$tabBarBackground, height: 93},
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Suivi journalier',
+          tabBarActiveTintColor: colors.$primary,
+          tabBarInactiveTintColor: colors.$tabBarInactiveTint,
+          tabBarIcon: props => <BottomTabIcon name="home" {...props} />,
+        }}
+      />
+      <Tab.Screen
+        name="Recipes"
+        component={RecipesScreen}
+        options={{
+          title: 'Recettes',
+          tabBarActiveTintColor: colors.$primary,
+          tabBarInactiveTintColor: colors.$tabBarInactiveTint,
+          tabBarIcon: props => <BottomTabIcon name="book" {...props} />,
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export default HomeNavigator;

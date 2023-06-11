@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import {TabScreenBase} from './TabScreenBase';
-import {TabNavigationProp, useUserSetupContext} from './UserSetupScreen';
 import NoGlutenImage from '../assets/sans-gluten.svg';
 import NoDiaryImage from '../assets/lait.svg';
 import NoNutImage from '../assets/cacahuete.svg';
@@ -14,6 +13,8 @@ import NoEggs from '../assets/des-oeufs.svg';
 import NoGrain from '../assets/farine.svg';
 import {SvgProps} from 'react-native-svg';
 import Icon from '../components/Icon';
+import {useUserSetupContext} from '../context/userSetup';
+import {useSaveUserData, useUserData} from '../hooks/userData';
 
 const ICONS: {[key: string]: React.FC<SvgProps>} = {
   'no-gluten': NoGlutenImage,
@@ -69,34 +70,30 @@ const ALLERGIES: AllergyItem[] = [
   },
 ];
 
-export const AllergiesTab: React.FC<{
-  navigation: TabNavigationProp;
-}> = ({navigation}) => {
+export const AllergiesTab: React.FC = () => {
+  const {saveUserData} = useSaveUserData();
   const {userSetup, setUserSetup} = useUserSetupContext();
-  const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
 
   function gotToHomeScreen() {
-    setUserSetup({...userSetup, allergies: selectedAllergies});
-    navigation.navigate('Home', {userSetup});
+    console.log('allergies', userSetup.allergies);
+    saveUserData(userSetup);
   }
 
   function onAllergyItemSelected(allergyId: string) {
-    if (selectedAllergies.includes(allergyId)) {
-      setSelectedAllergies(
-        selectedAllergies.filter(selectedItem => selectedItem !== allergyId),
-      );
+    if (userSetup.allergies.includes(allergyId)) {
+      setUserSetup({
+        ...userSetup,
+        allergies: userSetup.allergies.filter(selectedItem => selectedItem !== allergyId),
+      });
     } else {
-      setSelectedAllergies([...selectedAllergies, allergyId]);
+      setUserSetup({
+        ...userSetup,
+        allergies: [...userSetup.allergies, allergyId],
+      });
     }
   }
 
-  const renderObjectiveItem = ({
-    item,
-    index,
-  }: {
-    item: AllergyItem;
-    index: number;
-  }) => {
+  const renderObjectiveItem = ({item, index}: {item: AllergyItem; index: number}) => {
     const Image = ICONS[item.icon];
     return (
       <Pressable
@@ -113,25 +110,16 @@ export const AllergiesTab: React.FC<{
           <Box flex={1}>
             <Text paddingHorizontal={'m'}>{item.name}</Text>
           </Box>
-          {selectedAllergies.includes(item.id) && (
-            <Icon name="check" size={20} />
-          )}
+          {userSetup.allergies.includes(item.id) && <Icon name="check" size={20} />}
         </Box>
       </Pressable>
     );
   };
 
   return (
-    <TabScreenBase
-      title="Avez vous des allérgies?"
-      buttonTitle="Suivant"
-      onPress={gotToHomeScreen}>
+    <TabScreenBase title="Avez vous des allérgies?" buttonTitle="Suivant" onPress={gotToHomeScreen}>
       <Box paddingHorizontal={'xl'}>
-        <FlatList
-          data={ALLERGIES}
-          renderItem={renderObjectiveItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <FlatList data={ALLERGIES} renderItem={renderObjectiveItem} keyExtractor={(item, index) => index.toString()} />
       </Box>
     </TabScreenBase>
   );

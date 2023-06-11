@@ -2,6 +2,7 @@ import {createTheme} from '@shopify/restyle';
 
 const p = {
   orange: '#DE6B48',
+  orange400: '#DE9A85',
   green: '#18F0B7',
   red: '#FF647C',
 
@@ -9,8 +10,9 @@ const p = {
   black100: '#E6E6E6',
   black200: '#CCCCCC',
   black300: '#B3B3B3',
+  black800: '#333333',
   black900: '#A1A1A1',
-  black20P: 'rgba(102, 102, 102, 0.24)',
+  black24P: 'rgba(102, 102, 102, 0.24)',
   black40P: 'rgba(102, 102, 102, 0.4)',
   black80P: 'rgba(102, 102, 102, 0.8)',
   white: '#FFFFFF',
@@ -35,7 +37,7 @@ const theme = createTheme({
     $slideTabBackground: p.black100,
     $foreground: p.black,
     $textInputBackground: p.white,
-    $textInputBorderColor: p.black20P,
+    $textInputBorderColor: p.black24P,
     $textInputColor: p.black100,
     $labelSmall: p.black80P,
     $inputFocusColor: p.black,
@@ -43,6 +45,10 @@ const theme = createTheme({
     $listItemDivider: p.black100,
     $iconColor: p.black900,
     $buttonTextPrimary: p.white,
+    $headerButtonBackground: p.orange400,
+    $headerButtonBorder: p.black24P,
+    $tabBarBackground: p.black800,
+    $tabBarInactiveTint: p.black300,
     // $navbarBackground: p.paper10,
     // $navbarBorderBottom: p.paper100,
     // $sidebarBackground: p.navy20,

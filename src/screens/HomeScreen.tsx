@@ -1,3 +1,4 @@
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {FlatList, ListRenderItem} from 'react-native';
 import Box from '../atoms/Box';
@@ -7,6 +8,7 @@ import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
+import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
 
@@ -260,7 +262,9 @@ const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => 
   );
 };
 
-const HomeScreen = () => {
+type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
+
+const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const [currentDate, setCurrentDate] = useState(dayBefore.getTime());
   const currentDateMeals = userDailyData[currentDate] ?? undefined;
@@ -275,7 +279,7 @@ const HomeScreen = () => {
       />
       <TotalCalorieBar currentCalories={currentDateMeals.currentCalories} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
-      <Fab icon="plus" onPress={() => console.log('add')} />
+      <Fab icon="plus" onPress={() => navigation.navigate('AddMeal')} />
       <Box width={'90%'} height={'70%'}>
         {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
           <FlatList data={currentDateMeals[currentMealType]} renderItem={renderMeal} keyExtractor={item => item.food} />

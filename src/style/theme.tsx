@@ -181,6 +181,14 @@ const theme = createTheme({
       fontSize: 13.33,
       color: '$labelSmall',
     },
+    headerTitle: {
+      fontSize: 19.2,
+      fontWeight: 'bold',
+    },
+    headerBackTitle: {
+      fontSize: 16,
+      color: '$primary',
+    },
     defaults: {},
   },
   cardVariants: {

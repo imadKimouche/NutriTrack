@@ -3,6 +3,7 @@ import {createTheme} from '@shopify/restyle';
 const p = {
   orange: '#DE6B48',
   orange400: '#DE9A85',
+  orange8P: 'rgba(222, 107, 72, 0.08)',
   orange16P: 'rgba(222, 107, 72, 0.16)',
   green: '#18F0B7',
   red: '#FF647C',
@@ -61,6 +62,10 @@ const theme = createTheme({
     $carbsBar: p.orange,
     $fatBar: p.red16P,
     $dateSelectorBackground: p.black8P,
+    $searchbarBackground: p.black24P,
+    $searchbarIcon: p.black40P,
+    $searchbarPlaceholder: p.black40P,
+    $searchbarShadow: p.orange8P,
   },
   borderRadii: {
     xs: 4,

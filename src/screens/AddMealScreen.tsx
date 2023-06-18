@@ -5,6 +5,7 @@ import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
+import Searchbar from '../components/Searchbar';
 
 export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
   const insets = useSafeAreaInsets();
@@ -32,9 +33,7 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
 const AddMealScreen: React.FC<{}> = () => {
   return (
     <Box flex={1} alignItems={'center'} justifyContent={'center'}>
-      <Box>
-        <Text>Add Meal</Text>
-      </Box>
+      <Searchbar />
     </Box>
   );
 };

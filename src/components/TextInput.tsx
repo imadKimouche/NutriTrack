@@ -1,10 +1,6 @@
 import React from 'react';
 import Input, {InputProps} from '../atoms/Input';
-import {
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
-  TextInputProps,
-} from 'react-native';
+import {NativeSyntheticEvent, TextInputFocusEventData, TextInputProps} from 'react-native';
 import Box from '../atoms/Box';
 import Icon from '../components/Icon';
 import Text from '../atoms/Text';
@@ -16,16 +12,8 @@ type Props = TextInputProps &
     error?: string;
   };
 
-const TextInput: React.FC<Props> = ({
-  icon,
-  inputPropPresets,
-  error,
-  value,
-  ...rest
-}) => {
-  const presetProps = inputPropPresets
-    ? defaultInputProps[inputPropPresets]
-    : {};
+const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...rest}) => {
+  const presetProps = inputPropPresets ? defaultInputProps[inputPropPresets] : {};
 
   const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     if (rest.onBlur) {
@@ -33,9 +21,7 @@ const TextInput: React.FC<Props> = ({
     }
   };
 
-  const handleFocus = (
-    event: NativeSyntheticEvent<TextInputFocusEventData>,
-  ) => {
+  const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     if (rest.onFocus) {
       rest.onFocus(event);
     }
@@ -53,11 +39,7 @@ const TextInput: React.FC<Props> = ({
         borderWidth={1}
         borderRadius={'xs'}
         borderColor={'$textInputBorderColor'}>
-        <Icon
-          name={icon}
-          size={28}
-          color={value?.length ? '$foreground' : '$textInputColor'}
-        />
+        <Icon name={icon} size={28} color={value?.length ? '$foreground' : '$textInputColor'} />
         <Input
           {...rest}
           {...presetProps}
@@ -106,8 +88,7 @@ const defaultInputProps: {[id: string]: Partial<InputProps>} = {
     autoComplete: 'password-new',
     secureTextEntry: true,
     textContentType: Platform.OS === 'ios' ? undefined : 'newPassword',
-    passwordRules:
-      'minlength: 8; required: lower; required: upper; required: digit;',
+    passwordRules: 'minlength: 8; required: lower; required: upper; required: digit;',
   },
   email: {
     autoCapitalize: 'none',

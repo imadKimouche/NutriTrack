@@ -17,13 +17,7 @@ const db = getFirestore(app);
 
 export async function fetchUserData(userId: string) {
   const docRef = doc(db, 'users', userId);
-  const docSnap = await getDoc(docRef);
-
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    throw new Error(`No user document for id  ${userId}`);
-  }
+  return getDoc(docRef);
 }
 
 export function pushUserData(userId: string, userData: UserData) {

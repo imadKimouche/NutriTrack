@@ -10,6 +10,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useUserData} from '../hooks/userData';
+import {User} from 'firebase/auth';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -46,8 +47,7 @@ const ResetPassword = () => {
 };
 
 const Landing = () => {
-  const {data, isLoading} = useUserData();
-  console.log('userData', data);
+  const {data, isLoading, isError, error} = useUserData();
 
   if (isLoading) {
     return (
@@ -55,6 +55,12 @@ const Landing = () => {
         <Text variant={'labelSmall'}>Je prépare ton programme...</Text>
       </Box>
     );
+  }
+
+  if (isError) {
+    <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+      <Text variant={'errorSmall'}>{error}</Text>
+    </Box>;
   }
 
   if (data) {
@@ -65,7 +71,11 @@ const Landing = () => {
 };
 
 export const MainNavigator = () => {
-  const {user} = useAuth();
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

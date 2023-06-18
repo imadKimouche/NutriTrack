@@ -57,7 +57,12 @@ export const ObjectiveTab: React.FC<{navigation: TabNavigationProp}> = ({navigat
   return (
     <TabScreenBase title="Quel est votre objectif fitness?" buttonTitle="Suivant" onPress={goToMesureScreen}>
       <Box height={'100%'} paddingHorizontal={'xl'}>
-        <FlatList scrollEnabled={false} data={OBJECTIVES} renderItem={renderObjectiveItem} keyExtractor={(item, index) => index.toString()} />
+        <FlatList
+          scrollEnabled={false}
+          data={OBJECTIVES}
+          renderItem={renderObjectiveItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </Box>
     </TabScreenBase>
   );

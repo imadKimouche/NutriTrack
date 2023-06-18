@@ -10,19 +10,27 @@ export type UserData = {
 };
 
 export const useUserData = () => {
-  const {user} = useAuth();
-  const {data, isLoading, error} = useQuery(['userData', user?.uid!], () => fetchUserData(user?.uid!));
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
+  const {data, isLoading, error, isError} = useQuery(['userData', user?.uid!], () => fetchUserData(user?.uid!));
   let userData: UserData | undefined;
 
-  if (data !== undefined) {
-    userData = {
-      goal: data.goal,
-      height: data.height,
-      weight: data.weight,
-      allergies: data.allergies,
-    };
+  if (data) {
+    const parsedData = data.data();
+    if (parsedData) {
+      userData = {
+        goal: parsedData.goal,
+        height: parsedData.height,
+        weight: parsedData.weight,
+        allergies: parsedData.allergies,
+      };
+    }
   }
-  return {data: userData, isLoading, error};
+
+  return {data: userData, isLoading, error, isError};
 };
 
 export const useSaveUserData = () => {

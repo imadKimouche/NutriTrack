@@ -16,13 +16,17 @@ const SearchResultItem: React.FC<{label: string}> = ({label}) => {
 
 const Searchbar: React.FC<{}> = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [searchResults, setSearchResults] = useState<string[]>([]);
   const isIOS = Platform.OS === 'ios';
   const placeholder = 'Riz, Banane...';
-  let searchResultRef = useRef<string[]>([]);
 
   useEffect(() => {
     const DATA = ['Riz', 'Banane', 'Tomate', 'Brocoli'];
-    searchResultRef.current = DATA.filter(item => item.includes(searchValue));
+    if (searchValue.length) {
+      setSearchResults(DATA.filter(item => item.trim().toLowerCase().includes(searchValue.trim().toLowerCase())));
+    } else {
+      setSearchResults([]);
+    }
   }, [searchValue]);
 
   return (
@@ -47,7 +51,7 @@ const Searchbar: React.FC<{}> = () => {
         )}
       </Box>
       {/* -- Result Dropdown list -- */}
-      {searchResultRef.current.length > 0 && (
+      {searchResults.length > 0 && (
         <Box
           bg={'$background'}
           m={'s'}
@@ -57,8 +61,8 @@ const Searchbar: React.FC<{}> = () => {
           shadowOpacity={1}
           shadowRadius={16}
           elevation={isIOS ? undefined : 8}>
-          {searchResultRef.current.map(searchItem => {
-            return <SearchResultItem label={searchItem} />;
+          {searchResults.map(searchItem => {
+            return <SearchResultItem key={searchItem} label={searchItem} />;
           })}
         </Box>
       )}

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform} from 'react-native';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
@@ -14,20 +14,23 @@ const SearchResultItem: React.FC<{label: string}> = ({label}) => {
   );
 };
 
-const Searchbar: React.FC<{}> = () => {
-  const [searchValue, setSearchValue] = useState('');
+const Searchbar: React.FC<{
+  value: string;
+  placeholder: string;
+  onChangeText: (value: string) => void;
+  onSubmitEditing: (value: string) => void;
+  data: string[];
+}> = ({value, placeholder, onChangeText, onSubmitEditing, data}) => {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const isIOS = Platform.OS === 'ios';
-  const placeholder = 'Riz, Banane...';
 
   useEffect(() => {
-    const DATA = ['Riz', 'Banane', 'Tomate', 'Brocoli'];
-    if (searchValue.length) {
-      setSearchResults(DATA.filter(item => item.trim().toLowerCase().includes(searchValue.trim().toLowerCase())));
+    if (value.length) {
+      setSearchResults(data.filter(item => item.trim().toLowerCase().includes(value.trim().toLowerCase())));
     } else {
       setSearchResults([]);
     }
-  }, [searchValue]);
+  }, [value]);
 
   return (
     <Box>
@@ -39,13 +42,14 @@ const Searchbar: React.FC<{}> = () => {
         <Box flex={1} mx={'s'}>
           <Input
             placeholder={placeholder}
-            value={searchValue}
-            onChangeText={text => setSearchValue(text)}
+            value={value}
+            onChangeText={onChangeText}
+            onSubmitEditing={e => onSubmitEditing(e.nativeEvent.text)}
             returnKeyType={'search'}
           />
         </Box>
-        {searchValue.length > 0 && (
-          <Pressable onPress={() => setSearchValue('')}>
+        {value.length > 0 && (
+          <Pressable onPress={() => onChangeText('')}>
             <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />
           </Pressable>
         )}

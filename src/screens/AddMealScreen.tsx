@@ -1,5 +1,5 @@
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
@@ -31,9 +31,41 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
 };
 
 const AddMealScreen: React.FC<{}> = () => {
+  const [searchValue, setSearchValue] = useState('');
+  const DATA = ['Riz', 'Banane', 'Tomate', 'Brocoli'];
+  const HISTORY_DATA = ['Lorem', 'ipsum', 'dolor', 'sit amet', 'qui minim', 'labore adipisicing', 'minim sint cillum'];
+
   return (
     <Box flex={1} alignItems={'center'} justifyContent={'center'}>
-      <Searchbar />
+      <Box width={'100%'} px={'s'} py={'m'}>
+        <Searchbar
+          value={searchValue}
+          onChangeText={value => setSearchValue(value)}
+          placeholder="Banene, riz, ..."
+          onSubmitEditing={value => {
+            console.log('submit search value', value);
+          }}
+          data={DATA}
+        />
+      </Box>
+      <Box flex={1} width={'100%'} p={'s'}>
+        <Text variant={'h6'}>Historique</Text>
+        <Box>
+          {HISTORY_DATA.map((item, index) => {
+            return (
+              <Box
+                key={index}
+                p={'m'}
+                borderBottomColor={'$listItemDivider'}
+                borderBottomWidth={1}
+                flexDirection={'row'}
+                alignItems={'center'}>
+                <Text>{item}</Text>
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
     </Box>
   );
 };

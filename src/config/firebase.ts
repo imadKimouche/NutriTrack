@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore';
+import {getFirestore, doc, getDoc, setDoc, query, collection, where, getDocs} from 'firebase/firestore';
 import {UserData} from '../hooks/userData';
 
 const firebaseConfig = {
@@ -22,6 +22,14 @@ export async function fetchUserData(userId: string) {
 
 export function pushUserData(userId: string, userData: UserData) {
   return setDoc(doc(db, 'users', userId), userData);
+}
+
+export async function fetchMealsContaining(value: string) {
+  // TODO fix strict equal should be turned into contain
+  const q = query(collection(db, 'meals'), where('name', '==', value));
+  const querySnapshot = await getDocs(q);
+  const data = querySnapshot.docs.map(docElement => docElement.data());
+  return data;
 }
 
 export default app;

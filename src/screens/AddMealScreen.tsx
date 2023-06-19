@@ -6,6 +6,7 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import Searchbar from '../components/Searchbar';
+import {useSearchMeals} from '../hooks/meal';
 
 export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
   const insets = useSafeAreaInsets();
@@ -32,7 +33,7 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
 
 const AddMealScreen: React.FC<{}> = () => {
   const [searchValue, setSearchValue] = useState('');
-  const DATA = ['Riz', 'Banane', 'Tomate', 'Brocoli'];
+  const {data, isLoading, isError} = useSearchMeals(searchValue);
   const HISTORY_DATA = ['Lorem', 'ipsum', 'dolor', 'sit amet', 'qui minim', 'labore adipisicing', 'minim sint cillum'];
 
   return (
@@ -45,7 +46,9 @@ const AddMealScreen: React.FC<{}> = () => {
           onSubmitEditing={value => {
             console.log('submit search value', value);
           }}
-          data={DATA}
+          filteredResults={data}
+          isError={isError}
+          isLoading={isLoading}
         />
       </Box>
       <Box flex={1} width={'100%'} p={'s'}>

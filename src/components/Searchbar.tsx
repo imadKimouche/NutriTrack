@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Platform} from 'react-native';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
@@ -19,18 +19,15 @@ const Searchbar: React.FC<{
   placeholder: string;
   onChangeText: (value: string) => void;
   onSubmitEditing: (value: string) => void;
-  data: string[];
-}> = ({value, placeholder, onChangeText, onSubmitEditing, data}) => {
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  filteredResults: string[];
+  isError: boolean;
+  isLoading: boolean;
+}> = ({value, placeholder, onChangeText, onSubmitEditing, filteredResults, isError, isLoading}) => {
   const isIOS = Platform.OS === 'ios';
 
-  useEffect(() => {
-    if (value.length) {
-      setSearchResults(data.filter(item => item.trim().toLowerCase().includes(value.trim().toLowerCase())));
-    } else {
-      setSearchResults([]);
-    }
-  }, [value]);
+  if (isError) {
+    console.log('error while fetching data', isError);
+  }
 
   return (
     <Box>
@@ -55,20 +52,24 @@ const Searchbar: React.FC<{
         )}
       </Box>
       {/* -- Result Dropdown list -- */}
-      {searchResults.length > 0 && (
-        <Box
-          bg={'$background'}
-          m={'s'}
-          borderRadius={'xs'}
-          shadowColor={isIOS ? '$searchbarShadow' : undefined}
-          shadowOffset={isIOS ? {width: 0, height: 8} : undefined}
-          shadowOpacity={1}
-          shadowRadius={16}
-          elevation={isIOS ? undefined : 8}>
-          {searchResults.map(searchItem => {
-            return <SearchResultItem key={searchItem} label={searchItem} />;
-          })}
-        </Box>
+      {isLoading ? (
+        <Text>Un instant...</Text>
+      ) : (
+        filteredResults.length > 0 && (
+          <Box
+            bg={'$background'}
+            m={'s'}
+            borderRadius={'xs'}
+            shadowColor={isIOS ? '$searchbarShadow' : undefined}
+            shadowOffset={isIOS ? {width: 0, height: 8} : undefined}
+            shadowOpacity={1}
+            shadowRadius={16}
+            elevation={isIOS ? undefined : 8}>
+            {filteredResults.map(searchItem => {
+              return <SearchResultItem key={searchItem} label={searchItem} />;
+            })}
+          </Box>
+        )
       )}
     </Box>
   );

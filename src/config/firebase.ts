@@ -26,7 +26,10 @@ export function pushUserData(userId: string, userData: UserData) {
 
 export async function fetchMealsContaining(value: string) {
   // TODO fix strict equal should be turned into contain
-  const q = query(collection(db, 'meals'), where('name', '==', value));
+  if (value.trim().length === 0) {
+    return null;
+  }
+  const q = query(collection(db, 'meals'), where('name', '>=', value));
   const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map(docElement => docElement.data());
   return data;

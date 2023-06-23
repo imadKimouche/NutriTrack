@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Platform} from 'react-native';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
+import {Meal} from '../hooks/meal';
 import Icon from './Icon';
 
 const SearchResultItem: React.FC<{label: string}> = ({label}) => {
@@ -18,12 +19,14 @@ const Searchbar: React.FC<{
   value: string;
   placeholder: string;
   onChangeText: (value: string) => void;
+  onClearText: () => void;
   onSubmitEditing: (value: string) => void;
-  filteredResults: string[];
+  filteredResults: Pick<Meal, 'id' | 'name'>[];
   isError: boolean;
   isLoading: boolean;
-}> = ({value, placeholder, onChangeText, onSubmitEditing, filteredResults, isError, isLoading}) => {
+}> = ({value, placeholder, onChangeText, onClearText, onSubmitEditing, filteredResults, isError, isLoading}) => {
   const isIOS = Platform.OS === 'ios';
+  const memoizedResults = useMemo(() => filteredResults, [filteredResults]);
 
   if (isError) {
     console.log('error while fetching data', isError);
@@ -46,7 +49,7 @@ const Searchbar: React.FC<{
           />
         </Box>
         {value.length > 0 && (
-          <Pressable onPress={() => onChangeText('')}>
+          <Pressable onPress={onClearText}>
             <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />
           </Pressable>
         )}
@@ -55,7 +58,8 @@ const Searchbar: React.FC<{
       {isLoading ? (
         <Text>Un instant...</Text>
       ) : (
-        filteredResults.length > 0 && (
+        Array.isArray(memoizedResults) &&
+        memoizedResults.length > 0 && (
           <Box
             bg={'$background'}
             m={'s'}
@@ -65,8 +69,8 @@ const Searchbar: React.FC<{
             shadowOpacity={1}
             shadowRadius={16}
             elevation={isIOS ? undefined : 8}>
-            {filteredResults.map(searchItem => {
-              return <SearchResultItem key={searchItem} label={searchItem} />;
+            {memoizedResults.map(item => {
+              return <SearchResultItem key={item.id} label={item.name} />;
             })}
           </Box>
         )

@@ -38,8 +38,6 @@ const AddMealScreen: React.FC<{}> = () => {
   const {data, isLoading, isError} = useSearchOFFMeal(searchMeal);
   const HISTORY_DATA = ['Lorem', 'ipsum', 'dolor', 'sit amet', 'qui minim', 'labore adipisicing', 'minim sint cillum'];
 
-  console.log('search meal', searchMeal);
-
   return (
     <Box flex={1} alignItems={'center'} justifyContent={'center'}>
       <Box width={'100%'} px={'s'} py={'m'}>
@@ -47,9 +45,12 @@ const AddMealScreen: React.FC<{}> = () => {
           value={searchValue}
           placeholder="Banene, riz, ..."
           onChangeText={(value: string) => setSearchValue(value)}
-          onClearText={() => setSearchValue('')}
+          onClearText={() => {
+            setSearchValue('');
+            setSearchMeal('');
+          }}
           onSubmitEditing={value => setSearchMeal(value)}
-          filteredResults={data ? data.map(item => ({id: item.id, name: item.name})) : []}
+          filteredResults={data ? data : []}
           isError={isError}
           isLoading={isLoading}
         />

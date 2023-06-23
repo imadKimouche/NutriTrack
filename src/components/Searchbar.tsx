@@ -1,17 +1,40 @@
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useMemo} from 'react';
-import {Platform} from 'react-native';
+import {Image, Platform} from 'react-native';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import {Meal} from '../hooks/meal';
+import {HomeStackParamList} from '../screens/HomeStackNavigator';
 import Icon from './Icon';
 
-const SearchResultItem: React.FC<{label: string}> = ({label}) => {
+type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
+
+const SearchResultItem: React.FC<Meal> = item => {
+  const navigation = useNavigation<AddMealScreenNavigationProp>();
+
+  const openMealScreen = () => {
+    navigation.navigate('Meal', {meal: item});
+  };
+
   return (
-    <Box p={'m'} borderBottomColor={'$listItemDivider'} borderBottomWidth={1} flexDirection={'row'} alignItems={'center'}>
-      <Text>{label}</Text>
-    </Box>
+    <Pressable
+      onPress={openMealScreen}
+      p={'m'}
+      borderRadius={'sm'}
+      borderBottomColor={'$listItemDivider'}
+      borderBottomWidth={1}
+      flexDirection={'row'}
+      alignItems={'center'}>
+      <Image source={{uri: item.image}} style={{width: 30, height: 30}} />
+      <Box alignItems={'flex-start'} px={'s'} flex={1}>
+        <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
+          {item.name}
+        </Text>
+      </Box>
+    </Pressable>
   );
 };
 
@@ -21,7 +44,7 @@ const Searchbar: React.FC<{
   onChangeText: (value: string) => void;
   onClearText: () => void;
   onSubmitEditing: (value: string) => void;
-  filteredResults: Pick<Meal, 'id' | 'name'>[];
+  filteredResults: Meal[];
   isError: boolean;
   isLoading: boolean;
 }> = ({value, placeholder, onChangeText, onClearText, onSubmitEditing, filteredResults, isError, isLoading}) => {
@@ -70,7 +93,7 @@ const Searchbar: React.FC<{
             shadowRadius={16}
             elevation={isIOS ? undefined : 8}>
             {memoizedResults.map(item => {
-              return <SearchResultItem key={item.id} label={item.name} />;
+              return <SearchResultItem key={item.id} {...item} />;
             })}
           </Box>
         )

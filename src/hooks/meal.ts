@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {useQuery} from 'react-query';
 
 export type Meal = {
@@ -10,40 +9,45 @@ export type Meal = {
   carbs: number;
   quantity: number;
   unit: string; // gram, ounce, cup, litre ...etc
-  allergens: string[];
+  allergens: string;
   image: string;
 };
 
-const base_url = 'https://fr.openfoodfacts.org';
+const BASE_URL = 'https://fr.openfoodfacts.org';
+const FETCH_SIZE = 5;
 async function fetchOFFMeal(searchMeal: string) {
   if (searchMeal.trim().length === 0) {
     return null;
   }
-  const searchQuery = `${base_url}/cgi/search.pl?search_terms=${searchMeal}&search_simple=1&action=process&page_size=3&json=1&tagtype_0=countries&tag_contains_0=contains&tag_0=france`;
-  const response = await fetch(searchQuery);
-  console.log('response status', response.status); // DEBUG
-
-  const data = await response.json();
-  if (data && 'products' in data && Array.isArray(data.products)) {
-    // console.log('size', data.products.length);
-    // console.log('data in fetch', data.products[0]); // DEBUG
-    const parsedData: Meal[] = data.map((searchItem: any) => {
-      return {
-        id: searchItem.id,
-        name: '',
-        calories: searchItem.nutriments['energy-kcal_100g'],
-        proteins: searchItem.nutriments.proteins_100g,
-        fat: searchItem.nutriments.fat_100g,
-        carbs: searchItem.nutriments.carbohydrates_100g,
-        quantity: 0,
-        unit: 'gram',
-        allergens: searchItem.allergens,
-        image: searchItem.image_small_url,
-      };
-    });
-    return parsedData;
+  const searchQuery = `${BASE_URL}/cgi/search.pl?search_terms=${searchMeal}&search_simple=1&action=process&page_size=${FETCH_SIZE}&json=1&tagtype_0=countries&tag_contains_0=contains&tag_0=france`;
+  try {
+    const response = await fetch(searchQuery);
+    if (!response.ok) {
+      console.log('fetchOFFMeal(): failed to fetch meals');
+      return null;
+    }
+    const data = await response.json();
+    if (data !== undefined && 'products' in data && Array.isArray(data.products)) {
+      const parsedData: Meal[] = data.products.map((searchItem: any) => {
+        return {
+          id: searchItem.id,
+          name: searchItem.product_name,
+          calories: searchItem.nutriments['energy-kcal_100g'],
+          proteins: searchItem.nutriments.proteins_100g,
+          fat: searchItem.nutriments.fat_100g,
+          carbs: searchItem.nutriments.carbohydrates_100g,
+          quantity: searchItem.quantity,
+          unit: 'gram',
+          allergens: searchItem.allergens,
+          image: searchItem.image_url,
+        };
+      });
+      return parsedData;
+    }
+  } catch (error) {
+    console.log('fetchOFFMeal():', error);
+    return null;
   }
-
   return null;
 }
 

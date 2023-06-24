@@ -20,6 +20,8 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
   let headerTitle = mealRoute.params.meal.name;
   headerTitle = headerTitle.length > 15 ? headerTitle.slice(0, 12) + '...' : headerTitle;
 
+  function saveMeal() {}
+
   return (
     <Box
       width={'100%'}
@@ -40,7 +42,9 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'headerTitle'}>{headerTitle}</Text>
       </Box>
-      <Box flex={1} />
+      <Pressable flex={1} onPress={saveMeal}>
+        <Text variant={'headerBackTitle'}>Enregistrer</Text>
+      </Pressable>
     </Box>
   );
 };

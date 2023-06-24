@@ -1,60 +1,52 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useMemo} from 'react';
-import {Image, Platform} from 'react-native';
+import {useTheme} from '@shopify/restyle';
+import React, {useState} from 'react';
+import {FlatList, Image, ListRenderItem, Platform} from 'react-native';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import {Meal} from '../hooks/meal';
+import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from '../screens/HomeStackNavigator';
+import {Theme} from '../style/theme';
 import Icon from './Icon';
 import Loader from './Loader';
 
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
 
-const SearchResultItem: React.FC<Meal> = item => {
-  const navigation = useNavigation<AddMealScreenNavigationProp>();
-
-  const openMealScreen = () => {
-    navigation.navigate('Meal', {meal: item});
-  };
-
-  return (
-    <Pressable
-      onPress={openMealScreen}
-      p={'m'}
-      borderRadius={'sm'}
-      borderBottomColor={'$listItemDivider'}
-      borderBottomWidth={1}
-      flexDirection={'row'}
-      alignItems={'center'}>
-      <Image source={{uri: item.image}} style={{width: 30, height: 30}} />
-      <Box alignItems={'flex-start'} px={'s'} flex={1}>
-        <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
-          {item.name}
-        </Text>
-      </Box>
-    </Pressable>
-  );
-};
-
-const Searchbar: React.FC<{
-  value: string;
-  placeholder: string;
-  onChangeText: (value: string) => void;
-  onClearText: () => void;
-  onSubmitEditing: (value: string) => void;
-  filteredResults: Meal[];
-  isError: boolean;
-  isLoading: boolean;
-}> = ({value, placeholder, onChangeText, onClearText, onSubmitEditing, filteredResults, isError, isLoading}) => {
+const Searchbar: React.FC = () => {
   const isIOS = Platform.OS === 'ios';
-  const memoizedResults = useMemo(() => filteredResults, [filteredResults]);
+  const navigation = useNavigation<AddMealScreenNavigationProp>();
+  const [searchValue, setSearchValue] = useState('');
+  const [searchMeal, setSearchMeal] = useState('');
+  const {data, isLoading, isError, fetchNextPage, hasNextPage} = useSearchOFFMeal(searchMeal);
+  const {spacing, borderRadii, colors} = useTheme<Theme>();
 
-  if (isError) {
-    console.log('error while fetching data', isError);
-  }
+  const renderMealItem: ListRenderItem<Meal> = ({item: meal}) => {
+    const openMealScreen = () => {
+      navigation.navigate('Meal', {meal});
+    };
+
+    return (
+      <Pressable
+        onPress={openMealScreen}
+        alignSelf={'stretch'}
+        p={'m'}
+        borderRadius={'sm'}
+        borderBottomColor={'$listItemDivider'}
+        borderBottomWidth={1}
+        flexDirection={'row'}
+        alignItems={'center'}>
+        <Image source={{uri: meal.image}} style={{width: 30, height: 30}} />
+        <Box alignItems={'flex-start'} px={'s'} flex={1}>
+          <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
+            {meal.name}
+          </Text>
+        </Box>
+      </Pressable>
+    );
+  };
 
   return (
     <Box>
@@ -65,40 +57,63 @@ const Searchbar: React.FC<{
         </Box>
         <Box flex={1} mx={'s'}>
           <Input
-            placeholder={placeholder}
-            value={value}
-            onChangeText={onChangeText}
-            onSubmitEditing={e => onSubmitEditing(e.nativeEvent.text)}
+            placeholder={'Riz, lentilles ...'}
+            value={searchValue}
+            onChangeText={value => setSearchValue(value)}
+            onSubmitEditing={e => setSearchMeal(e.nativeEvent.text)}
             returnKeyType={'search'}
           />
         </Box>
-        {value.length > 0 && (
-          <Pressable onPress={onClearText}>
+        {searchValue.length > 0 && (
+          <Pressable
+            onPress={() => {
+              setSearchMeal('');
+              setSearchValue('');
+            }}>
             <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />
           </Pressable>
         )}
       </Box>
       {/* -- Result Dropdown list -- */}
-      {isLoading ? (
+      {isError ? (
+        <Box>
+          <Text variant={'errorSmall'}>Oups, je rencontre un problème</Text>
+        </Box>
+      ) : isLoading ? (
         <Box my={'s'}>
           <Loader color="$primary" />
         </Box>
       ) : (
-        Array.isArray(memoizedResults) &&
-        memoizedResults.length > 0 && (
-          <Box
-            bg={'$background'}
-            m={'s'}
-            borderRadius={'xs'}
-            shadowColor={isIOS ? '$searchbarShadow' : undefined}
-            shadowOffset={isIOS ? {width: 0, height: 8} : undefined}
-            shadowOpacity={1}
-            shadowRadius={16}
-            elevation={isIOS ? undefined : 8}>
-            {memoizedResults.map(item => {
-              return <SearchResultItem key={item.id} {...item} />;
-            })}
-          </Box>
+        data !== undefined &&
+        data.length > 0 && (
+          <FlatList
+            style={{height: 300}}
+            contentContainerStyle={{
+              backgroundColor: colors.$background,
+              margin: spacing.s,
+              borderRadius: borderRadii.xs,
+              shadowColor: isIOS ? colors.$searchbarShadow : undefined,
+              shadowOffset: isIOS ? {width: 0, height: 8} : undefined,
+              shadowOpacity: 1,
+              shadowRadius: borderRadii.sm,
+              elevation: isIOS ? undefined : spacing.s,
+            }}
+            data={data}
+            renderItem={renderMealItem}
+            keyExtractor={item => item.name}
+            ListFooterComponent={() => {
+              if (hasNextPage) {
+                return (
+                  <Pressable alignSelf={'center'} py={'s'} onPress={() => fetchNextPage()}>
+                    <Text variant={'bodySmall'} color={'$primary'}>
+                      Plus
+                    </Text>
+                  </Pressable>
+                );
+              }
+              return <></>;
+            }}
+          />
         )
       )}
     </Box>

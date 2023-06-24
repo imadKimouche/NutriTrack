@@ -14,19 +14,18 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
     <Box
       width={'100%'}
       flexDirection={'row'}
-      paddingHorizontal={'l'}
       alignItems={'center'}
       style={{
         paddingTop: insets.top,
       }}>
-      <Pressable flex={0.5} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
+      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={30} />
         <Text variant={'headerBackTitle'}>Suivi</Text>
       </Pressable>
-      <Box flex={1} justifyContent={'center'} alignItems={'center'}>
+      <Box flex={2} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'headerTitle'}>Ajout de repas</Text>
       </Box>
-      <Box flex={0.5} />
+      <Box flex={1} />
     </Box>
   );
 };

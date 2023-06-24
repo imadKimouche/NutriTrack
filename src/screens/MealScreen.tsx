@@ -21,26 +21,23 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
     <Box
       width={'100%'}
       flexDirection={'row'}
-      paddingHorizontal={'l'}
       alignItems={'center'}
       style={{
         paddingTop: insets.top,
       }}>
       <Pressable
-        flex={0.5}
+        flex={1}
         flexDirection={'row'}
         alignItems={'center'}
         justifyContent={'flex-start'}
         onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'headerBackTitle'}>Ajout...</Text>
+        <Text variant={'headerBackTitle'}>Recherche</Text>
       </Pressable>
-      <Box flex={1} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'headerTitle'} fontSize={12}>
-          {headerTitle}
-        </Text>
+      <Box flex={2} justifyContent={'center'} alignItems={'center'}>
+        <Text variant={'headerTitle'}>{headerTitle}</Text>
       </Box>
-      <Box flex={0.5} />
+      <Box flex={1} />
     </Box>
   );
 };

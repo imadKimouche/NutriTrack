@@ -9,7 +9,7 @@ import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
-import {Meal, Unit} from '../hooks/meal';
+import {Unit} from '../hooks/meal';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
 
@@ -76,7 +76,10 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
       <Box flex={1}>
         <Box flexDirection={'row'}>
           <Text variant={'bodyRegular'}>Portion</Text>
-          <Picker itemStyle={{height: 110}} selectedValue={portion} onValueChange={itemValue => setPortion(itemValue.toString())}>
+          <Picker
+            itemStyle={{height: 110, width: 110}}
+            selectedValue={portion}
+            onValueChange={itemValue => setPortion(itemValue.toString())}>
             {Object.values(UNITS).map(unit => {
               return <Picker.Item key={unit} label={unit} value={unit} />;
             })}

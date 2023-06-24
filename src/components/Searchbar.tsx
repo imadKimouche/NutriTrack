@@ -9,6 +9,7 @@ import Text from '../atoms/Text';
 import {Meal} from '../hooks/meal';
 import {HomeStackParamList} from '../screens/HomeStackNavigator';
 import Icon from './Icon';
+import Loader from './Loader';
 
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
 
@@ -79,7 +80,9 @@ const Searchbar: React.FC<{
       </Box>
       {/* -- Result Dropdown list -- */}
       {isLoading ? (
-        <Text>Un instant...</Text>
+        <Box my={'s'}>
+          <Loader color="$primary" />
+        </Box>
       ) : (
         Array.isArray(memoizedResults) &&
         memoizedResults.length > 0 && (

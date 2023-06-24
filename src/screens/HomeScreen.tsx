@@ -34,7 +34,7 @@ type UserDailyData = {
 };
 
 const dayInMs = 24 * 60 * 60 * 1000;
-const today = new Date(1686999956703);
+const today = new Date(1687612900379);
 const dayBefore = new Date(today.getTime() - 2 * dayInMs);
 const yesterday = new Date(today.getTime() - dayInMs);
 const tomorrow = new Date(today.getTime() + dayInMs);
@@ -270,7 +270,7 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const [currentDate, setCurrentDate] = useState(dayBefore.getTime());
+  const [currentDate, setCurrentDate] = useState(today.getTime());
   const currentDateMeals = userDailyData[currentDate] ?? undefined;
   const [currentMealType, setCurrentMealType] = useState<MealType>('lunch');
 

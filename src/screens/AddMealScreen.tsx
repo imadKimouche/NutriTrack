@@ -12,9 +12,11 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
   const insets = useSafeAreaInsets();
   return (
     <Box
+      bg={'$background'}
       width={'100%'}
       flexDirection={'row'}
       alignItems={'center'}
+      pb={'s'}
       style={{
         paddingTop: insets.top,
       }}>
@@ -38,11 +40,11 @@ const AddMealScreen: React.FC<{}> = () => {
   const HISTORY_DATA = ['Lorem', 'ipsum', 'dolor', 'sit amet', 'qui minim', 'labore adipisicing', 'minim sint cillum'];
 
   return (
-    <Box flex={1} alignItems={'center'} justifyContent={'center'}>
+    <Box flex={1} alignItems={'center'} justifyContent={'center'} bg={'$windowBackground'}>
       <Box width={'100%'} px={'s'} py={'m'}>
         <Searchbar
           value={searchValue}
-          placeholder="Banene, riz, ..."
+          placeholder="Banane, riz, ..."
           onChangeText={(value: string) => setSearchValue(value)}
           onClearText={() => {
             setSearchValue('');

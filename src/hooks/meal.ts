@@ -15,15 +15,16 @@ export type Meal = {
   image: string;
 };
 
-const BASE_URL = 'https://fr.openfoodfacts.org';
-const FETCH_SIZE = 4;
-async function fetchOFFMeal(searchMeal: string) {
-  if (searchMeal.trim().length === 0) {
-    return null;
-  }
-  const searchQuery = `${BASE_URL}/cgi/search.pl?search_terms=${searchMeal}&search_simple=1&action=process&page_size=${FETCH_SIZE}&json=1&tagtype_0=countries&tag_contains_0=contains&tag_0=france`;
-  try {
-    const response = await fetch(searchQuery);
+export function useSearchOFFMeal(searchValue: string, pageSize: number = 10, region: string = 'fr') {
+  const BASE_URL = `https://${region}.openfoodfacts.org/cgi/search.pl`;
+
+  async function fetchOFFMeal(searchMeal: string) {
+    if (searchMeal.trim().length === 0) {
+      return null;
+    }
+
+    const response = await fetch(`${BASE_URL}?search_terms=${searchValue}&page_size=${pageSize}&json=true`);
+
     if (!response.ok) {
       console.log('fetchOFFMeal(): failed to fetch meals');
       return null;
@@ -45,14 +46,9 @@ async function fetchOFFMeal(searchMeal: string) {
       });
       return parsedData;
     }
-  } catch (error) {
-    console.log('fetchOFFMeal():', error);
     return null;
   }
-  return null;
-}
 
-export function useSearchOFFMeal(searchValue: string) {
   const {data, isLoading, isError, error} = useQuery(['searchOFFMeals', searchValue], () => fetchOFFMeal(searchValue));
   return {data, isLoading, isError, error};
 }

@@ -1,4 +1,5 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTheme} from '@shopify/restyle';
 import React, {useState} from 'react';
 import {FlatList, ListRenderItem} from 'react-native';
 import Box from '../atoms/Box';
@@ -183,11 +184,13 @@ const renderMeal: ListRenderItem<Meal> = ({item: meal}) => {
 const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => void}> = ({label, selected = false, onPress}) => {
   return (
     <Pressable
+      flex={1}
       onPress={onPress}
-      borderRadius={selected ? 'sm' : undefined}
-      bg={selected ? '$background' : undefined}
-      py={selected ? 's' : undefined}
-      px={'l'}>
+      alignItems={'center'}
+      justifyContent={'center'}
+      style={{borderRadius: 12}}
+      m={'xs'}
+      bg={selected ? '$background' : undefined}>
       <Text variant={selected ? 'labelSmallSelected' : 'labelSmall'} fontSize={12}>
         {label}
       </Text>
@@ -204,12 +207,12 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
   return (
     <Box
       flexDirection={'row'}
-      alignItems={'center'}
+      alignItems={'stretch'}
       bg={'$dateSelectorBackground'}
       borderRadius={'sm'}
       width={'80%'}
+      height={32}
       justifyContent={'space-between'}
-      py={'xs'}
       my={'xs'}>
       <MealTypeItem label="Petit déj" selected={currentMealType === 'breakfast'} onPress={() => onMealTypePress('breakfast')} />
       <MealTypeItem label="Déjeuner" selected={currentMealType === 'lunch'} onPress={() => onMealTypePress('lunch')} />
@@ -266,6 +269,7 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
+  const {spacing} = useTheme<Theme>();
   const [currentDate, setCurrentDate] = useState(dayBefore.getTime());
   const currentDateMeals = userDailyData[currentDate] ?? undefined;
   const [currentMealType, setCurrentMealType] = useState<MealType>('lunch');
@@ -280,9 +284,14 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
       <TotalCalorieBar currentCalories={currentDateMeals.currentCalories} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
       <Fab icon="plus" onPress={() => navigation.navigate('AddMeal')} />
-      <Box width={'90%'} height={'70%'}>
+      <Box flex={1} alignSelf={'stretch'}>
         {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
-          <FlatList data={currentDateMeals[currentMealType]} renderItem={renderMeal} keyExtractor={item => item.food} />
+          <FlatList
+            contentContainerStyle={{padding: spacing.m}}
+            data={currentDateMeals[currentMealType]}
+            renderItem={renderMeal}
+            keyExtractor={item => item.food}
+          />
         )}
       </Box>
     </Box>

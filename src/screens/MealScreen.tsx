@@ -1,12 +1,15 @@
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
+import Picker from '../components/Picker';
+import {Meal, Unit} from '../hooks/meal';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
 
@@ -43,10 +46,46 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
 };
 
 const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
+  const {meal} = route.params;
+  const [portion, setPortion] = useState('');
+
+  const UNITS: Record<Unit, string> = {
+    g: 'g',
+    ml: 'ml',
+    tsp: 'cc',
+    tbsp: 'cs',
+    cup: 'tasse',
+    floz: 'fl oz',
+    pint: 'pt',
+    quart: 'qt',
+    l: 'l',
+    kg: 'kg',
+    lb: 'lb',
+    oz: 'oz',
+    piece: 'pièce(s)',
+  };
+
   return (
-    <Box>
-      <Text>meal</Text>
-      <Text>{route.params.meal.name}</Text>
+    <Box flex={1} px={'m'}>
+      <Box flex={0.2} flexDirection={'row'} alignItems={'center'}>
+        <Image source={{uri: meal.image}} style={{width: 60, height: 60}} />
+        <Text variant={'cardTitle'} px={'s'}>
+          {meal.name}
+        </Text>
+      </Box>
+      <Box flex={1}>
+        <Box flexDirection={'row'}>
+          <Text variant={'bodyRegular'}>Portion</Text>
+          <Picker itemStyle={{height: 110}} selectedValue={portion} onValueChange={itemValue => setPortion(itemValue.toString())}>
+            {Object.values(UNITS).map(unit => {
+              return <Picker.Item key={unit} label={unit} value={unit} />;
+            })}
+          </Picker>
+        </Box>
+        <Box flexDirection={'row'}>
+          <Text variant={'bodyRegular'}>Nombre de portion</Text>
+        </Box>
+      </Box>
     </Box>
   );
 };

@@ -1,5 +1,7 @@
 import {useQuery} from 'react-query';
 
+export type Unit = 'g' | 'ml' | 'tsp' | 'tbsp' | 'cup' | 'floz' | 'pint' | 'quart' | 'l' | 'kg' | 'lb' | 'oz' | 'piece';
+
 export type Meal = {
   id: number;
   name: string;
@@ -8,13 +10,13 @@ export type Meal = {
   fat: number;
   carbs: number;
   quantity: number;
-  unit: string; // gram, ounce, cup, litre ...etc
+  unit?: Unit;
   allergens: string;
   image: string;
 };
 
 const BASE_URL = 'https://fr.openfoodfacts.org';
-const FETCH_SIZE = 5;
+const FETCH_SIZE = 4;
 async function fetchOFFMeal(searchMeal: string) {
   if (searchMeal.trim().length === 0) {
     return null;
@@ -37,10 +39,9 @@ async function fetchOFFMeal(searchMeal: string) {
           fat: searchItem.nutriments.fat_100g,
           carbs: searchItem.nutriments.carbohydrates_100g,
           quantity: searchItem.quantity,
-          unit: 'gram',
           allergens: searchItem.allergens,
           image: searchItem.image_url,
-        };
+        } as Meal;
       });
       return parsedData;
     }

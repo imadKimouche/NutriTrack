@@ -34,10 +34,7 @@ const PickerBase = createRestyleComponent<PropsBase, Theme>(
   NativePicker,
 );
 
-const Item = createRestyleComponent<NativePickerItemProps, Theme>(
-  [],
-  NativePicker.Item,
-);
+const Item = createRestyleComponent<NativePickerItemProps, Theme>([], NativePicker.Item);
 
 const Picker = ({children, ...rest}: PropsBase) => {
   return (

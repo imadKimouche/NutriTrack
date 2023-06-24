@@ -10,6 +10,9 @@ import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
 import {Unit} from '../hooks/meal';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '../style/theme';
+import Input from '../atoms/Input';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
 
@@ -52,6 +55,8 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
 const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
   const {meal} = route.params;
   const [portion, setPortion] = useState('');
+  const [portionNumber, setPortionNumber] = useState(0);
+  const {spacing} = useTheme<Theme>();
 
   const UNITS: Record<Unit, string> = {
     g: 'g',
@@ -77,11 +82,12 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
           {meal.name}
         </Text>
       </Box>
-      <Box flex={1}>
-        <Box flexDirection={'row'}>
+      <Box flex={0.25}>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
           <Text variant={'bodyRegular'}>Portion</Text>
           <Picker
-            itemStyle={{height: 110, width: 110}}
+            style={{marginLeft: spacing.s}}
+            itemStyle={{height: 50, width: 160}}
             selectedValue={portion}
             onValueChange={itemValue => setPortion(itemValue.toString())}>
             {Object.values(UNITS).map(unit => {
@@ -89,9 +95,24 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
             })}
           </Picker>
         </Box>
-        <Box flexDirection={'row'}>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
           <Text variant={'bodyRegular'}>Nombre de portion</Text>
+          <Input
+            bg={'$background'}
+            flex={1}
+            height={36}
+            marginLeft={'s'}
+            borderRadius={'xs'}
+            keyboardType={'numeric'}
+            paddingHorizontal={'s'}
+          />
         </Box>
+      </Box>
+      <Box flex={1}>
+        <Text>calories {meal.calories}</Text>
+        <Text>proteins {meal.proteins}</Text>
+        <Text>carbs {meal.carbs}</Text>
+        <Text>fat {meal.fat}</Text>
       </Box>
     </Box>
   );

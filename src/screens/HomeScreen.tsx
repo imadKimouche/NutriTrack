@@ -7,6 +7,7 @@ import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
+import {useCurrentSelectedDate} from '../hooks/dailyTracker';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
 import {HomeStackParamList} from './HomeStackNavigator';
@@ -270,16 +271,16 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const [currentDate, setCurrentDate] = useState(today.getTime());
-  const currentDateMeals = userDailyData[currentDate] ?? undefined;
+  const {currentSelectedDate, setCurrentSelectedDate} = useCurrentSelectedDate();
+  const currentDateMeals = userDailyData[currentSelectedDate] ?? undefined;
   const [currentMealType, setCurrentMealType] = useState<MealType>('lunch');
 
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>
       <DatePicker
         dates={Object.keys(userDailyData).map(key => parseInt(key, 10))}
-        currentDate={currentDate}
-        onPress={selectedPickerDate => setCurrentDate(selectedPickerDate)}
+        currentDate={currentSelectedDate}
+        onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
       />
       <TotalCalorieBar currentCalories={currentDateMeals.currentCalories} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />

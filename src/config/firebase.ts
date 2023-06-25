@@ -1,5 +1,6 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore, doc, getDoc, setDoc, query, collection, where, getDocs} from 'firebase/firestore';
+import {getFirestore, doc, getDoc, setDoc, query, collection, where, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
 
 const firebaseConfig = {
@@ -33,6 +34,16 @@ export async function fetchMealsContaining(value: string) {
   const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map(docElement => docElement.data());
   return data;
+}
+
+export type MealType = 'breakfest' | 'lunch' | 'dinner' | 'snack';
+
+export async function pushUserMeal(userId: string, date: string, type: MealType, meal: Meal) {
+  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
+
+  return updateDoc(dailyMealsRef, {
+    [type]: arrayUnion(meal),
+  });
 }
 
 export default app;

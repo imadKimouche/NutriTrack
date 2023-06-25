@@ -10,6 +10,8 @@ import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
 import Input from '../atoms/Input';
+import {useAuth} from '../hooks/auth';
+import {usePostMeal} from '../hooks/meal';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
 type MealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Meal'>;
@@ -66,9 +68,14 @@ const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNa
   const {meal} = route.params;
   const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
   const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
+  const {saveUserMeal} = usePostMeal(meal);
+  //TODO handle save meal loading & error state
 
   function saveMealPortion() {
-    console.log('saving with state', unit, portion);
+    saveUserMeal();
+    // TODO navigate if no error and after loading
+    // TODO save correct meal portions
+    navigation.navigate('AddMeal');
   }
 
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;

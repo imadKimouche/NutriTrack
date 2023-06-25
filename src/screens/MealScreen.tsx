@@ -10,8 +10,6 @@ import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
 import {Unit} from '../hooks/meal';
-import {useTheme} from '@shopify/restyle';
-import {Theme} from '../style/theme';
 import Input from '../atoms/Input';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
@@ -52,11 +50,19 @@ export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}
   );
 };
 
+const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, value}) => {
+  return (
+    <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$slideTabBackground'} justifyContent={'space-between'}>
+      <Text variant={'cardSubtitle'}>{label}</Text>
+      <Text variant={'cardSubtitle'}>{value.toString()}</Text>
+    </Box>
+  );
+};
+
 const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
   const {meal} = route.params;
   const [portion, setPortion] = useState('');
-  const [portionNumber, setPortionNumber] = useState(0);
-  const {spacing} = useTheme<Theme>();
+  const [portionNumber, setPortionNumber] = useState(1);
 
   const UNITS: Record<Unit, string> = {
     g: 'g',
@@ -86,7 +92,6 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
           <Text variant={'bodyRegular'}>Portion</Text>
           <Picker
-            style={{marginLeft: spacing.s}}
             itemStyle={{height: 50, width: 160}}
             selectedValue={portion}
             onValueChange={itemValue => setPortion(itemValue.toString())}>
@@ -98,9 +103,11 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
           <Text variant={'bodyRegular'}>Nombre de portion</Text>
           <Input
+            value={portionNumber.toString()}
+            onChangeText={value => setPortionNumber(parseInt(value, 10))}
             bg={'$background'}
-            flex={1}
-            height={36}
+            height={50}
+            width={140}
             marginLeft={'s'}
             borderRadius={'xs'}
             keyboardType={'numeric'}
@@ -108,11 +115,14 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
           />
         </Box>
       </Box>
-      <Box flex={1}>
-        <Text>calories {meal.calories}</Text>
-        <Text>proteins {meal.proteins}</Text>
-        <Text>carbs {meal.carbs}</Text>
-        <Text>fat {meal.fat}</Text>
+      <Box flex={1} py={'m'}>
+        <Text py={'s'} variant={'cardTitle'}>
+          Macro-nutriments (100g)
+        </Text>
+        <NutrimentValueItem label="Calories" value={meal.calories} />
+        <NutrimentValueItem label="Protéines" value={meal.proteins} />
+        <NutrimentValueItem label="Glucides" value={meal.carbs} />
+        <NutrimentValueItem label="Gras" value={meal.fat} />
       </Box>
     </Box>
   );

@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
@@ -9,41 +9,38 @@ import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
-import {Unit} from '../hooks/meal';
 import Input from '../atoms/Input';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
+type MealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Meal'>;
 
-export const MealHeader: React.FC<NativeStackHeaderProps> = ({navigation, route}) => {
+type MealHeaderProps = {
+  title: string;
+  onBackPress: () => void;
+  onSavePress: () => void;
+};
+
+export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSavePress}) => {
   const insets = useSafeAreaInsets();
-  const mealRoute = route as MealScreenRouteProp;
-
-  let headerTitle = mealRoute.params.meal.name;
-  headerTitle = headerTitle.length > 15 ? headerTitle.slice(0, 12) + '...' : headerTitle;
-
-  function saveMeal() {}
+  const headerTitle = title.length > 18 ? title.slice(0, 15) + '...' : title;
 
   return (
     <Box
-      width={'100%'}
+      alignSelf={'stretch'}
       flexDirection={'row'}
       alignItems={'center'}
+      pb={'m'}
       style={{
         paddingTop: insets.top,
       }}>
-      <Pressable
-        flex={1}
-        flexDirection={'row'}
-        alignItems={'center'}
-        justifyContent={'flex-start'}
-        onPress={() => navigation.goBack()}>
+      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
         <Icon name="chevron-left" size={30} />
         <Text variant={'headerBackTitle'}>Recherche</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'headerTitle'}>{headerTitle}</Text>
       </Box>
-      <Pressable flex={1} onPress={saveMeal}>
+      <Pressable flex={1} onPress={onSavePress}>
         <Text variant={'headerBackTitle'}>Enregistrer</Text>
       </Pressable>
     </Box>
@@ -59,52 +56,43 @@ const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, va
   );
 };
 
-const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
-  const {meal} = route.params;
-  const [portion, setPortion] = useState('');
-  const [portionNumber, setPortionNumber] = useState(1);
+const UNITS: Record<string, string[]> = {
+  g: ['g', 'kg', 'oz', 'mg'],
+  ml: ['ml', 'l', 'cl', 'floz'],
+  default: ['g', 'kg', 'oz', 'mg', 'ml', 'l', 'cl', 'floz'],
+};
 
-  const UNITS: Record<Unit, string> = {
-    g: 'g',
-    ml: 'ml',
-    tsp: 'cc',
-    tbsp: 'cs',
-    cup: 'tasse',
-    floz: 'fl oz',
-    pint: 'pt',
-    quart: 'qt',
-    l: 'l',
-    kg: 'kg',
-    lb: 'lb',
-    oz: 'oz',
-    piece: 'pièce(s)',
-  };
+const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNavigationProp}> = ({route, navigation}) => {
+  const {meal} = route.params;
+  const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
+  const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
+
+  function saveMealPortion() {
+    console.log('saving with state', unit, portion);
+  }
+
+  const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
 
   return (
-    <Box flex={1} px={'m'}>
-      <Box flex={0.2} flexDirection={'row'} alignItems={'center'}>
-        <Image source={{uri: meal.image}} style={{width: 60, height: 60}} />
-        <Text variant={'cardTitle'} px={'s'}>
+    <Box flex={1} bg={'$windowBackground'}>
+      <MealHeader title={meal.name} onBackPress={navigation.goBack} onSavePress={saveMealPortion} />
+      <Box flex={0.5} alignItems={'center'} px={'s'}>
+        <Text variant={'cardTitle'} py={'m'}>
           {meal.name}
         </Text>
+        <Image source={{uri: meal.images.url}} style={{width: 150, height: 150}} />
       </Box>
-      <Box flex={0.25}>
+      <Box flex={0.2} px={'s'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'bodyRegular'}>Portion</Text>
-          <Picker
-            itemStyle={{height: 50, width: 160}}
-            selectedValue={portion}
-            onValueChange={itemValue => setPortion(itemValue.toString())}>
-            {Object.values(UNITS).map(unit => {
-              return <Picker.Item key={unit} label={unit} value={unit} />;
-            })}
-          </Picker>
-        </Box>
-        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'bodyRegular'}>Nombre de portion</Text>
+          <Text variant={'cardTitle'}>Portion</Text>
           <Input
-            value={portionNumber.toString()}
-            onChangeText={value => setPortionNumber(parseInt(value, 10))}
+            value={portion.toString()}
+            onChangeText={text => {
+              const numericValue = parseFloat(text);
+              if (!isNaN(numericValue)) {
+                setPortion(numericValue);
+              }
+            }}
             bg={'$background'}
             height={50}
             width={140}
@@ -113,9 +101,17 @@ const MealScreen: React.FC<{route: MealScreenRouteProp}> = ({route}) => {
             keyboardType={'numeric'}
             paddingHorizontal={'s'}
           />
+          <Picker
+            itemStyle={{height: 50, width: 160}}
+            selectedValue={unit}
+            onValueChange={itemValue => setUnit(itemValue.toString())}>
+            {mealUnits.map(unitItem => {
+              return <Picker.Item key={unitItem} label={unitItem} value={unitItem} />;
+            })}
+          </Picker>
         </Box>
       </Box>
-      <Box flex={1} py={'m'}>
+      <Box flex={1} p={'s'}>
         <Text py={'s'} variant={'cardTitle'}>
           Macro-nutriments (100g)
         </Text>

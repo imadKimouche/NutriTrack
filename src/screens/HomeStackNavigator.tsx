@@ -11,7 +11,7 @@ import HeaderWithSettings from '../components/HeaderWithSettings';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingsScreen from './SettingsScreen';
 import AddMealScreen, {AddMealHeader} from './AddMealScreen';
-import MealScreen, {MealHeader} from './MealScreen';
+import MealScreen from './MealScreen';
 import {Meal} from '../hooks/meal';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
@@ -36,7 +36,7 @@ const HomeStackNavigator = () => {
     <Stack.Navigator>
       <Stack.Screen options={{headerShown: false}} name="HomeTabNavigator" component={HomeTabNavigator} />
       <Stack.Screen name="AddMeal" options={{header: AddMealHeader}} component={AddMealScreen} />
-      <Stack.Screen name="Meal" options={{header: MealHeader}} component={MealScreen} />
+      <Stack.Screen name="Meal" options={{headerShown: false}} component={MealScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
   );

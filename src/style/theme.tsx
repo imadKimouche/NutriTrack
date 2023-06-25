@@ -193,7 +193,7 @@ const theme = createTheme({
       color: '$labelSmall',
     },
     headerTitle: {
-      fontSize: 19.2,
+      fontSize: 16,
       fontWeight: 'bold',
     },
     headerBackTitle: {

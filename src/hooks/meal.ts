@@ -1,7 +1,5 @@
-import {useEffect, useState} from 'react';
-import {useInfiniteQuery, useQuery} from 'react-query';
-
-export type Unit = 'g' | 'ml' | 'tsp' | 'tbsp' | 'cup' | 'floz' | 'pint' | 'quart' | 'l' | 'kg' | 'lb' | 'oz' | 'piece';
+import {useState} from 'react';
+import {useInfiniteQuery} from 'react-query';
 
 export type Meal = {
   id: number;
@@ -10,11 +8,91 @@ export type Meal = {
   proteins: number;
   fat: number;
   carbs: number;
-  quantity: number;
-  unit?: Unit;
+  portion: number;
+  per100unit: string;
+  unit: string;
   allergens: string;
-  image: string;
+  images: {url?: string; thumbUrl?: string};
 };
+
+function cleanProduct(product: any): Meal {
+  let quantity = product.quantity as string;
+  let unit = '';
+  let portion = 100;
+  if (quantity) {
+    quantity = quantity.replace(/ /g, '');
+    let match = quantity.match(/\d+(\.|\,)?\d*[a-zA-Z]*/i);
+    if (match && match.length > 0) {
+      let numberMatches = match[0].match(/\d+(\.|\,)?\d*/);
+      if (numberMatches && numberMatches.length > 0) {
+        portion = myParseFloat(numberMatches[0]);
+      }
+      unit = match[0].replace(/\d+(\.|\,)?\d*/g, '');
+    }
+  }
+  let per100unit = unit.trim();
+  if (liquidUnits.find(un => un.text.toLocaleLowerCase() === unit.toLocaleLowerCase())) {
+    per100unit = 'ml';
+    portion = portion * liquidUnits.find(un => un.text.toLocaleLowerCase() === unit.toLocaleLowerCase())!.product;
+    unit = 'ml';
+  } else if (gramsUnits.find(un => un.text.toLocaleLowerCase() === unit.toLocaleLowerCase())) {
+    per100unit = 'g';
+    portion = portion * gramsUnits.find(un => un.text.toLocaleLowerCase() === unit.toLocaleLowerCase())!.product;
+    unit = 'g';
+  }
+  return {
+    id: product._id,
+    unit: unit,
+    per100unit: per100unit,
+    portion: portion,
+    images: {
+      url: product.image_url,
+      thumbUrl: product.image_thumb_url,
+    },
+    name: product.product_name,
+    calories: myParseFloat(product.nutriments['energy-kcal_100g']),
+    carbs: myParseFloat(product.nutriments.carbohydrates_100g),
+    fat: myParseFloat(product.nutriments.fat_100g),
+    proteins: myParseFloat(product.nutriments.proteins_100g),
+    allergens: product.allergens,
+  };
+}
+
+function myParseFloat(text: string) {
+  let number = parseFloat(text);
+  if (isNaN(number)) {
+    return 0;
+  } else {
+    return number;
+  }
+}
+
+let gramsUnits = [
+  {
+    text: 'mg',
+    product: 0.001,
+  },
+  {
+    text: 'g',
+    product: 1,
+  },
+  {
+    text: 'oz',
+    product: 28.3495,
+  },
+  {
+    text: 'kg',
+    product: 1000,
+  },
+];
+let liquidUnits = [
+  {text: 'l', product: 1000},
+  {text: 'ml', product: 1},
+  {text: 'cl', product: 10},
+  {text: 'liter', product: 1000},
+  {text: 'litre', product: 1000},
+  {text: 'floz', product: 29.5735296875},
+];
 
 const REGION = 'fr';
 const BASE_URL = `https://${REGION}.openfoodfacts.org/cgi/search.pl`;
@@ -33,18 +111,8 @@ async function fetchOFFMeal(searchText: string, pageNumber: number) {
   }
   const data = await response.json();
   if (data !== undefined && 'products' in data && Array.isArray(data.products)) {
-    const parsedData: Meal[] = data.products.map((searchItem: any) => {
-      return {
-        id: searchItem.id,
-        name: searchItem.product_name,
-        calories: searchItem.nutriments['energy-kcal_100g'],
-        proteins: searchItem.nutriments.proteins_100g,
-        fat: searchItem.nutriments.fat_100g,
-        carbs: searchItem.nutriments.carbohydrates_100g,
-        quantity: searchItem.quantity,
-        allergens: searchItem.allergens,
-        image: searchItem.image_url,
-      } as Meal;
+    const parsedData: Meal[] = data.products.map((product: any) => {
+      return cleanProduct(product);
     });
     return {meals: parsedData, page: data.page, pageCount: data.page_count, count: data.count} as {
       meals: Meal[];

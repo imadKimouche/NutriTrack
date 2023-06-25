@@ -49,7 +49,7 @@ const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
       borderBottomWidth={1}
       flexDirection={'row'}
       alignItems={'center'}>
-      <Image source={{uri: meal.image}} style={{width: 30, height: 30}} />
+      <Image source={{uri: meal.images.thumbUrl}} style={{width: 30, height: 30}} />
       <Box alignItems={'flex-start'} px={'s'} flex={1}>
         <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
           {meal.name}

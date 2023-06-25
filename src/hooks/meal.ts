@@ -46,10 +46,9 @@ async function fetchOFFMeal(searchText: string, pageNumber: number) {
         image: searchItem.image_url,
       } as Meal;
     });
-    return {meals: parsedData, page: data.page, pageTotal: data.page_total, pageCount: data.page_count, count: data.count} as {
+    return {meals: parsedData, page: data.page, pageCount: data.page_count, count: data.count} as {
       meals: Meal[];
       page: number;
-      pageTotal: number;
       pageCount: number;
       count: number;
     };
@@ -68,7 +67,14 @@ export function useSearchOFFMeal(searchValue: string) {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(['searchOFFMeals', searchValue], ({pageParam = 1}) => fetchOFFMeal(searchValue, pageParam), {
-    getNextPageParam: queryResult => (queryResult ? queryResult.page + 1 : 1),
+    getNextPageParam: queryResult => {
+      if (queryResult && 'page' in queryResult) {
+        if (queryResult.page < queryResult.pageCount) {
+          return queryResult.page + 1;
+        }
+      }
+      return undefined;
+    },
   });
 
   let data;

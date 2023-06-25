@@ -1,11 +1,16 @@
-import {NativeStackHeaderProps} from '@react-navigation/native-stack';
-import React from 'react';
+import {NativeStackHeaderProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FlatList, Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import Searchbar from '../components/Searchbar';
+import Loader from '../components/Loader';
+import {Meal, useSearchOFFMeal} from '../hooks/meal';
+import {useNavigation} from '@react-navigation/native';
+import {HomeStackParamList} from './HomeStackNavigator';
 
 export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
   const insets = useSafeAreaInsets();
@@ -31,31 +36,108 @@ export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) =>
   );
 };
 
+type MealListItemProps = {meal: Meal; onItemPressed: (meal: Meal) => void};
+
+const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
+  return (
+    <Pressable
+      onPress={() => onItemPressed(meal)}
+      alignSelf={'stretch'}
+      p={'m'}
+      borderRadius={'sm'}
+      borderBottomColor={'$listItemDivider'}
+      borderBottomWidth={1}
+      flexDirection={'row'}
+      alignItems={'center'}>
+      <Image source={{uri: meal.image}} style={{width: 30, height: 30}} />
+      <Box alignItems={'flex-start'} px={'s'} flex={1}>
+        <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
+          {meal.name}
+        </Text>
+      </Box>
+    </Pressable>
+  );
+};
+
+const SearchError: React.FC = () => {
+  return (
+    <Box>
+      <Text variant={'errorSmall'}>Oups, je rencontre un problème</Text>
+    </Box>
+  );
+};
+
+const SearchLoader: React.FC = () => {
+  return (
+    <Box my={'s'}>
+      <Loader color="$primary" />
+    </Box>
+  );
+};
+
+const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: () => void}> = ({show, isLoading, onPress}) => {
+  if (show) {
+    if (isLoading) {
+      return <SearchLoader />;
+    } else {
+      return (
+        <Pressable alignSelf={'center'} py={'s'} onPress={onPress}>
+          <Text variant={'bodySmall'} color={'$primary'}>
+            Plus
+          </Text>
+        </Pressable>
+      );
+    }
+  }
+  return <></>;
+};
+
+type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
+
+const SearchList: React.FC<{searchValue: string}> = ({searchValue}) => {
+  const navigation = useNavigation<AddMealScreenNavigationProp>();
+  const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetching} = useSearchOFFMeal(searchValue);
+
+  function onMealPressed(meal: Meal) {
+    navigation.navigate('Meal', {meal});
+  }
+
+  if (isError) {
+    return <SearchError />;
+  }
+
+  if (isLoading) {
+    return <SearchLoader />;
+  }
+
+  if (data !== undefined && data.length > 0) {
+    return (
+      <Box flex={1} bg={'$background'} alignSelf={'stretch'} mx={'m'} borderRadius={'xs'}>
+        <FlatList
+          data={data}
+          renderItem={item => <MealListItem meal={item.item} onItemPressed={onMealPressed} />}
+          keyExtractor={item => `${item.id}-${item.name}`}
+          ListFooterComponent={<SearchListFooter show={hasNextPage} isLoading={isFetching} onPress={fetchNextPage} />}
+        />
+      </Box>
+    );
+  }
+
+  return <></>;
+};
+
 const AddMealScreen: React.FC<{}> = () => {
-  const HISTORY_DATA = ['Lorem', 'ipsum', 'dolor', 'sit amet', 'qui minim', 'labore adipisicing', 'minim sint cillum'];
+  const [searchMeal, setSearchMeal] = useState('');
+  const insets = useSafeAreaInsets();
 
   return (
-    <Box flex={1} alignItems={'center'} justifyContent={'center'} bg={'$windowBackground'}>
-      <Box width={'100%'} px={'s'} py={'m'}>
-        <Searchbar />
+    <Box flex={1} justifyContent={'flex-start'} bg={'$windowBackground'} style={{paddingBottom: insets.bottom}}>
+      <Box p={'s'}>
+        <Searchbar onSubmitEditing={setSearchMeal} />
       </Box>
-      <Box flex={1} width={'100%'} p={'s'}>
-        <Text variant={'h6'}>Historique</Text>
-        <Box>
-          {HISTORY_DATA.map((item, index) => {
-            return (
-              <Box
-                key={index}
-                p={'m'}
-                borderBottomColor={'$listItemDivider'}
-                borderBottomWidth={1}
-                flexDirection={'row'}
-                alignItems={'center'}>
-                <Text>{item}</Text>
-              </Box>
-            );
-          })}
-        </Box>
+      <SearchList searchValue={searchMeal} />
+      <Box flex={1} m={'s'}>
+        <Text variant={'bodyLarge'}>Historique</Text>
       </Box>
     </Box>
   );

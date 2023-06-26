@@ -174,12 +174,16 @@ export function usePostMeal(meal: Meal) {
   };
 
   // const queryClient = useQueryClient();
-  const {isLoading, error, mutate} = useMutation(() => pushUserMeal(user.uid, stringFormattedDate, currentMealType, meal), {
-    onSuccess: () => {
-      // TODO
-      // Invalidate and refetch user daily meals data
+  const {isLoading, error, mutate} = useMutation(
+    ({portion, unit}: {portion: number; unit: string}) =>
+      pushUserMeal(user.uid, stringFormattedDate, currentMealType, meal, portion, unit),
+    {
+      onSuccess: () => {
+        // TODO
+        // Invalidate and refetch user daily meals data
+      },
     },
-  });
+  );
   return {
     saveUserMeal: mutate,
     isLoading,

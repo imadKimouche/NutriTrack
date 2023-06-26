@@ -26,19 +26,19 @@ export function pushUserData(userId: string, userData: UserData) {
   return setDoc(doc(db, 'users', userId), userData);
 }
 
-export async function pushUserMeal(userId: string, date: string, type: MealType, meal: Meal) {
+export async function pushUserMeal(userId: string, date: string, type: MealType, meal: Meal, portion: number, unit: string) {
   const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
   const docSnapshot = await getDoc(dailyMealsRef);
 
   if (docSnapshot.exists()) {
     return updateDoc(dailyMealsRef, {
-      [type]: arrayUnion(meal),
+      [type]: arrayUnion({...meal, portion, unit}),
     });
   } else {
     return setDoc(
       dailyMealsRef,
       {
-        [type]: [meal],
+        [type]: [{...meal, portion, unit}],
       },
       {merge: true},
     );

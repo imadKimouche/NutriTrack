@@ -72,7 +72,7 @@ const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNa
   //TODO handle save meal loading & error state
 
   function saveMealPortion() {
-    saveUserMeal();
+    saveUserMeal({portion, unit});
     // TODO navigate if no error and after loading
     // TODO save correct meal portions
     navigation.navigate('AddMeal');

@@ -45,4 +45,11 @@ export async function pushUserMeal(userId: string, date: string, type: MealType,
   }
 }
 
+export async function fetchUserDailyMeals(userId: string, startDate: string, endDate: string) {
+  const dailyMealsRef = collection(db, 'users', userId, 'dailyMeals');
+  const mealsQuery = query(dailyMealsRef, where('date', '>=', startDate), where('date', '<=', endDate));
+
+  return getDocs(mealsQuery);
+}
+
 export default app;

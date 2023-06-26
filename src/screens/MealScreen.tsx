@@ -74,7 +74,6 @@ const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNa
   function saveMealPortion() {
     saveUserMeal({portion, unit});
     // TODO navigate if no error and after loading
-    // TODO save correct meal portions
     navigation.navigate('AddMeal');
   }
 
@@ -95,9 +94,13 @@ const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNa
           <Input
             value={portion.toString()}
             onChangeText={text => {
-              const numericValue = parseFloat(text);
-              if (!isNaN(numericValue)) {
-                setPortion(numericValue);
+              if (text === '') {
+                setPortion(0);
+              } else {
+                const numericValue = parseFloat(text);
+                if (!isNaN(numericValue)) {
+                  setPortion(numericValue);
+                }
               }
             }}
             bg={'$background'}

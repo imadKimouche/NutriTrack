@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
-import {pushUserMeal} from '../config/firebase';
+import {fetchUserDailyMeals, pushUserMeal} from '../config/firebase';
 import {useCurrentMealData, useCurrentSelectedDate} from './dailyTracker';
 
 export type Meal = {
@@ -189,4 +189,27 @@ export function usePostMeal(meal: Meal) {
     isLoading,
     error,
   };
+}
+
+export function useUserDailyMeals() {
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
+
+  return useInfiniteQuery(['userDailyMeals', user.uid, startDate, endDate], async ({pageParam = 0}) => {
+    const startIdx = pageParam * PAGE_SIZE;
+    const endIdx = (pageParam + 1) * PAGE_SIZE;
+    const mealsQuerySnapshot = await fetchUserDailyMeals(userId, startDate, endDate);
+    const meals = mealsQuerySnapshot.docs.map(doc => doc.data());
+    const hasMore = meals.length > endIdx;
+    const nextPageParam = hasMore ? pageParam + 1 : undefined;
+    const slicedMeals = meals.slice(startIdx, endIdx);
+
+    return {
+      slicedMeals,
+      nextPageParam,
+    };
+  });
 }

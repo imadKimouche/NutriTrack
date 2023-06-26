@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
 import {pushUserMeal} from '../config/firebase';
-import {useCurrentSelectedDate} from './dailyTracker';
+import {useCurrentMealData, useCurrentSelectedDate} from './dailyTracker';
 
 export type Meal = {
   id: number;
@@ -166,7 +166,7 @@ export function useSearchOFFMeal(searchValue: string) {
 }
 
 export function usePostMeal(meal: Meal) {
-  const {stringFormattedDate} = useCurrentSelectedDate();
+  const {stringFormattedDate, currentMealType} = useCurrentMealData();
   // const {user} = useAuth();
   const user = {
     email: 'imad.kim@gmail.com',
@@ -174,7 +174,7 @@ export function usePostMeal(meal: Meal) {
   };
 
   // const queryClient = useQueryClient();
-  const {isLoading, error, mutate} = useMutation(() => pushUserMeal(user.uid, stringFormattedDate, 'breakfest', meal), {
+  const {isLoading, error, mutate} = useMutation(() => pushUserMeal(user.uid, stringFormattedDate, currentMealType, meal), {
     onSuccess: () => {
       // TODO
       // Invalidate and refetch user daily meals data

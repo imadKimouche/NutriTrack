@@ -1,5 +1,6 @@
 import {initializeApp} from 'firebase/app';
 import {getFirestore, doc, getDoc, setDoc, query, collection, where, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+import {MealType} from '../hooks/dailyTracker';
 import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
 
@@ -25,25 +26,23 @@ export function pushUserData(userId: string, userData: UserData) {
   return setDoc(doc(db, 'users', userId), userData);
 }
 
-export async function fetchMealsContaining(value: string) {
-  // TODO fix strict equal should be turned into contain
-  if (value.trim().length === 0) {
-    return null;
-  }
-  const q = query(collection(db, 'meals'), where('name', '>=', value));
-  const querySnapshot = await getDocs(q);
-  const data = querySnapshot.docs.map(docElement => docElement.data());
-  return data;
-}
-
-export type MealType = 'breakfest' | 'lunch' | 'dinner' | 'snack';
-
 export async function pushUserMeal(userId: string, date: string, type: MealType, meal: Meal) {
   const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
+  const docSnapshot = await getDoc(dailyMealsRef);
 
-  return updateDoc(dailyMealsRef, {
-    [type]: arrayUnion(meal),
-  });
+  if (docSnapshot.exists()) {
+    return updateDoc(dailyMealsRef, {
+      [type]: arrayUnion(meal),
+    });
+  } else {
+    return setDoc(
+      dailyMealsRef,
+      {
+        [type]: [meal],
+      },
+      {merge: true},
+    );
+  }
 }
 
 export default app;

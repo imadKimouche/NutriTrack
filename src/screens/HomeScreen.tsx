@@ -1,13 +1,13 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '@shopify/restyle';
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList, ListRenderItem} from 'react-native';
 import Box from '../atoms/Box';
 import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
-import {useCurrentSelectedDate} from '../hooks/dailyTracker';
+import {MealType, useCurrentMealData} from '../hooks/dailyTracker';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
 import {HomeStackParamList} from './HomeStackNavigator';
@@ -31,7 +31,7 @@ type UserDailyData = {
   breakfast?: Meal[];
   lunch?: Meal[];
   dinner?: Meal[];
-  snacks?: Meal[];
+  snack?: Meal[];
 };
 
 const dayInMs = 24 * 60 * 60 * 1000;
@@ -199,8 +199,6 @@ const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => 
   );
 };
 
-type MealType = keyof Pick<UserDailyData, 'lunch' | 'breakfast' | 'dinner' | 'snacks'>;
-
 const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (mealType: MealType) => void}> = ({
   currentMealType,
   onMealTypePress,
@@ -218,6 +216,7 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
       <MealTypeItem label="Petit déj" selected={currentMealType === 'breakfast'} onPress={() => onMealTypePress('breakfast')} />
       <MealTypeItem label="Déjeuner" selected={currentMealType === 'lunch'} onPress={() => onMealTypePress('lunch')} />
       <MealTypeItem label="Diner" selected={currentMealType === 'dinner'} onPress={() => onMealTypePress('dinner')} />
+      <MealTypeItem label="En-cas" selected={currentMealType === 'snack'} onPress={() => onMealTypePress('snack')} />
     </Box>
   );
 };
@@ -271,9 +270,13 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const {currentSelectedDate, setCurrentSelectedDate} = useCurrentSelectedDate();
-  const currentDateMeals = userDailyData[currentSelectedDate] ?? undefined;
-  const [currentMealType, setCurrentMealType] = useState<MealType>('lunch');
+  const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useCurrentMealData();
+  const currentDateMeals = userDailyData[currentSelectedDate] ?? {
+    currentCalories: 0,
+    currentCarbs: 0,
+    currentFat: 0,
+    currentProt: 0,
+  };
 
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>

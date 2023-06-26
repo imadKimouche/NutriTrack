@@ -1,13 +1,18 @@
 import {useState} from 'react';
 
-const TODAY = new Date(1687612900379);
+const TODAY = new Date();
 
-export function useCurrentSelectedDate() {
+export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+
+export function useCurrentMealData() {
   const [currentSelectedDate, setCurrentSelectedDate] = useState(TODAY.getTime());
+  const [currentMealType, setCurrentMealType] = useState<MealType>('breakfast');
 
   return {
     currentSelectedDate,
     setCurrentSelectedDate,
-    stringFormattedDate: `${TODAY.getDay()}-${TODAY.getMonth()}-${TODAY.getFullYear()}`,
+    stringFormattedDate: `${TODAY.getDate()}-${TODAY.getMonth()}-${TODAY.getFullYear()}`,
+    currentMealType,
+    setCurrentMealType,
   };
 }

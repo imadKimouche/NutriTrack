@@ -11,6 +11,8 @@ import {
   updateDoc,
   arrayUnion,
   QueryDocumentSnapshot,
+  DocumentSnapshot,
+  SnapshotOptions,
 } from 'firebase/firestore';
 import {MealType} from '../hooks/dailyTracker';
 import {Meal} from '../hooks/meal';
@@ -57,8 +59,55 @@ export async function pushUserMeal(userId: string, date: string, type: MealType,
   }
 }
 
+type DailyMeals = {
+  currentCalories: number;
+  currentProt: number;
+  currentFat: number;
+  currentCarbs: number;
+  breakfast?: Meal[];
+  lunch?: Meal[];
+  diner?: Meal[];
+  snack?: Meal[];
+};
+
+const dailyMealsConverter = {
+  toFirestore: (dailyMeals: DailyMeals) => {
+    return {
+      currentCalories: dailyMeals.currentCalories,
+      currentProt: dailyMeals.currentProt,
+      currentFat: dailyMeals.currentFat,
+      currentCarbs: dailyMeals.currentCarbs,
+      breakfast: dailyMeals.breakfast || [],
+      lunch: dailyMeals.lunch || [],
+      diner: dailyMeals.diner || [],
+      snack: dailyMeals.snack || [],
+    };
+  },
+  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
+    const data = snapshot.data(options);
+    if (data !== undefined) {
+      return {
+        currentCalories: data.currentCalories,
+        currentProt: data.currentProt,
+        currentFat: data.currentFat,
+        currentCarbs: data.currentCarbs,
+        breakfast: data.breakfast || [],
+        lunch: data.lunch || [],
+        diner: data.diner || [],
+        snack: data.snack || [],
+      } as DailyMeals;
+    }
+    return {
+      currentCalories: 0,
+      currentProt: 0,
+      currentFat: 0,
+      currentCarbs: 0,
+    };
+  },
+};
+
 export async function fetchUserDailyMeals(userId: string, date: string) {
-  const dailyMealsDocRef = doc(db, 'users', userId, 'dailyMeals', date);
+  const dailyMealsDocRef = doc(db, 'users', userId, 'dailyMeals', date).withConverter(dailyMealsConverter);
   const dailyMeals = await getDoc(dailyMealsDocRef);
 
   if (dailyMeals.exists()) {

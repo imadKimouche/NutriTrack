@@ -1,3 +1,4 @@
+import {DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {fetchUserDailyMeals, pushUserMeal} from '../config/firebase';
@@ -173,14 +174,13 @@ export function usePostMeal(meal: Meal) {
     uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
   };
 
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const {isLoading, error, mutate} = useMutation(
     ({portion, unit}: {portion: number; unit: string}) =>
       pushUserMeal(user.uid, stringFormattedDate, currentMealType, meal, portion, unit),
     {
       onSuccess: () => {
-        // TODO
-        // Invalidate and refetch user daily meals data
+        queryClient.invalidateQueries('userDailyMeals');
       },
     },
   );

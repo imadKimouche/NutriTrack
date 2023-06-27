@@ -59,14 +59,14 @@ export async function pushUserMeal(userId: string, date: string, type: MealType,
   }
 }
 
-type DailyMeals = {
+export type DailyMeals = {
   currentCalories: number;
   currentProt: number;
   currentFat: number;
   currentCarbs: number;
   breakfast?: Meal[];
   lunch?: Meal[];
-  diner?: Meal[];
+  dinner?: Meal[];
   snack?: Meal[];
 };
 
@@ -79,7 +79,7 @@ const dailyMealsConverter = {
       currentCarbs: dailyMeals.currentCarbs,
       breakfast: dailyMeals.breakfast || [],
       lunch: dailyMeals.lunch || [],
-      diner: dailyMeals.diner || [],
+      dinner: dailyMeals.dinner || [],
       snack: dailyMeals.snack || [],
     };
   },
@@ -107,13 +107,16 @@ const dailyMealsConverter = {
 };
 
 export async function fetchUserDailyMeals(userId: string, date: string) {
+  if (userId.trim().length === 0 || date.trim().length === 0) {
+    return undefined;
+  }
   const dailyMealsDocRef = doc(db, 'users', userId, 'dailyMeals', date).withConverter(dailyMealsConverter);
   const dailyMeals = await getDoc(dailyMealsDocRef);
 
   if (dailyMeals.exists()) {
     return dailyMeals.data();
   }
-  return [];
+  return undefined;
 }
 
 // export async function fetchUserDailyMeals(userId: string, startDate: string, endDate: string) {

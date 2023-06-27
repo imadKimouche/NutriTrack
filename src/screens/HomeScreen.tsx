@@ -1,95 +1,19 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '@shopify/restyle';
 import React from 'react';
-import {FlatList, ListRenderItem} from 'react-native';
+import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {MealType, useCurrentMealData} from '../hooks/dailyTracker';
-import {useUserDailyMeals} from '../hooks/meal';
+import {Meal, useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
-
-type Meal = {
-  food: string;
-  calories: number;
-  protein: number;
-  fat: number;
-  carbs: number;
-};
-
-type UserDailyData = {
-  date: Date;
-  currentCalories: number;
-  currentProt: number;
-  currentFat: number;
-  currentCarbs: number;
-  breakfast?: Meal[];
-  lunch?: Meal[];
-  dinner?: Meal[];
-  snack?: Meal[];
-};
-
-const dayInMs = 24 * 60 * 60 * 1000;
-const today = new Date(1687612900379);
-const dayBefore = new Date(today.getTime() - 2 * dayInMs);
-const yesterday = new Date(today.getTime() - dayInMs);
-const tomorrow = new Date(today.getTime() + dayInMs);
-const dayAfter = new Date(today.getTime() + 2 * dayInMs);
-
-const userDailyData: {[key: string]: UserDailyData} = {
-  [dayBefore.getTime()]: {
-    date: dayBefore,
-    currentCalories: 2001,
-    currentProt: 30,
-    currentFat: 30,
-    currentCarbs: 150,
-    breakfast: [{food: 'Lait', calories: 300, protein: 180, fat: 20, carbs: 30}],
-    lunch: [
-      {food: 'Riz', calories: 300, protein: 180, fat: 20, carbs: 30},
-      {food: 'Banane', calories: 300, protein: 180, fat: 20, carbs: 30},
-      {food: 'Pomme', calories: 300, protein: 180, fat: 20, carbs: 30},
-      {food: 'Pates', calories: 300, protein: 180, fat: 20, carbs: 30},
-      {food: 'Poulet', calories: 300, protein: 180, fat: 20, carbs: 30},
-      {food: 'Fraises', calories: 300, protein: 180, fat: 20, carbs: 30},
-    ],
-    dinner: [],
-  },
-
-  [yesterday.getTime()]: {
-    date: yesterday,
-    currentCalories: 30,
-    currentProt: 0,
-    currentFat: 0,
-    currentCarbs: 0,
-  },
-  [today.getTime()]: {
-    date: today,
-    currentCalories: 3000,
-    currentProt: 0,
-    currentFat: 0,
-    currentCarbs: 0,
-  },
-  [tomorrow.getTime()]: {
-    date: tomorrow,
-    currentCalories: 1000,
-    currentProt: 0,
-    currentFat: 0,
-    currentCarbs: 0,
-  },
-  [dayAfter.getTime()]: {
-    date: dayAfter,
-    currentCalories: 1500,
-    currentProt: 0,
-    currentFat: 0,
-    currentCarbs: 0,
-  },
-};
 
 const MAX_CAL = 2300;
 const MAX_PROT = 120;
@@ -156,7 +80,7 @@ const MacroItem: React.FC<{
   );
 };
 
-const renderMeal: ListRenderItem<Meal> = ({item: meal}) => {
+const MealItem: React.FC<Meal> = meal => {
   return (
     <Box
       bg={'$background'}
@@ -170,12 +94,12 @@ const renderMeal: ListRenderItem<Meal> = ({item: meal}) => {
       <Box flex={1} flexDirection={'row'} alignItems={'center'}>
         <Image />
         <Box marginLeft={'s'}>
-          <Text variant={'cardTitle'}>{meal.food}</Text>
+          <Text variant={'cardTitle'}>{meal.name}</Text>
           <Text variant={'cardSubtitle'}>{meal.calories}kcal - 100G</Text>
         </Box>
       </Box>
       <Box flex={1} flexDirection={'row'} justifyContent={'space-around'} alignItems={'center'}>
-        <MacroItem value={meal.protein} maxValue={MAX_PROT} unit="g" label="Protein" color="$proteinBar" />
+        <MacroItem value={meal.proteins} maxValue={MAX_PROT} unit="g" label="Protein" color="$proteinBar" />
         <MacroItem value={meal.carbs} maxValue={MAX_CARBS} unit="g" label="Carbs" color="$carbsBar" />
         <MacroItem value={meal.fat} maxValue={MAX_FAT} unit="g" label="Fat" color="$fatBar" />
       </Box>
@@ -273,19 +197,19 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   const {spacing} = useTheme<Theme>();
   const {currentSelectedDate, setCurrentSelectedDate, stringFormattedDate, currentMealType, setCurrentMealType} =
     useCurrentMealData();
-  const currentDateMeals = userDailyData[currentSelectedDate] ?? {
+
+  const {data} = useUserDailyMeals(stringFormattedDate);
+  const currentDateMeals = data ?? {
     currentCalories: 0,
     currentCarbs: 0,
     currentFat: 0,
     currentProt: 0,
   };
-  const {data} = useUserDailyMeals(stringFormattedDate);
-  console.log('data', data);
 
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>
       <DatePicker
-        dates={Object.keys(userDailyData).map(key => parseInt(key, 10))}
+        dates={['24-5-2013', '25-5-2013', '26-5-2013', '27-5-2013', '28-5-2013'].map(key => parseInt(key, 10))}
         currentDate={currentSelectedDate}
         onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
       />
@@ -297,8 +221,8 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
           <FlatList
             contentContainerStyle={{padding: spacing.m}}
             data={currentDateMeals[currentMealType]}
-            renderItem={renderMeal}
-            keyExtractor={item => item.food}
+            renderItem={({item}) => <MealItem {...item} />}
+            keyExtractor={item => item.name}
           />
         )}
       </Box>

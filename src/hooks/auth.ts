@@ -15,7 +15,8 @@ import {FirebaseError} from 'firebase/app';
 
 const auth = getAuth();
 
-console.log(app);
+// console.log(app);
+app;
 
 type SignupFormData = {
   email: string;
@@ -70,13 +71,8 @@ export function useSignup() {
 export const useSignin = () => {
   const form = useForm<SigninFormData>();
 
-  const mutation = useMutation<UserCredential, FirebaseError, MutationData>(
-    (data: MutationData) => signInWithEmailAndPassword(auth, data.email, data.password),
-    {
-      onSuccess: result => {
-        console.log('user logged in', result.user.uid);
-      },
-    },
+  const mutation = useMutation<UserCredential, FirebaseError, MutationData>((data: MutationData) =>
+    signInWithEmailAndPassword(auth, data.email, data.password),
   );
 
   const onSubmit = form.handleSubmit((data: MutationData) => {

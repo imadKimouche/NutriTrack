@@ -8,6 +8,7 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {MealType, useCurrentMealData} from '../hooks/dailyTracker';
+import {useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
 import {HomeStackParamList} from './HomeStackNavigator';
@@ -270,13 +271,16 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useCurrentMealData();
+  const {currentSelectedDate, setCurrentSelectedDate, stringFormattedDate, currentMealType, setCurrentMealType} =
+    useCurrentMealData();
   const currentDateMeals = userDailyData[currentSelectedDate] ?? {
     currentCalories: 0,
     currentCarbs: 0,
     currentFat: 0,
     currentProt: 0,
   };
+  const {data} = useUserDailyMeals(stringFormattedDate);
+  console.log('data', data);
 
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>

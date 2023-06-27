@@ -1,5 +1,17 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore, doc, getDoc, setDoc, query, collection, where, getDocs, updateDoc, arrayUnion} from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  query,
+  collection,
+  where,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+  QueryDocumentSnapshot,
+} from 'firebase/firestore';
 import {MealType} from '../hooks/dailyTracker';
 import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
@@ -45,11 +57,21 @@ export async function pushUserMeal(userId: string, date: string, type: MealType,
   }
 }
 
-export async function fetchUserDailyMeals(userId: string, startDate: string, endDate: string) {
-  const dailyMealsRef = collection(db, 'users', userId, 'dailyMeals');
-  const mealsQuery = query(dailyMealsRef, where('date', '>=', startDate), where('date', '<=', endDate));
+export async function fetchUserDailyMeals(userId: string, date: string) {
+  const dailyMealsDocRef = doc(db, 'users', userId, 'dailyMeals', date);
+  const dailyMeals = await getDoc(dailyMealsDocRef);
 
-  return getDocs(mealsQuery);
+  if (dailyMeals.exists()) {
+    return dailyMeals.data();
+  }
+  return [];
 }
+
+// export async function fetchUserDailyMeals(userId: string, startDate: string, endDate: string) {
+//   const dailyMealsRef = collection(db, 'users', userId, 'dailyMeals');
+//   const mealsQuery = query(dailyMealsRef, where('date', '>=', startDate), where('date', '<=', endDate));
+//
+//   return getDocs(mealsQuery);
+// }
 
 export default app;

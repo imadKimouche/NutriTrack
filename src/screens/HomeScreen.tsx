@@ -1,15 +1,15 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '@shopify/restyle';
-import React, {useMemo} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
-import {MealType, useCurrentMealData} from '../hooks/dailyTracker';
 import {Meal, useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
+import {useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
 import {getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
@@ -189,7 +189,11 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useCurrentMealData();
+  const currentSelectedDate = useDashboardStore(state => state.selectedDate);
+  const setCurrentSelectedDate = useDashboardStore(state => state.setSelectedDate);
+  const currentMealType = useDashboardStore(state => state.selectedMealType);
+  const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
+
   const {data} = useUserDailyMeals(currentSelectedDate);
 
   const currentDateMeals = data ?? {

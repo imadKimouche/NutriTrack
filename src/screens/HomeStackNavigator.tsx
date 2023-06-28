@@ -13,6 +13,7 @@ import SettingsScreen from './SettingsScreen';
 import AddMealScreen, {AddMealHeader} from './AddMealScreen';
 import MealScreen from './MealScreen';
 import {Meal} from '../hooks/meal';
+import {useCurrentMealData} from '../hooks/dailyTracker';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;

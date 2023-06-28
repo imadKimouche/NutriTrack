@@ -12,6 +12,7 @@ import Picker from '../components/Picker';
 import Input from '../atoms/Input';
 import {useAuth} from '../hooks/auth';
 import {usePostMeal} from '../hooks/meal';
+import {useDashboardStore} from '../store/dashboard';
 
 type MealScreenRouteProp = RouteProp<HomeStackParamList, 'Meal'>;
 type MealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Meal'>;
@@ -69,11 +70,14 @@ const MealScreen: React.FC<{route: MealScreenRouteProp; navigation: MealScreenNa
   const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
   const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
   const {saveUserMeal} = usePostMeal(meal);
+  const currentMealType = useDashboardStore(state => state.selectedMealType);
   //TODO handle save meal loading & error state
 
   function saveMealPortion() {
+    console.log('current meal type', currentMealType);
+
     saveUserMeal({portion, unit});
-    // TODO navigate if no error and after loading
+    // // TODO navigate if no error and after loading
     navigation.navigate('AddMeal');
   }
 

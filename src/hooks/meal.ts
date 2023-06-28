@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {fetchUserDailyMeals, pushUserMeal} from '../config/firebase';
-import {useCurrentMealData} from './dailyTracker';
+import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
   id: number;
@@ -166,7 +166,9 @@ export function useSearchOFFMeal(searchValue: string) {
 }
 
 export function usePostMeal(meal: Meal) {
-  const {currentSelectedDate, currentMealType} = useCurrentMealData();
+  const currentSelectedDate = useDashboardStore(state => state.selectedDate);
+  const currentMealType = useDashboardStore(state => state.selectedMealType);
+
   // const {user} = useAuth();
   const user = {
     email: 'imad.kim@gmail.com',

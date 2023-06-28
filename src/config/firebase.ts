@@ -93,7 +93,7 @@ const dailyMealsConverter = {
         currentCarbs: data.currentCarbs,
         breakfast: data.breakfast || [],
         lunch: data.lunch || [],
-        diner: data.diner || [],
+        dinner: data.dinner || [],
         snack: data.snack || [],
       } as DailyMeals;
     }

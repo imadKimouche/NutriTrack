@@ -42,7 +42,7 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
             borderColor={'black'}
             borderStyle={'solid'}
             borderWidth={isSelected ? 0 : 1}>
-            <Text color={isSelected ? 'white' : 'black'}>{currentDate.split('-')[0]}</Text>
+            <Text color={isSelected ? 'white' : 'black'}>{date.split('-')[0]}</Text>
           </Pressable>
         );
       })}

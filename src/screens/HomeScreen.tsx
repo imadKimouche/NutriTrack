@@ -196,6 +196,8 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
 
   const {data} = useUserDailyMeals(currentSelectedDate);
 
+  console.log(data);
+
   const currentDateMeals = data ?? {
     currentCalories: 0,
     currentCarbs: 0,

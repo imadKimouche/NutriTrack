@@ -1,22 +1,8 @@
 import {initializeApp} from 'firebase/app';
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  query,
-  collection,
-  where,
-  getDocs,
-  updateDoc,
-  arrayUnion,
-  QueryDocumentSnapshot,
-  DocumentSnapshot,
-  SnapshotOptions,
-} from 'firebase/firestore';
-import {MealType} from '../hooks/dailyTracker';
+import {getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
+import {MealType} from '../store/dashboard';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC1VPYajPNE1OcNoQjdQAuL6-cGoFSbuBI',

@@ -1,6 +1,6 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '@shopify/restyle';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Image from '../atoms/Image';
@@ -11,6 +11,7 @@ import {MealType, useCurrentMealData} from '../hooks/dailyTracker';
 import {Meal, useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
 import {Theme} from '../style/theme';
+import {getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
@@ -20,20 +21,13 @@ const MAX_PROT = 120;
 const MAX_FAT = 30;
 const MAX_CARBS = 100;
 
-const DatePicker: React.FC<{dates: number[]; currentDate: number; onPress: (date: number) => void}> = ({
-  dates,
-  currentDate,
-  onPress,
-}) => {
+const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void}> = ({currentDate, onPress}) => {
+  const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
+
   return (
     <Box flexDirection={'row'} justifyContent={'space-around'} width={'100%'} px={'l'} py={'l'}>
       {dates.map(date => {
-        const dateObj = new Date(date);
-        const currentDateObj = new Date(currentDate);
-        const isCurrentDate =
-          dateObj.getDate() === currentDateObj.getDate() &&
-          dateObj.getMonth() === currentDateObj.getMonth() &&
-          dateObj.getFullYear() === currentDateObj.getFullYear();
+        const isSelected = currentDate === date;
 
         return (
           <Pressable
@@ -43,12 +37,12 @@ const DatePicker: React.FC<{dates: number[]; currentDate: number; onPress: (date
             height={42}
             alignItems={'center'}
             justifyContent={'center'}
-            bg={isCurrentDate ? '$primary' : '$background'}
+            bg={isSelected ? '$primary' : '$background'}
             borderRadius={'xs'}
             borderColor={'black'}
             borderStyle={'solid'}
-            borderWidth={isCurrentDate ? 0 : 1}>
-            <Text color={isCurrentDate ? 'white' : 'black'}>{new Date(date).getDate()}</Text>
+            borderWidth={isSelected ? 0 : 1}>
+            <Text color={isSelected ? 'white' : 'black'}>{currentDate.split('-')[0]}</Text>
           </Pressable>
         );
       })}
@@ -195,10 +189,9 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
-  const {currentSelectedDate, setCurrentSelectedDate, stringFormattedDate, currentMealType, setCurrentMealType} =
-    useCurrentMealData();
+  const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useCurrentMealData();
+  const {data} = useUserDailyMeals(currentSelectedDate);
 
-  const {data} = useUserDailyMeals(stringFormattedDate);
   const currentDateMeals = data ?? {
     currentCalories: 0,
     currentCarbs: 0,
@@ -208,11 +201,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
 
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>
-      <DatePicker
-        dates={['24-5-2013', '25-5-2013', '26-5-2013', '27-5-2013', '28-5-2013'].map(key => parseInt(key, 10))}
-        currentDate={currentSelectedDate}
-        onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
-      />
+      <DatePicker currentDate={currentSelectedDate} onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)} />
       <TotalCalorieBar currentCalories={currentDateMeals.currentCalories} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
       <Fab icon="plus" onPress={() => navigation.navigate('AddMeal')} />

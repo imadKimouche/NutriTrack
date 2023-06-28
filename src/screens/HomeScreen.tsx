@@ -193,10 +193,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   const setCurrentSelectedDate = useDashboardStore(state => state.setSelectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
   const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
-
   const {data} = useUserDailyMeals(currentSelectedDate);
-
-  console.log(data);
 
   const currentDateMeals = data ?? {
     currentCalories: 0,
@@ -208,7 +205,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>
       <DatePicker currentDate={currentSelectedDate} onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)} />
-      <TotalCalorieBar currentCalories={currentDateMeals.currentCalories} maxCalories={MAX_CAL} />
+      <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
       <Fab icon="plus" onPress={() => navigation.navigate('AddMeal')} />
       <Box flex={1} alignSelf={'stretch'}>

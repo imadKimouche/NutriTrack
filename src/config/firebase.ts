@@ -26,22 +26,69 @@ export function pushUserData(userId: string, userData: UserData) {
   return setDoc(doc(db, 'users', userId), userData);
 }
 
-export async function pushUserMeal(userId: string, date: string, type: MealType, meal: Meal, portion: number, unit: string) {
+export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
   const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
   const docSnapshot = await getDoc(dailyMealsRef);
 
   if (docSnapshot.exists()) {
     return updateDoc(dailyMealsRef, {
-      [type]: arrayUnion({...meal, portion, unit}),
+      [mealType]: arrayUnion({...meal, portion, unit}),
     });
   } else {
     return setDoc(
       dailyMealsRef,
       {
-        [type]: [{...meal, portion, unit}],
+        [mealType]: [{...meal, portion, unit}],
       },
       {merge: true},
     );
+  }
+}
+
+export async function updateUserDailyMacros(
+  userId: string,
+  date: string,
+  calories?: number,
+  proteins?: number,
+  carbs?: number,
+  fat?: number,
+) {
+  // TODO share same ref across functions ?
+  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
+  const docSnapshot = await getDoc(dailyMealsRef);
+
+  if (docSnapshot.exists()) {
+    const updatedData: Partial<DailyMeals> = {};
+
+    if (calories !== undefined) {
+      updatedData.currentCalories = calories;
+    }
+    if (proteins !== undefined) {
+      updatedData.currentProt = proteins;
+    }
+    if (carbs !== undefined) {
+      updatedData.currentCarbs = carbs;
+    }
+    if (fat !== undefined) {
+      updatedData.currentFat = fat;
+    }
+    return updateDoc(dailyMealsRef, updatedData);
+  } else {
+    const newData: Partial<DailyMeals> = {};
+
+    if (calories !== undefined) {
+      newData.currentCalories = calories;
+    }
+    if (proteins !== undefined) {
+      newData.currentProt = proteins;
+    }
+    if (carbs !== undefined) {
+      newData.currentCarbs = carbs;
+    }
+    if (fat !== undefined) {
+      newData.currentFat = fat;
+    }
+    return setDoc(dailyMealsRef, newData, {merge: true});
   }
 }
 

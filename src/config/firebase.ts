@@ -1,5 +1,16 @@
 import {initializeApp} from 'firebase/app';
-import {getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  DocumentSnapshot,
+  SnapshotOptions,
+  deleteDoc,
+  deleteField,
+} from 'firebase/firestore';
 import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
 import {MealType} from '../store/dashboard';
@@ -148,6 +159,29 @@ export async function fetchUserDailyMeals(userId: string, date: string) {
     return dailyMeals.data();
   }
   return undefined;
+}
+
+export async function deleteUserMeal(userId: string, date: string, mealType: MealType, mealId: number) {
+  console.log('delete', mealId);
+
+  if (userId.trim().length === 0 || date.trim().length === 0) {
+    return undefined;
+  }
+
+  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
+  const docSnapshot = await getDoc(dailyMealsRef);
+
+  if (docSnapshot.exists()) {
+    const mealTypeData = docSnapshot.get(mealType) as Meal[] | undefined;
+
+    if (mealTypeData) {
+      const updatedMeals = mealTypeData.filter(meal => meal.id !== mealId);
+
+      return updateDoc(dailyMealsRef, {
+        [mealType]: updatedMeals,
+      });
+    }
+  }
 }
 
 // export async function fetchUserDailyMeals(userId: string, startDate: string, endDate: string) {

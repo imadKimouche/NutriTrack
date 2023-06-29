@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
-import {fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
+import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
@@ -202,4 +202,31 @@ export function useUserDailyMeals(date: string) {
 
   const {data, isLoading, error, isError} = useQuery(['userDailyMeals', user, date], () => fetchUserDailyMeals(user.uid, date));
   return {data, isLoading, error, isError};
+}
+
+export function useDeleteDailyMeal() {
+  const currentSelectedDate = useDashboardStore(state => state.selectedDate);
+  const currentMealType = useDashboardStore(state => state.selectedMealType);
+
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
+
+  const queryClient = useQueryClient();
+  const {isLoading, isError, error, mutate} = useMutation(
+    (mealId: number) => deleteUserMeal(user.uid, currentSelectedDate, currentMealType, mealId),
+    {
+      onSuccess: async () => {
+        queryClient.invalidateQueries('userDailyMeals');
+      },
+    },
+  );
+  return {
+    deleteDailyMeal: mutate,
+    isLoading,
+    isError,
+    error,
+  };
 }

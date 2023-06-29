@@ -1,5 +1,5 @@
 import React from 'react';
-import {BoxProps, ResponsiveValue, useResponsiveProp, useTheme} from '@shopify/restyle';
+import {BoxProps, ResponsiveValue, useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import {ActivityIndicator} from 'react-native';
 

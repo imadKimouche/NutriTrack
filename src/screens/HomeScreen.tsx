@@ -7,7 +7,8 @@ import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
-import {Meal, useUserDailyMeals} from '../hooks/meal';
+import Loader from '../components/Loader';
+import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
@@ -74,9 +75,16 @@ const MacroItem: React.FC<{
   );
 };
 
-const MealItem: React.FC<Meal> = meal => {
+interface MealItemProps extends Meal {
+  onLongPress: (id: number) => void;
+}
+
+const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
   return (
-    <Box
+    <Pressable
+      onLongPress={() => {
+        onLongPress(meal.id);
+      }}
       bg={'$background'}
       height={120}
       padding={'s'}
@@ -97,7 +105,7 @@ const MealItem: React.FC<Meal> = meal => {
         <MacroItem value={meal.carbs} maxValue={MAX_CARBS} unit="g" label="Carbs" color="$carbsBar" />
         <MacroItem value={meal.fat} maxValue={MAX_FAT} unit="g" label="Fat" color="$fatBar" />
       </Box>
-    </Box>
+    </Pressable>
   );
 };
 
@@ -194,6 +202,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   const currentMealType = useDashboardStore(state => state.selectedMealType);
   const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
   const {data} = useUserDailyMeals(currentSelectedDate);
+  const {deleteDailyMeal, isLoading: deleteIsLoading, isError: deleteIsError, error: deleteError} = useDeleteDailyMeal();
 
   const currentDateMeals = data ?? {
     currentCalories: 0,
@@ -213,7 +222,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
           <FlatList
             contentContainerStyle={{padding: spacing.m}}
             data={currentDateMeals[currentMealType]}
-            renderItem={({item}) => <MealItem {...item} />}
+            renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
             keyExtractor={item => item.name}
           />
         )}

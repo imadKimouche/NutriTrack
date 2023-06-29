@@ -162,8 +162,6 @@ export async function fetchUserDailyMeals(userId: string, date: string) {
 }
 
 export async function deleteUserMeal(userId: string, date: string, mealType: MealType, mealId: number) {
-  console.log('delete', mealId);
-
   if (userId.trim().length === 0 || date.trim().length === 0) {
     return undefined;
   }
@@ -175,11 +173,28 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
     const mealTypeData = docSnapshot.get(mealType) as Meal[] | undefined;
 
     if (mealTypeData) {
-      const updatedMeals = mealTypeData.filter(meal => meal.id !== mealId);
+      const mealToDelete = mealTypeData.find(meal => meal.id === mealId);
 
-      return updateDoc(dailyMealsRef, {
-        [mealType]: updatedMeals,
-      });
+      if (mealToDelete) {
+        const {calories: mealCalories = 0, proteins: mealProteins = 0, carbs: mealCarbs = 0, fat: mealFat = 0} = mealToDelete;
+
+        const {currentCalories = 0, currentProt = 0, currentCarbs = 0, currentFat = 0} = docSnapshot.data() as DailyMeals;
+
+        const updatedCalories = currentCalories - mealCalories;
+        const updatedProt = currentProt - mealProteins;
+        const updatedCarbs = currentCarbs - mealCarbs;
+        const updatedFat = currentFat - mealFat;
+
+        const updatedMeals = mealTypeData.filter(meal => meal.id !== mealId);
+
+        return updateDoc(dailyMealsRef, {
+          [mealType]: updatedMeals,
+          currentCalories: updatedCalories,
+          currentProt: updatedProt,
+          currentCarbs: updatedCarbs,
+          currentFat: updatedFat,
+        });
+      }
     }
   }
 }

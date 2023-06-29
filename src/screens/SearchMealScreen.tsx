@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {useNavigation} from '@react-navigation/native';
 import {HomeStackParamList} from './HomeStackNavigator';
+import {useMealSearchHistory} from '../store/mealSearchHistory';
 
 export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
   const insets = useSafeAreaInsets();
@@ -92,13 +93,12 @@ const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: (
   return <></>;
 };
 
-type SearchMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
-
-const SearchList: React.FC<{searchValue: string}> = ({searchValue}) => {
-  const navigation = useNavigation<SearchMealScreenNavigationProp>();
+const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNavigationProp}> = ({searchValue, navigation}) => {
   const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetching} = useSearchOFFMeal(searchValue);
+  const addMealToHistory = useMealSearchHistory(state => state.add);
 
   function onMealPressed(meal: Meal) {
+    addMealToHistory(meal);
     navigation.navigate('AddMeal', {meal});
   }
 
@@ -126,18 +126,33 @@ const SearchList: React.FC<{searchValue: string}> = ({searchValue}) => {
   return <></>;
 };
 
-const SearchMealScreen: React.FC<{}> = () => {
+type SearchMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'SearchMeal'>;
+const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> = ({navigation}) => {
   const [searchMeal, setSearchMeal] = useState('');
   const insets = useSafeAreaInsets();
+  const mealSearchHistory = useMealSearchHistory(state => state.history);
+  const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
 
   return (
     <Box flex={1} justifyContent={'flex-start'} bg={'$windowBackground'} style={{paddingBottom: insets.bottom}}>
       <Box p={'s'}>
         <Searchbar onSubmitEditing={setSearchMeal} />
       </Box>
-      <SearchList searchValue={searchMeal} />
+      <SearchList searchValue={searchMeal} navigation={navigation} />
       <Box flex={1} m={'s'}>
-        <Text variant={'bodyLarge'}>Historique</Text>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'bodyLarge'}>Historique</Text>
+          <Text onPress={clearMealSearchHistory} variant={'labelSmall'}>
+            Tout effacer
+          </Text>
+        </Box>
+        {mealSearchHistory.map((meal: Meal) => {
+          return (
+            <Pressable key={meal.id} onPress={() => navigation.navigate('AddMeal', {meal})} alignSelf={'stretch'} p={'s'}>
+              <Text>{meal.name}</Text>
+            </Pressable>
+          );
+        })}
       </Box>
     </Box>
   );

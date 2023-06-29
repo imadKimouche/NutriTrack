@@ -9,7 +9,7 @@ import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {Meal, useUserDailyMeals} from '../hooks/meal';
 import {useUserData} from '../hooks/userData';
-import {useDashboardStore} from '../store/dashboard';
+import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
 import {getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
@@ -207,7 +207,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
       <DatePicker currentDate={currentSelectedDate} onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)} />
       <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={MAX_CAL} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
-      <Fab icon="plus" onPress={() => navigation.navigate('AddMeal')} />
+      <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
       <Box flex={1} alignSelf={'stretch'}>
         {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
           <FlatList

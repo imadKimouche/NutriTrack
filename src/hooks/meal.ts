@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
-import {fetchUserDailyMeals, pushUserMeal} from '../config/firebase';
+import {fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
@@ -180,7 +180,8 @@ export function usePostMeal(meal: Meal) {
     ({portion, unit}: {portion: number; unit: string}) =>
       pushUserMeal(user.uid, currentSelectedDate, currentMealType, meal, portion, unit),
     {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await updateUserDailyMacros(user.uid, currentSelectedDate, meal.calories, meal.proteins, meal.carbs, meal.fat);
         queryClient.invalidateQueries('userDailyMeals');
       },
     },

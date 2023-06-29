@@ -58,37 +58,35 @@ export async function updateUserDailyMacros(
   const docSnapshot = await getDoc(dailyMealsRef);
 
   if (docSnapshot.exists()) {
-    const updatedData: Partial<DailyMeals> = {};
+    const currentData = docSnapshot.data() as DailyMeals;
+    const updatedMacros: Partial<DailyMeals> = {};
 
     if (calories !== undefined) {
-      updatedData.currentCalories = calories;
+      updatedMacros.currentCalories = (currentData.currentCalories || 0) + calories;
     }
+
     if (proteins !== undefined) {
-      updatedData.currentProt = proteins;
+      updatedMacros.currentProt = (currentData.currentProt || 0) + proteins;
     }
+
     if (carbs !== undefined) {
-      updatedData.currentCarbs = carbs;
+      updatedMacros.currentCarbs = (currentData.currentCarbs || 0) + carbs;
     }
+
     if (fat !== undefined) {
-      updatedData.currentFat = fat;
+      updatedMacros.currentFat = (currentData.currentFat || 0) + fat;
     }
-    return updateDoc(dailyMealsRef, updatedData);
+
+    return updateDoc(dailyMealsRef, updatedMacros);
   } else {
-    const newData: Partial<DailyMeals> = {};
+    const newMacros: DailyMeals = {
+      currentCalories: calories || 0,
+      currentProt: proteins || 0,
+      currentCarbs: carbs || 0,
+      currentFat: fat || 0,
+    };
 
-    if (calories !== undefined) {
-      newData.currentCalories = calories;
-    }
-    if (proteins !== undefined) {
-      newData.currentProt = proteins;
-    }
-    if (carbs !== undefined) {
-      newData.currentCarbs = carbs;
-    }
-    if (fat !== undefined) {
-      newData.currentFat = fat;
-    }
-    return setDoc(dailyMealsRef, newData, {merge: true});
+    return setDoc(dailyMealsRef, newMacros, {merge: true});
   }
 }
 

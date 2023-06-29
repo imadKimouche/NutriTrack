@@ -1,143 +1,137 @@
-import {NativeStackHeaderProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {FlatList, Image} from 'react-native';
+import {Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
-import Searchbar from '../components/Searchbar';
-import Loader from '../components/Loader';
-import {Meal, useSearchOFFMeal} from '../hooks/meal';
-import {useNavigation} from '@react-navigation/native';
 import {HomeStackParamList} from './HomeStackNavigator';
+import Picker from '../components/Picker';
+import Input from '../atoms/Input';
+import {useAuth} from '../hooks/auth';
+import {usePostMeal} from '../hooks/meal';
 
-export const AddMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
+type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
+type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
+
+type MealHeaderProps = {
+  title: string;
+  onBackPress: () => void;
+  onSavePress: () => void;
+};
+
+export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSavePress}) => {
   const insets = useSafeAreaInsets();
+  const headerTitle = title.length > 18 ? title.slice(0, 15) + '...' : title;
+
   return (
     <Box
-      bg={'$background'}
-      width={'100%'}
+      alignSelf={'stretch'}
       flexDirection={'row'}
       alignItems={'center'}
-      pb={'s'}
+      pb={'m'}
       style={{
         paddingTop: insets.top,
       }}>
-      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
+      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'headerBackTitle'}>Suivi</Text>
+        <Text variant={'headerBackTitle'}>Recherche</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'headerTitle'}>Ajout de repas</Text>
+        <Text variant={'headerTitle'}>{headerTitle}</Text>
       </Box>
-      <Box flex={1} />
+      <Pressable flex={1} onPress={onSavePress}>
+        <Text variant={'headerBackTitle'}>Enregistrer</Text>
+      </Pressable>
     </Box>
   );
 };
 
-type MealListItemProps = {meal: Meal; onItemPressed: (meal: Meal) => void};
-
-const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
+const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, value}) => {
   return (
-    <Pressable
-      onPress={() => onItemPressed(meal)}
-      alignSelf={'stretch'}
-      p={'m'}
-      borderRadius={'sm'}
-      borderBottomColor={'$listItemDivider'}
-      borderBottomWidth={1}
-      flexDirection={'row'}
-      alignItems={'center'}>
-      <Image source={{uri: meal.images.thumbUrl}} style={{width: 30, height: 30}} />
-      <Box alignItems={'flex-start'} px={'s'} flex={1}>
-        <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
+    <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$slideTabBackground'} justifyContent={'space-between'}>
+      <Text variant={'cardSubtitle'}>{label}</Text>
+      <Text variant={'cardSubtitle'}>{value.toString()}</Text>
+    </Box>
+  );
+};
+
+const UNITS: Record<string, string[]> = {
+  g: ['g', 'kg', 'oz', 'mg'],
+  ml: ['ml', 'l', 'cl', 'floz'],
+  default: ['g', 'kg', 'oz', 'mg', 'ml', 'l', 'cl', 'floz'],
+};
+
+const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMealScreenNavigationProp}> = ({
+  route,
+  navigation,
+}) => {
+  const {meal} = route.params;
+  const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
+  const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
+  const {saveUserMeal} = usePostMeal(meal);
+  //TODO handle save meal loading & error state
+
+  function saveMealPortion() {
+    saveUserMeal({portion, unit});
+    // // TODO navigate if no error and after loading
+    navigation.navigate('SearchMeal');
+  }
+
+  const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
+
+  return (
+    <Box flex={1} bg={'$windowBackground'}>
+      <MealHeader title={meal.name} onBackPress={navigation.goBack} onSavePress={saveMealPortion} />
+      <Box flex={0.5} alignItems={'center'} px={'s'}>
+        <Text variant={'cardTitle'} py={'m'}>
           {meal.name}
         </Text>
+        <Image source={{uri: meal.images.url}} style={{width: 150, height: 150}} />
       </Box>
-    </Pressable>
-  );
-};
-
-const SearchError: React.FC = () => {
-  return (
-    <Box>
-      <Text variant={'errorSmall'}>Oups, je rencontre un problème</Text>
-    </Box>
-  );
-};
-
-const SearchLoader: React.FC = () => {
-  return (
-    <Box my={'s'}>
-      <Loader color="$primary" />
-    </Box>
-  );
-};
-
-const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: () => void}> = ({show, isLoading, onPress}) => {
-  if (show) {
-    if (isLoading) {
-      return <SearchLoader />;
-    } else {
-      return (
-        <Pressable alignSelf={'center'} py={'s'} onPress={onPress}>
-          <Text variant={'bodySmall'} color={'$primary'}>
-            Plus
-          </Text>
-        </Pressable>
-      );
-    }
-  }
-  return <></>;
-};
-
-type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
-
-const SearchList: React.FC<{searchValue: string}> = ({searchValue}) => {
-  const navigation = useNavigation<AddMealScreenNavigationProp>();
-  const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetching} = useSearchOFFMeal(searchValue);
-
-  function onMealPressed(meal: Meal) {
-    navigation.navigate('Meal', {meal});
-  }
-
-  if (isError) {
-    return <SearchError />;
-  }
-
-  if (isLoading) {
-    return <SearchLoader />;
-  }
-
-  if (data !== undefined && data.length > 0) {
-    return (
-      <Box flex={1} bg={'$background'} alignSelf={'stretch'} mx={'m'} borderRadius={'xs'}>
-        <FlatList
-          data={data}
-          renderItem={item => <MealListItem meal={item.item} onItemPressed={onMealPressed} />}
-          keyExtractor={item => `${item.id}-${item.name}`}
-          ListFooterComponent={<SearchListFooter show={hasNextPage} isLoading={isFetching} onPress={fetchNextPage} />}
-        />
+      <Box flex={0.2} px={'s'}>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
+          <Text variant={'cardTitle'}>Portion</Text>
+          <Input
+            value={portion.toString()}
+            onChangeText={text => {
+              if (text === '') {
+                setPortion(0);
+              } else {
+                const numericValue = parseFloat(text);
+                if (!isNaN(numericValue)) {
+                  setPortion(numericValue);
+                }
+              }
+            }}
+            bg={'$background'}
+            height={50}
+            width={140}
+            marginLeft={'s'}
+            borderRadius={'xs'}
+            keyboardType={'numeric'}
+            paddingHorizontal={'s'}
+          />
+          <Picker
+            itemStyle={{height: 50, width: 160}}
+            selectedValue={unit}
+            onValueChange={itemValue => setUnit(itemValue.toString())}>
+            {mealUnits.map(unitItem => {
+              return <Picker.Item key={unitItem} label={unitItem} value={unitItem} />;
+            })}
+          </Picker>
+        </Box>
       </Box>
-    );
-  }
-
-  return <></>;
-};
-
-const AddMealScreen: React.FC<{}> = () => {
-  const [searchMeal, setSearchMeal] = useState('');
-  const insets = useSafeAreaInsets();
-
-  return (
-    <Box flex={1} justifyContent={'flex-start'} bg={'$windowBackground'} style={{paddingBottom: insets.bottom}}>
-      <Box p={'s'}>
-        <Searchbar onSubmitEditing={setSearchMeal} />
-      </Box>
-      <SearchList searchValue={searchMeal} />
-      <Box flex={1} m={'s'}>
-        <Text variant={'bodyLarge'}>Historique</Text>
+      <Box flex={1} p={'s'}>
+        <Text py={'s'} variant={'cardTitle'}>
+          Macro-nutriments (100g)
+        </Text>
+        <NutrimentValueItem label="Calories" value={meal.calories} />
+        <NutrimentValueItem label="Protéines" value={meal.proteins} />
+        <NutrimentValueItem label="Glucides" value={meal.carbs} />
+        <NutrimentValueItem label="Gras" value={meal.fat} />
       </Box>
     </Box>
   );

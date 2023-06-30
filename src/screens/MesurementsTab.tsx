@@ -1,5 +1,6 @@
 import React from 'react';
 import Box from '../atoms/Box';
+import Input from '../atoms/Input';
 import Text from '../atoms/Text';
 import Picker from '../components/Picker';
 import {useUserSetupContext} from '../context/userSetup';
@@ -36,8 +37,24 @@ export const MesurementsTab: React.FC<{
   }
 
   return (
-    <TabScreenBase title="Renseingez vos mensurations" buttonTitle="Suivant" onPress={goToAllergiesScreen}>
+    <TabScreenBase title="Renseingez votre age et vos mensurations" buttonTitle="Suivant" onPress={goToAllergiesScreen}>
       <Box paddingHorizontal={'xl'}>
+        <Box flexDirection={'row'} alignSelf={'stretch'} py={'l'} alignItems={'center'}>
+          <Text variant={'bodyRegular'}>Age</Text>
+          <Input
+            value={!isNaN(userSetup.age) ? userSetup.age.toString() : ''}
+            onChangeText={value => setUserSetup({...userSetup, age: parseInt(value, 10)})}
+            flex={1}
+            marginLeft={'s'}
+            placeholder="age"
+            keyboardType="numeric"
+            borderStyle={'solid'}
+            borderWidth={1}
+            borderColor={'$textInputBorderColor'}
+            borderRadius={'xs'}
+            padding={'m'}
+          />
+        </Box>
         <Box>
           <Text variant={'bodyRegular'}>Taille</Text>
           <Box flexDirection={'row'}>

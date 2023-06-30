@@ -63,9 +63,9 @@ const Landing = () => {
     </Box>;
   }
 
-  if (data) {
-    return <HomeStackNavigator />;
-  }
+  // if (data) {
+  //   return <HomeStackNavigator />;
+  // }
 
   return <UserSetupScreen />;
 };

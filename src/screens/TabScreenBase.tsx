@@ -10,28 +10,19 @@ type TabScreenBaseProps = {
   onPress: () => void;
 };
 
-export const TabScreenBase: React.FC<TabScreenBaseProps> = ({
-  title,
-  children,
-  buttonTitle,
-  onPress,
-}) => {
+export const TabScreenBase: React.FC<TabScreenBaseProps> = ({title, children, buttonTitle, onPress}) => {
   return (
     <Box flex={1} bg={'$background'} alignItems={'center'}>
-      <Box flex={1} justifyContent={'center'}>
-        <Text variant={'h6'}>{title}</Text>
+      <Box flex={0.5} justifyContent={'center'}>
+        <Text variant={'h6'} textAlign={'center'}>
+          {title}
+        </Text>
       </Box>
       <Box width={'100%'} flex={1}>
         {children}
       </Box>
-      <Box flex={1} justifyContent={'center'}>
-        <Button
-          width={'32%'}
-          label={buttonTitle}
-          onPress={onPress}
-          variant="primary"
-          icon="chevron-right"
-        />
+      <Box flex={0.5} justifyContent={'center'}>
+        <Button width={'32%'} label={buttonTitle} onPress={onPress} variant="primary" icon="chevron-right" />
       </Box>
     </Box>
   );

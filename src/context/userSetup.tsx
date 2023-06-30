@@ -2,6 +2,7 @@ import {createContext, useContext} from 'react';
 
 export type UserSetupContextProps = {
   goal: string;
+  age: number;
   height: string;
   weight: string;
   allergies: string[];

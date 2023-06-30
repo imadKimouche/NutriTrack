@@ -3,13 +3,13 @@ import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import {createMaterialTopTabNavigator, MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import Pressable from '../atoms/Pressable';
-import {SafeAreaView} from 'react-native';
 import {ObjectiveTab} from './ObjectivesTab';
 import {MesurementsTab} from './MesurementsTab';
 import {AllergiesTab} from './AllergiesTab';
 import {RouteProp} from '@react-navigation/native';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {UserSetupContext, UserSetupContextProps, UserSetupContextType} from '../context/userSetup';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type TopTabParams = {
   Objectives: undefined;
@@ -27,7 +27,8 @@ const LOTabBar: React.FC<MaterialTopTabBarProps> = ({state, descriptors, navigat
     <Box flexDirection={'row'} bg={'$background'} width={'100%'} height={44} paddingHorizontal={'m'}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
-        const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
+        const label =
+          options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
 
         const isFocused = state.index === index;
 
@@ -82,6 +83,7 @@ type UserSetupContextProviderProps = {
 export const UserSetupContextProvider: React.FC<UserSetupContextProviderProps> = ({children}) => {
   const [userSetup, setUserSetup] = useState<UserSetupContextProps>({
     goal: '',
+    age: 1,
     height: '150',
     weight: '50',
     allergies: [],
@@ -96,8 +98,10 @@ export const UserSetupContextProvider: React.FC<UserSetupContextProviderProps> =
 };
 
 export const UserSetupScreen = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <Box flex={1} style={{marginTop: insets.top}}>
       <UserSetupContextProvider>
         <Tab.Navigator initialRouteName="Objectives" tabBar={props => <LOTabBar {...props} />}>
           <Tab.Screen name="Objectives" component={ObjectiveTab} />
@@ -105,6 +109,6 @@ export const UserSetupScreen = () => {
           <Tab.Screen name="Allergies" component={AllergiesTab} />
         </Tab.Navigator>
       </UserSetupContextProvider>
-    </SafeAreaView>
+    </Box>
   );
 };

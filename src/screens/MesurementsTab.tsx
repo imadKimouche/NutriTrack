@@ -1,8 +1,9 @@
 import React from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import Box from '../atoms/Box';
-import Input from '../atoms/Input';
 import Text from '../atoms/Text';
 import Picker from '../components/Picker';
+import TextInput from '../components/TextInput';
 import {useUserSetupContext} from '../context/userSetup';
 import {TabScreenBase} from './TabScreenBase';
 import {TabNavigationProp} from './UserSetupScreen';
@@ -28,31 +29,35 @@ export const MesurementsTab: React.FC<{
   navigation: TabNavigationProp;
 }> = ({navigation}) => {
   const {userSetup, setUserSetup} = useUserSetupContext();
+  const {handleSubmit, control} = useForm<{age: number}>({defaultValues: {age: userSetup.age}});
 
   const heightOptions = generateHeightOptions(120, 230, 1);
   const weightOptions = generateWeightOptions(30, 180, 1);
 
-  function goToAllergiesScreen() {
+  function onSubmit(data: {age: number}) {
+    setUserSetup({...userSetup, age: data.age});
     navigation.navigate('Allergies');
   }
 
   return (
-    <TabScreenBase title="Renseingez votre age et vos mensurations" buttonTitle="Suivant" onPress={goToAllergiesScreen}>
+    <TabScreenBase title="Renseingez votre age et vos mensurations" buttonTitle="Suivant" onPress={handleSubmit(onSubmit)}>
       <Box paddingHorizontal={'xl'}>
         <Box flexDirection={'row'} alignSelf={'stretch'} py={'l'} alignItems={'center'}>
           <Text variant={'bodyRegular'}>Age</Text>
-          <Input
-            value={!isNaN(userSetup.age) ? userSetup.age.toString() : ''}
-            onChangeText={value => setUserSetup({...userSetup, age: parseInt(value, 10)})}
-            flex={1}
-            marginLeft={'s'}
-            placeholder="age"
-            keyboardType="numeric"
-            borderStyle={'solid'}
-            borderWidth={1}
-            borderColor={'$textInputBorderColor'}
-            borderRadius={'xs'}
-            padding={'m'}
+          <Controller
+            name="age"
+            control={control}
+            rules={{required: 'Age is required', max: 200, min: 10}}
+            render={({field: {value, onChange, onBlur}, fieldState: {error}}) => (
+              <TextInput
+                inputPropPresets={'positiveNumber'}
+                height={46}
+                value={!isNaN(value) ? value.toString() : ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={error?.message}
+              />
+            )}
           />
         </Box>
         <Box>

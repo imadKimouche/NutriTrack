@@ -1,9 +1,8 @@
-import React from 'react';
-import {Controller, useForm} from 'react-hook-form';
+import React, {useState} from 'react';
 import Box from '../atoms/Box';
+import Input from '../atoms/Input';
 import Text from '../atoms/Text';
 import Picker from '../components/Picker';
-import TextInput from '../components/TextInput';
 import {useUserSetupContext} from '../context/userSetup';
 import {TabScreenBase} from './TabScreenBase';
 import {TabNavigationProp} from './UserSetupScreen';
@@ -29,36 +28,50 @@ export const MesurementsTab: React.FC<{
   navigation: TabNavigationProp;
 }> = ({navigation}) => {
   const {userSetup, setUserSetup} = useUserSetupContext();
-  const {handleSubmit, control} = useForm<{age: number}>({defaultValues: {age: userSetup.age}});
+  const [ageError, setAgeError] = useState('');
 
   const heightOptions = generateHeightOptions(120, 230, 1);
   const weightOptions = generateWeightOptions(30, 180, 1);
 
-  function onSubmit(data: {age: number}) {
-    setUserSetup({...userSetup, age: data.age});
-    navigation.navigate('Allergies');
+  function goToAllergiesScreen() {
+    if (ageError === '') {
+      navigation.navigate('Allergies');
+    }
+  }
+
+  function setAge(age: string) {
+    const ageNumber = parseInt(age, 10);
+    if (!isNaN(ageNumber)) {
+      if (ageNumber < 10 || ageNumber > 150) {
+        setAgeError('est-ce bien votre age? 🤔');
+      } else {
+        setAgeError('');
+      }
+    }
+    setUserSetup({...userSetup, age: parseInt(age, 10)});
   }
 
   return (
-    <TabScreenBase title="Renseingez votre age et vos mensurations" buttonTitle="Suivant" onPress={handleSubmit(onSubmit)}>
+    <TabScreenBase title="Renseingez votre age et vos mensurations" buttonTitle="Suivant" onPress={goToAllergiesScreen}>
       <Box paddingHorizontal={'xl'}>
-        <Box flexDirection={'row'} alignSelf={'stretch'} py={'l'} alignItems={'center'}>
-          <Text variant={'bodyRegular'}>Age</Text>
-          <Controller
-            name="age"
-            control={control}
-            rules={{required: 'Age is required', max: 200, min: 10}}
-            render={({field: {value, onChange, onBlur}, fieldState: {error}}) => (
-              <TextInput
-                inputPropPresets={'positiveNumber'}
-                height={46}
-                value={!isNaN(value) ? value.toString() : ''}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={error?.message}
-              />
-            )}
-          />
+        <Box py={'l'}>
+          <Box flexDirection={'row'} alignSelf={'stretch'} alignItems={'center'}>
+            <Text variant={'bodyRegular'}>Age</Text>
+            <Input
+              value={!isNaN(userSetup.age) ? userSetup.age.toString() : ''}
+              onChangeText={setAge}
+              flex={1}
+              marginHorizontal={'s'}
+              placeholder="age"
+              keyboardType="numeric"
+              borderStyle={'solid'}
+              borderWidth={1}
+              borderColor={'$textInputBorderColor'}
+              borderRadius={'xs'}
+              padding={'m'}
+            />
+          </Box>
+          <Text variant={'errorSmall'}>{ageError}</Text>
         </Box>
         <Box>
           <Text variant={'bodyRegular'}>Taille</Text>

@@ -63,19 +63,19 @@ const Landing = () => {
     </Box>;
   }
 
-  // if (data) {
-  //   return <HomeStackNavigator />;
-  // }
+  if (data) {
+    return <HomeStackNavigator />;
+  }
 
   return <UserSetupScreen />;
 };
 
 export const MainNavigator = () => {
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
+  // const user = {
+  //   email: 'imad.kim@gmail.com',
+  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  // };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

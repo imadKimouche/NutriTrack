@@ -1,16 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-  DocumentSnapshot,
-  SnapshotOptions,
-  deleteDoc,
-  deleteField,
-} from 'firebase/firestore';
+import {getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {Meal} from '../hooks/meal';
 import {UserData} from '../hooks/userData';
 import {MealType} from '../store/dashboard';
@@ -35,6 +24,10 @@ export async function fetchUserData(userId: string) {
 
 export function pushUserData(userId: string, userData: UserData) {
   return setDoc(doc(db, 'users', userId), userData);
+}
+
+export function pushUserBMR(userId: string, bmr: number) {
+  return setDoc(doc(db, 'users', userId), {bmr});
 }
 
 export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {

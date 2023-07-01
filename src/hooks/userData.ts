@@ -4,6 +4,8 @@ import {useAuth} from './auth';
 
 export type UserData = {
   goal: string;
+  age: number;
+  sexe: number;
   height: string;
   weight: string;
   allergies: string[];
@@ -23,6 +25,8 @@ export const useUserData = () => {
     if (parsedData) {
       userData = {
         goal: parsedData.goal,
+        age: parsedData.age,
+        sexe: parsedData.sexe,
         height: parsedData.height,
         weight: parsedData.weight,
         allergies: parsedData.allergies,

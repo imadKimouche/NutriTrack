@@ -10,8 +10,10 @@ import {RouteProp} from '@react-navigation/native';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {UserSetupContext, UserSetupContextProps, UserSetupContextType} from '../context/userSetup';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {InfoTab} from './InfoTab';
 
 export type TopTabParams = {
+  Info: undefined;
   Objectives: undefined;
   Mesurements: undefined;
   Allergies: undefined;
@@ -104,6 +106,7 @@ export const UserSetupScreen = () => {
     <Box flex={1} style={{marginTop: insets.top}}>
       <UserSetupContextProvider>
         <Tab.Navigator initialRouteName="Objectives" tabBar={props => <LOTabBar {...props} />}>
+          <Tab.Screen name="Info" component={InfoTab} />
           <Tab.Screen name="Objectives" component={ObjectiveTab} />
           <Tab.Screen name="Mesurements" component={MesurementsTab} />
           <Tab.Screen name="Allergies" component={AllergiesTab} />

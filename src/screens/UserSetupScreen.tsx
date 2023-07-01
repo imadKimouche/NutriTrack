@@ -85,7 +85,8 @@ type UserSetupContextProviderProps = {
 export const UserSetupContextProvider: React.FC<UserSetupContextProviderProps> = ({children}) => {
   const [userSetup, setUserSetup] = useState<UserSetupContextProps>({
     goal: '',
-    age: 1,
+    age: 10,
+    sexe: 'Homme', // TODO replace with a generic type
     height: '150',
     weight: '50',
     allergies: [],
@@ -105,7 +106,7 @@ export const UserSetupScreen = () => {
   return (
     <Box flex={1} style={{marginTop: insets.top}}>
       <UserSetupContextProvider>
-        <Tab.Navigator initialRouteName="Objectives" tabBar={props => <LOTabBar {...props} />}>
+        <Tab.Navigator initialRouteName="Info" tabBar={props => <LOTabBar {...props} />}>
           <Tab.Screen name="Info" component={InfoTab} />
           <Tab.Screen name="Objectives" component={ObjectiveTab} />
           <Tab.Screen name="Mesurements" component={MesurementsTab} />

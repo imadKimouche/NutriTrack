@@ -8,7 +8,7 @@ import {
   User,
   UserCredential,
 } from 'firebase/auth';
-import {useMutation} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
 import app from '../config/firebase';
 import {FirebaseError} from 'firebase/app';
@@ -60,9 +60,17 @@ export function useSignup() {
     createUserWithEmailAndPassword(auth, data.email, data.password),
   );
 
+  const queryClient = useQueryClient();
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
-    mutation.mutate({email, password});
+    mutation.mutate(
+      {email, password},
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries('userDailyMeals');
+        },
+      },
+    );
   });
 
   return {form, onSubmit, mutation};
@@ -75,10 +83,18 @@ export const useSignin = () => {
     signInWithEmailAndPassword(auth, data.email, data.password),
   );
 
+  const queryClient = useQueryClient();
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
 
-    mutation.mutate({email: email, password: password});
+    mutation.mutate(
+      {email: email, password: password},
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries('userDailyMeals');
+        },
+      },
+    );
   });
 
   return {form, onSubmit, mutation};

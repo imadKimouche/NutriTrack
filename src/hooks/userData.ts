@@ -1,22 +1,22 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
-import {fetchUserData, pushUserData} from '../config/firebase';
+import {fetchUserData, pushUserBMR, pushUserData} from '../config/firebase';
 import {useAuth} from './auth';
 
 export type UserData = {
   goal: string;
   age: number;
-  sexe: number;
+  sexe: string;
   height: string;
   weight: string;
   allergies: string[];
 };
 
 export const useUserData = () => {
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
+  // const user = {
+  //   email: 'imad.kim@gmail.com',
+  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  // };
   const {data, isLoading, error, isError} = useQuery(['userData', user?.uid!], () => fetchUserData(user?.uid!));
   let userData: UserData | undefined;
 
@@ -48,6 +48,21 @@ export const useSaveUserData = () => {
   });
   return {
     saveUserData: mutate,
+    isLoading,
+    error,
+  };
+};
+
+export const useSaveUserBMR = () => {
+  const {user} = useAuth();
+  // const queryClient = useQueryClient();
+  const {isLoading, error, mutate} = useMutation((bmr: number) => pushUserBMR(user?.uid!, bmr), {
+    onSuccess: () => {
+      // Invalidate and refetch userData
+    },
+  });
+  return {
+    saveUserBMR: mutate,
     isLoading,
     error,
   };

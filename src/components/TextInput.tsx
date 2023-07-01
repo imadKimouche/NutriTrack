@@ -30,6 +30,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
   return (
     <Box marginBottom={'s'}>
       <Box
+        bg={'$background'}
         flexDirection={'row'}
         justifyContent={'flex-start'}
         alignItems={'center'}

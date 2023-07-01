@@ -11,10 +11,10 @@ import NoShellfishImage from '../assets/crevette.svg';
 import NoSoy from '../assets/soja.svg';
 import NoEggs from '../assets/des-oeufs.svg';
 import NoGrain from '../assets/farine.svg';
-import {SvgProps} from 'react-native-svg';
+import {parse, SvgProps} from 'react-native-svg';
 import Icon from '../components/Icon';
 import {useUserSetupContext} from '../context/userSetup';
-import {useSaveUserData, useUserData} from '../hooks/userData';
+import {useSaveUserBMR, useSaveUserData, useUserData} from '../hooks/userData';
 
 const ICONS: {[key: string]: React.FC<SvgProps>} = {
   'no-gluten': NoGlutenImage,
@@ -72,9 +72,20 @@ const ALLERGIES: AllergyItem[] = [
 
 export const AllergiesTab: React.FC = () => {
   const {saveUserData} = useSaveUserData();
+  const {saveUserBMR} = useSaveUserBMR();
   const {userSetup, setUserSetup} = useUserSetupContext();
 
-  function gotToHomeScreen() {
+  function setUserData() {
+    let bmr;
+    const weight = parseInt(userSetup.weight, 10); // TODO weight => number
+    const height = parseInt(userSetup.height, 10); // TODO height => number
+    if (userSetup.sexe === 'Homme') {
+      bmr = 66.473 + 13.7516 * weight + 5.0033 * height - 6.755 * userSetup.age;
+    } else {
+      bmr = 655.0955 + 9.5634 * weight + 1.8496 * height - 4.6756 * userSetup.age;
+    }
+
+    saveUserBMR(bmr);
     saveUserData(userSetup);
   }
 
@@ -116,7 +127,7 @@ export const AllergiesTab: React.FC = () => {
   };
 
   return (
-    <TabScreenBase title="Avez vous des allérgies?" buttonTitle="Suivant" onPress={gotToHomeScreen}>
+    <TabScreenBase title="Avez vous des allérgies?" buttonTitle="Suivant" onPress={setUserData}>
       <Box paddingHorizontal={'xl'}>
         <FlatList data={ALLERGIES} renderItem={renderObjectiveItem} keyExtractor={(item, index) => index.toString()} />
       </Box>

@@ -19,6 +19,14 @@ const OBJECTIVES: ObjectiveItem[] = [
   {name: 'Résistance', icon: 'circle'},
 ];
 
+const ACTIVITY_TYPES = [
+  {label: "Sédentaire (peu ou pas d'exercice)", factor: 1.2},
+  {label: 'Légèrement actif (1 à 3 jours par semaine)', factor: 1.375},
+  {label: 'Modérément actif (3 à 5 jours par semaine)', factor: 1.55},
+  {label: 'Très actif (6 à 7 jours par semaine)', factor: 1.725},
+  {label: 'Extrêmement actif (exercice très intense)', factor: 1.9},
+];
+
 export const ObjectiveTab: React.FC<{navigation: TabNavigationProp}> = ({navigation}) => {
   const {userSetup, setUserSetup} = useUserSetupContext();
 
@@ -56,12 +64,21 @@ export const ObjectiveTab: React.FC<{navigation: TabNavigationProp}> = ({navigat
 
   return (
     <TabScreenBase title="Quel est votre objectif fitness?" buttonTitle="Suivant" onPress={goToMesureScreen}>
-      <Box height={'100%'} paddingHorizontal={'xl'}>
+      <Box flex={1} px={'xl'} my={'s'}>
+        <Text variant={'bodyLarge'}>Objectif</Text>
         <FlatList
           scrollEnabled={false}
           data={OBJECTIVES}
           renderItem={renderObjectiveItem}
           keyExtractor={(item, index) => index.toString()}
+        />
+      </Box>
+      <Box flex={0.8} px={'xl'} my={'s'}>
+        <Text variant={'bodyLarge'}>Activité</Text>
+        <FlatList
+          data={ACTIVITY_TYPES}
+          renderItem={({item}) => <Text p={'s'}>{item.label}</Text>}
+          keyExtractor={item => item.label}
         />
       </Box>
     </TabScreenBase>

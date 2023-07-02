@@ -32,7 +32,7 @@ export const InfoTab: React.FC<{
   }
 
   return (
-    <TabScreenBase title="Renseingez votre age et votre sexe" buttonTitle="Suivant" onPress={goToObjectivesScreen}>
+    <TabScreenBase title="1/4" buttonTitle="Suivant" onPress={goToObjectivesScreen}>
       <Box paddingHorizontal={'xl'}>
         <Box py={'l'}>
           <Box flexDirection={'row'} alignSelf={'stretch'} alignItems={'center'}>

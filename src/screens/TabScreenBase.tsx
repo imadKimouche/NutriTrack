@@ -13,7 +13,7 @@ type TabScreenBaseProps = {
 export const TabScreenBase: React.FC<TabScreenBaseProps> = ({title, children, buttonTitle, onPress}) => {
   return (
     <Box flex={1} bg={'$background'} alignItems={'center'}>
-      <Box flex={0.5} justifyContent={'center'}>
+      <Box flex={0.3} justifyContent={'center'}>
         <Text variant={'h6'} textAlign={'center'}>
           {title}
         </Text>

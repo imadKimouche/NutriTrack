@@ -47,21 +47,21 @@ const ResetPassword = () => {
 };
 
 const Landing = () => {
-  const {data, isLoading, isError, error} = useUserData();
-
-  if (isLoading) {
-    return (
-      <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
-        <Text variant={'labelSmall'}>Je prépare ton programme...</Text>
-      </Box>
-    );
-  }
-
-  if (isError) {
-    <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
-      <Text variant={'errorSmall'}>{error}</Text>
-    </Box>;
-  }
+  // const {data, isLoading, isError, error} = useUserData();
+  //
+  // if (isLoading) {
+  //   return (
+  //     <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+  //       <Text variant={'labelSmall'}>Je prépare ton programme...</Text>
+  //     </Box>
+  //   );
+  // }
+  //
+  // if (isError) {
+  //   <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+  //     <Text variant={'errorSmall'}>{error}</Text>
+  //   </Box>;
+  // }
 
   // if (data) {
   //   return <HomeStackNavigator />;

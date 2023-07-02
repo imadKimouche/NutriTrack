@@ -1,16 +1,16 @@
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SignUpScreen} from '../screens/SignUpScreen';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
-import {SignInScreen} from '../screens/SignInScreen';
-import {useAuth} from '../hooks/auth';
-import {UserSetupScreen} from '../screens/UserSetupScreen';
-import {NavigationContainer} from '@react-navigation/native';
 import HomeStackNavigator from '../screens/HomeStackNavigator';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {OnboardingNavigator} from './OnboardingNavigator';
+import {SignUpScreen} from '../screens/SignUpScreen';
+import {SignInScreen} from '../screens/SignInScreen';
 import {useUserData} from '../hooks/userData';
 import {User} from 'firebase/auth';
+import {useAuth} from '../hooks/auth';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -67,7 +67,7 @@ const Landing = () => {
   //   return <HomeStackNavigator />;
   // }
 
-  return <UserSetupScreen />;
+  return <OnboardingNavigator />;
 };
 
 export const MainNavigator = () => {

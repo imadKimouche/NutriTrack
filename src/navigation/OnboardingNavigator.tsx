@@ -1,20 +1,17 @@
 import React, {useState} from 'react';
 import Box from '../atoms/Box';
-import {createMaterialTopTabNavigator, MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
-import {ObjectiveTab} from './ObjectivesTab';
-import {MesurementsTab} from './MesurementsTab';
-import {AllergiesTab} from './AllergiesTab';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {RouteProp} from '@react-navigation/native';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {UserSetupContext, UserSetupContextProps, UserSetupContextType} from '../context/userSetup';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {InfoTab} from './InfoTab';
+import GoalTab from '../screens/onboarding/goalTab';
 
 export type TopTabParams = {
-  Info: undefined;
-  Objectives: undefined;
-  Mesurements: undefined;
-  Allergies: undefined;
+  goal: undefined;
+  activityLevel: undefined;
+  aboutYou: undefined;
+  nutritionPreferences: undefined;
 };
 
 export type TabNavigationProp = MaterialTopTabNavigationProp<TopTabParams>;
@@ -46,17 +43,14 @@ export const UserSetupContextProvider: React.FC<UserSetupContextProviderProps> =
   return <UserSetupContext.Provider value={contextValue}>{children}</UserSetupContext.Provider>;
 };
 
-export const UserSetupScreen = () => {
+export const OnboardingNavigator = () => {
   const insets = useSafeAreaInsets();
 
   return (
     <Box flex={1} style={{marginTop: insets.top}}>
       <UserSetupContextProvider>
-        <Tab.Navigator initialRouteName="Info" tabBar={() => null}>
-          <Tab.Screen name="Info" component={InfoTab} />
-          <Tab.Screen name="Objectives" component={ObjectiveTab} />
-          <Tab.Screen name="Mesurements" component={MesurementsTab} />
-          <Tab.Screen name="Allergies" component={AllergiesTab} />
+        <Tab.Navigator tabBar={() => null}>
+          <Tab.Screen name="goal" component={GoalTab} />
         </Tab.Navigator>
       </UserSetupContextProvider>
     </Box>

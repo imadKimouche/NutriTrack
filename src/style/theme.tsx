@@ -156,9 +156,18 @@ const theme = createTheme({
       fontWeight: 'bold',
       fontSize: 23.04,
     },
+    h7: {
+      fontWeight: 'bold',
+      fontSize: 19.2,
+    },
     bodyRegular: {
       fontSize: 16,
       lineHeight: 24,
+    },
+    bodyRegularBold: {
+      fontSize: 16,
+      lineHeight: 24,
+      fontWeight: 'bold',
     },
     bodySmall: {
       fontSize: 13.33,

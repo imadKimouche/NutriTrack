@@ -50,6 +50,7 @@ const theme = createTheme({
     $textInputColor: p.black100,
     $labelSmall: p.black80P,
     $labelSmallSelected: p.black,
+    $labelOff: p.black80P,
     $inputFocusColor: p.black,
     $textError: p.red,
     $listItemDivider: p.black100,
@@ -199,6 +200,10 @@ const theme = createTheme({
     headerBackTitle: {
       fontSize: 16,
       color: '$primary',
+    },
+    headerSkipLabel: {
+      fontSize: 16,
+      color: '$labelOff',
     },
     defaults: {},
   },

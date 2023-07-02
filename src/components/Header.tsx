@@ -8,14 +8,18 @@ export type HeaderProps = {
   rightComponent?: React.ReactNode;
 };
 
-export function BaseHeader({leftComponent, title, rightComponent}: HeaderProps) {
+const BaseHeader: React.FC<HeaderProps> = ({leftComponent, title, rightComponent}) => {
   return (
-    <Box>
-      <Box flex={1}>{leftComponent}</Box>
-      <Box flex={1}>
+    <Box height={70} flexDirection={'row'} alignItems={'center'} alignSelf={'flex-start'}>
+      <Box flex={0.5}>{leftComponent}</Box>
+      <Box flex={1} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'headerTitle'}>{title}</Text>
       </Box>
-      <Box flex={1}>{rightComponent}</Box>
+      <Box flex={0.5} alignItems={'center'} justifyContent={'center'}>
+        {rightComponent}
+      </Box>
     </Box>
   );
-}
+};
+
+export default BaseHeader;

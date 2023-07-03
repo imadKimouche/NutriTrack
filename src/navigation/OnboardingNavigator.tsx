@@ -7,6 +7,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import GoalTab from '../screens/onboarding/GoalTab';
 import ActivityLevelTab from '../screens/onboarding/ActivityLevelTab';
 import AboutYouTab from '../screens/onboarding/AboutYouTab';
+import NutritionPrefTab from '../screens/onboarding/NutritionPrefTab';
 
 export type TopTabParams = {
   goal: undefined;
@@ -29,6 +30,7 @@ export const OnboardingNavigator = () => {
         <Tab.Screen name="goal" component={GoalTab} />
         <Tab.Screen name="activityLevel" component={ActivityLevelTab} />
         <Tab.Screen name="aboutYou" component={AboutYouTab} />
+        <Tab.Screen name="nutritionPreferences" component={NutritionPrefTab} />
       </Tab.Navigator>
     </Box>
   );

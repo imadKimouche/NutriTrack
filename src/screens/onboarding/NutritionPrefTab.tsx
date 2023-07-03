@@ -1,4 +1,3 @@
-import {Picker} from '@react-native-picker/picker';
 import React from 'react';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
@@ -10,26 +9,6 @@ import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
-
-function generateHeightOptions(min: number, max: number, increment: number) {
-  const options = [];
-  for (let height = min; height <= max; height += increment) {
-    const label = `${height} cm`;
-    options.push({value: height.toString(), label});
-  }
-  return options;
-}
-
-const generateWeightOptions = (min: number, max: number, increment: number) => {
-  const options = [];
-  for (let weight = min; weight <= max; weight += increment) {
-    options.push({value: weight.toString(), label: `${weight} kg`});
-  }
-  return options;
-};
-
-const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
-const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
 
 const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -91,16 +70,12 @@ const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedIt
 
 export type AboutYouTabProps = {navigation: TabNavigationProp};
 
-const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
-  const {gender, setGender, age, setAge, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
-    gender: state.gender,
-    setGender: state.setGender,
-    age: state.age,
-    setAge: state.setAge,
-    height: state.height,
-    setHeight: state.setHeight,
-    weight: state.weight,
-    setWeight: state.setWeight,
+const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
+  const {allergies, addAllergy, removeAllergy, clearAllergies} = useOnBoardingStore(state => ({
+    allergies: state.allergies,
+    addAllergy: state.addAllergy,
+    removeAllergy: state.removeAllergy,
+    clearAllergies: state.clearAllergies,
   }));
 
   function skipOnBoarding() {}
@@ -108,16 +83,15 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   return (
     <Box flex={1}>
       <BaseHeader
-        title="A propos de toi"
+        title="Nutrition"
         leftComponent={<GoBackButton onPress={navigation.goBack} />}
         rightComponent={<SkipLabel onPress={skipOnBoarding} />}
       />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
-          Encore un peu
+          Est-tu allérgique?
         </Text>
         <Box>
-          <Text variant={'subtitle2'}>Sexe</Text>
           {GENDERS.map(item => (
             <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
           ))}
@@ -135,22 +109,6 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
             borderRadius={'xs'}
           />
         </Box>
-        <Box mt={'s'}>
-          <Text variant={'subtitle2'}>Taille</Text>
-          <Picker itemStyle={{height: 110}} selectedValue={height} onValueChange={itemValue => setHeight(itemValue)}>
-            {HEIGHT_OPTIONS.map(option => {
-              return <Picker.Item key={option.label} label={option.label} value={option.value} />;
-            })}
-          </Picker>
-        </Box>
-        <Box mt={'s'}>
-          <Text variant={'subtitle2'}>Poids</Text>
-          <Picker itemStyle={{height: 110}} selectedValue={weight} onValueChange={itemValue => setWeight(itemValue)}>
-            {WEIGHT_OPTIONS.map(option => {
-              return <Picker.Item key={option.label} label={option.label} value={option.value} />;
-            })}
-          </Picker>
-        </Box>
       </Box>
       <Box flex={0.5} justifyContent={'center'} alignItems={'center'}>
         <Button
@@ -167,4 +125,4 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   );
 };
 
-export default AboutYouTab;
+export default NutritionPrefTab;

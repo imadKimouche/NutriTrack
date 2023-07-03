@@ -79,7 +79,7 @@ export const AllergiesTab: React.FC = () => {
     let bmr;
     const weight = parseInt(userSetup.weight, 10); // TODO weight => number
     const height = parseInt(userSetup.height, 10); // TODO height => number
-    if (userSetup.sexe === 'Homme') {
+    if (userSetup.gender === 'Homme') {
       bmr = 66.473 + 13.7516 * weight + 5.0033 * height - 6.755 * userSetup.age;
     } else {
       bmr = 655.0955 + 9.5634 * weight + 1.8496 * height - 4.6756 * userSetup.age;

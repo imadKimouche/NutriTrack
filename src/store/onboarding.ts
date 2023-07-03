@@ -3,20 +3,20 @@ import {devtools} from 'zustand/middleware';
 
 export type FitnessGoal = 'gain' | 'lose' | 'maintain' | 'recomposition';
 export type ActivityLevel = 'minimal' | 'moderate' | 'active' | 'extreme';
-export type Sexe = 'male' | 'female';
+export type Gender = 'male' | 'female';
 export type FoodAllergy = 'gluten' | 'diary' | 'nut' | 'shellfish' | 'soy' | 'grain' | 'eggs';
 
 type OnBoardingState = {
   fitnessGoal: FitnessGoal;
   activityLevel: ActivityLevel;
-  sexe: Sexe;
+  gender: Gender;
   age: number;
   height: number;
   weight: number;
   allergies: FoodAllergy[];
   setFitnessGoal: (goal: FitnessGoal) => void;
   setActivityLevel: (level: ActivityLevel) => void;
-  setSexe: (sexe: Sexe) => void;
+  setGender: (gender: Gender) => void;
   setAge: (age: number) => void;
   setHeight: (height: number) => void;
   setWeight: (weight: number) => void;
@@ -32,8 +32,8 @@ export const useOnBoardingStore = create<OnBoardingState>()(
       setFitnessGoal: (goal: FitnessGoal) => set(state => ({...state, fitnessGoal: goal})),
       activityLevel: 'minimal',
       setActivityLevel: (level: ActivityLevel) => set(state => ({...state, activityLevel: level})),
-      sexe: 'male',
-      setSexe: (sexe: Sexe) => set(state => ({...state, sexe})),
+      gender: 'male',
+      setGender: (gender: Gender) => set(state => ({...state, gender: gender})),
       age: 13,
       setAge: (age: number) => set(state => ({...state, age})),
       height: 150,

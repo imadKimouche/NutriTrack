@@ -5,7 +5,7 @@ import {useAuth} from './auth';
 export type UserData = {
   goal: string;
   age: number;
-  sexe: string;
+  gender: string;
   height: string;
   weight: string;
   allergies: string[];
@@ -26,7 +26,7 @@ export const useUserData = () => {
       userData = {
         goal: parsedData.goal,
         age: parsedData.age,
-        sexe: parsedData.sexe,
+        gender: parsedData.gender,
         height: parsedData.height,
         weight: parsedData.weight,
         allergies: parsedData.allergies,

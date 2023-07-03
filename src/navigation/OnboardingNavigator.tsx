@@ -6,6 +6,7 @@ import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs'
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import GoalTab from '../screens/onboarding/GoalTab';
 import ActivityLevelTab from '../screens/onboarding/ActivityLevelTab';
+import AboutYouTab from '../screens/onboarding/AboutYouTab';
 
 export type TopTabParams = {
   goal: undefined;
@@ -27,6 +28,7 @@ export const OnboardingNavigator = () => {
       <Tab.Navigator tabBar={() => null}>
         <Tab.Screen name="goal" component={GoalTab} />
         <Tab.Screen name="activityLevel" component={ActivityLevelTab} />
+        <Tab.Screen name="aboutYou" component={AboutYouTab} />
       </Tab.Navigator>
     </Box>
   );

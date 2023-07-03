@@ -18,17 +18,21 @@ const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
       flexDirection={'row'}
       flex={1}
       alignSelf={'stretch'}>
-      <Text variant={'headerSkipLabel'}>Ignorer</Text>
+      <Text variant={'subtitle2'} color={'$labelOff'}>
+        Ignorer
+      </Text>
     </Pressable>
   );
 };
 
-type FitnessGoalItem = {
-  id: FitnessGoal;
+export type OnboardingListItem<T> = {
+  id: T;
   label: string;
   icon: string;
   indication: string;
 };
+
+type FitnessGoalItem = OnboardingListItem<FitnessGoal>;
 
 const FITNESS_GOALS: FitnessGoalItem[] = [
   {id: 'gain', label: 'Prise de masse', icon: 'chevrons-up', indication: 'Je veux passer au niveau supérieur'},
@@ -53,10 +57,10 @@ const FitnessGoalListItem: React.FC<
       borderStyle={'solid'}>
       <Icon name={icon} size={26} color={isSelected ? '$primary' : '$labelOff'} />
       <Box flex={1} px={'l'}>
-        <Text variant={'bodyRegular'} color={isSelected ? '$primary' : 'black'}>
+        <Text variant={'body1'} color={isSelected ? '$primary' : 'black'}>
           {label}
         </Text>
-        <Text variant={'bodySmall'} color={isSelected ? '$primary' : '$labelOff'}>
+        <Text variant={'body2'} color={isSelected ? '$primary' : '$labelOff'}>
           {indication}
         </Text>
       </Box>
@@ -76,7 +80,7 @@ const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
     <Box flex={1}>
       <BaseHeader title="Objectif" rightComponent={<SkipLabel onPress={skipOnBoarding} />} />
       <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'h7'}>
+        <Text py={'l'} variant={'subtitle1'}>
           Quel est ton objectif ?
         </Text>
         <FlatList

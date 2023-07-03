@@ -154,7 +154,7 @@ const theme = createTheme({
     },
     h6: {
       fontWeight: 500,
-      fontSize: 19.20,
+      fontSize: 19.2,
     },
     subtitle1: {
       fontWeight: 400,
@@ -175,7 +175,6 @@ const theme = createTheme({
     button: {
       fontWeight: 500,
       fontSize: 13.33,
-      textTransform: 'uppercase',
     },
     caption: {
       fontWeight: 400,

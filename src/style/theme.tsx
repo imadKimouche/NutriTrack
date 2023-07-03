@@ -133,86 +133,57 @@ const theme = createTheme({
   },
   textVariants: {
     h1: {
-      fontWeight: 'bold',
-      fontSize: 57.33,
-    },
-    h2: {
-      fontWeight: 'bold',
+      fontWeight: 300,
       fontSize: 47.78,
     },
-    h3: {
-      fontWeight: 'bold',
+    h2: {
+      fontWeight: 300,
       fontSize: 39.81,
     },
-    h4: {
-      fontWeight: 'bold',
+    h3: {
+      fontWeight: 400,
       fontSize: 33.18,
     },
-    h5: {
-      fontWeight: 'bold',
+    h4: {
+      fontWeight: 400,
       fontSize: 27.65,
     },
-    h6: {
-      fontWeight: 'bold',
+    h5: {
+      fontWeight: 400,
       fontSize: 23.04,
     },
-    h7: {
-      fontWeight: 'bold',
-      fontSize: 19.2,
+    h6: {
+      fontWeight: 500,
+      fontSize: 19.20,
     },
-    bodyRegular: {
+    subtitle1: {
+      fontWeight: 400,
       fontSize: 16,
-      lineHeight: 24,
     },
-    bodyRegularBold: {
-      fontSize: 16,
-      lineHeight: 24,
-      fontWeight: 'bold',
-    },
-    bodySmall: {
+    subtitle2: {
+      fontWeight: 500,
       fontSize: 13.33,
-      lineHeight: 24,
     },
-    bodyLarge: {
-      fontSize: 19.2,
-      lineHeight: 24,
+    body1: {
+      fontWeight: 400,
+      fontSize: 16,
     },
-    labelSmall: {
+    body2: {
+      fontWeight: 400,
       fontSize: 13.33,
-      color: '$labelSmall',
     },
-    labelSmallSelected: {
+    button: {
+      fontWeight: 500,
       fontSize: 13.33,
-      color: '$labelSmallSelected',
-      fontWeight: 'bold',
+      textTransform: 'uppercase',
     },
-    errorSmall: {
-      fontSize: 13.33,
-      color: '$error',
+    caption: {
+      fontWeight: 400,
+      fontSize: 11.11,
     },
-    buttonLabel: {
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    cardTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    cardSubtitle: {
-      fontSize: 13.33,
-      color: '$labelSmall',
-    },
-    headerTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    headerBackTitle: {
-      fontSize: 16,
-      color: '$primary',
-    },
-    headerSkipLabel: {
-      fontSize: 16,
-      color: '$labelOff',
+    overline: {
+      fontWeight: 400,
+      fontSize: 9.2,
     },
     defaults: {},
   },

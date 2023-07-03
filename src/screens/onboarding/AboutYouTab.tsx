@@ -1,6 +1,7 @@
 import {Picker} from '@react-native-picker/picker';
 import React from 'react';
 import Box from '../../atoms/Box';
+import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
@@ -123,6 +124,16 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
         </Box>
         <Box mt={'s'}>
           <Text variant={'subtitle2'}>Age</Text>
+          <Input
+            value={age.toString()}
+            onChangeText={value => setAge(parseInt(value, 10))}
+            padding={'s'}
+            marginVertical={'s'}
+            keyboardType="numeric"
+            borderWidth={1}
+            borderColor={'$textInputBorderColor'}
+            borderRadius={'xs'}
+          />
         </Box>
         <Box mt={'s'}>
           <Text variant={'subtitle2'}>Taille</Text>

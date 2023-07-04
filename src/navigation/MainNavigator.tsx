@@ -8,9 +8,8 @@ import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {OnboardingNavigator} from './OnboardingNavigator';
 import {SignUpScreen} from '../screens/SignUpScreen';
 import {SignInScreen} from '../screens/SignInScreen';
-import {useUserData} from '../hooks/userData';
-import {User} from 'firebase/auth';
 import {useAuth} from '../hooks/auth';
+import {useUserFitnessData} from '../hooks/userFitnessData';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -47,35 +46,35 @@ const ResetPassword = () => {
 };
 
 const Landing = () => {
-  // const {data, isLoading, isError, error} = useUserData();
-  //
-  // if (isLoading) {
-  //   return (
-  //     <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
-  //       <Text variant={'labelSmall'}>Je prépare ton programme...</Text>
-  //     </Box>
-  //   );
-  // }
-  //
-  // if (isError) {
-  //   <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
-  //     <Text variant={'errorSmall'}>{error}</Text>
-  //   </Box>;
-  // }
+  const {userFitnessData, isLoading, isError} = useUserFitnessData();
 
-  // if (data) {
-  //   return <HomeStackNavigator />;
-  // }
+  if (isLoading) {
+    return (
+      <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+        <Text variant={'body1'}>Je prépare ton programme...</Text>
+      </Box>
+    );
+  }
+
+  if (isError) {
+    <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+      <Text variant={'body1'}>Une erreur s'est produite</Text>
+    </Box>;
+  }
+
+  if (userFitnessData) {
+    return <HomeStackNavigator />;
+  }
 
   return <OnboardingNavigator />;
 };
 
 export const MainNavigator = () => {
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
+  // const user = {
+  //   email: 'imad.kim@gmail.com',
+  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  // };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

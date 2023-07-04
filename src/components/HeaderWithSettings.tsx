@@ -59,7 +59,7 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, 
         borderStyle={'solid'}
         borderWidth={1}
         bg={'$headerButtonBackground'}>
-        <Text variant={'bodyLarge'} color={'$buttonTextPrimary'}>
+        <Text variant={'h6'} color={'$buttonTextPrimary'}>
           {initials}
         </Text>
         {showBadge && (

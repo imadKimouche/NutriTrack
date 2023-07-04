@@ -38,6 +38,7 @@ const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
     </Pressable>
   );
 };
+
 const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable
@@ -109,7 +110,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     <Box flex={1}>
       <BaseHeader
         title="A propos de toi"
-        leftComponent={<GoBackButton onPress={navigation.goBack} />}
+        leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />}
         rightComponent={<SkipLabel onPress={skipOnBoarding} />}
       />
       <Box flex={1} px={'m'}>

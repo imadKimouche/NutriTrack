@@ -9,7 +9,6 @@ import Icon from '../components/Icon';
 import Searchbar from '../components/Searchbar';
 import Loader from '../components/Loader';
 import {Meal, useSearchOFFMeal} from '../hooks/meal';
-import {useNavigation} from '@react-navigation/native';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 
@@ -27,10 +26,10 @@ export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation})
       }}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'headerBackTitle'}>Suivi</Text>
+        <Text variant={'caption'}>Suivi</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'headerTitle'}>Ajout de repas</Text>
+        <Text variant={'caption'}>Ajout de repas</Text>
       </Box>
       <Box flex={1} />
     </Box>
@@ -52,7 +51,7 @@ const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
       alignItems={'center'}>
       <Image source={{uri: meal.images.thumbUrl}} style={{width: 30, height: 30}} />
       <Box alignItems={'flex-start'} px={'s'} flex={1}>
-        <Text variant={'bodySmall'} ellipsizeMode={'tail'}>
+        <Text variant={'caption'} ellipsizeMode={'tail'}>
           {meal.name}
         </Text>
       </Box>
@@ -63,7 +62,7 @@ const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
 const SearchError: React.FC = () => {
   return (
     <Box>
-      <Text variant={'errorSmall'}>Oups, je rencontre un problème</Text>
+      <Text variant={'caption'}>Oups, je rencontre un problème</Text>
     </Box>
   );
 };
@@ -83,7 +82,7 @@ const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: (
     } else {
       return (
         <Pressable alignSelf={'center'} py={'s'} onPress={onPress}>
-          <Text variant={'bodySmall'} color={'$primary'}>
+          <Text variant={'caption'} color={'$primary'}>
             Plus
           </Text>
         </Pressable>
@@ -141,8 +140,8 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
       <SearchList searchValue={searchMeal} navigation={navigation} />
       <Box flex={1} m={'s'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'bodyLarge'}>Historique</Text>
-          <Text onPress={clearMealSearchHistory} variant={'labelSmall'}>
+          <Text variant={'subtitle1'}>Historique</Text>
+          <Text onPress={clearMealSearchHistory} variant={'caption'}>
             Tout effacer
           </Text>
         </Box>

@@ -106,14 +106,14 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
           />
 
           <TouchableOpacity onPress={goToSigninSceen}>
-            <Text variant={'labelSmall'} textAlign={'right'} paddingVertical={'s'}>
+            <Text variant={'body2'} textAlign={'right'} paddingVertical={'s'}>
               J'ai déjà un compte
             </Text>
           </TouchableOpacity>
         </Box>
         {submitMutation.error && (
           <Box>
-            <Text variant={'errorSmall'}>{submitMutation.error.message}</Text>
+            <Text variant={'body2'}>{submitMutation.error.message}</Text>
           </Box>
         )}
       </Box>

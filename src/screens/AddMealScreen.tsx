@@ -10,7 +10,6 @@ import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
 import Input from '../atoms/Input';
-import {useAuth} from '../hooks/auth';
 import {usePostMeal} from '../hooks/meal';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
@@ -37,13 +36,13 @@ export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSav
       }}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'headerBackTitle'}>Recherche</Text>
+        <Text variant={'caption'}>Recherche</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'headerTitle'}>{headerTitle}</Text>
+        <Text variant={'caption'}>{headerTitle}</Text>
       </Box>
       <Pressable flex={1} onPress={onSavePress}>
-        <Text variant={'headerBackTitle'}>Enregistrer</Text>
+        <Text variant={'caption'}>Enregistrer</Text>
       </Pressable>
     </Box>
   );
@@ -52,8 +51,8 @@ export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSav
 const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, value}) => {
   return (
     <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$slideTabBackground'} justifyContent={'space-between'}>
-      <Text variant={'cardSubtitle'}>{label}</Text>
-      <Text variant={'cardSubtitle'}>{value.toString()}</Text>
+      <Text variant={'subtitle1'}>{label}</Text>
+      <Text variant={'subtitle2'}>{value.toString()}</Text>
     </Box>
   );
 };
@@ -86,14 +85,14 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
     <Box flex={1} bg={'$windowBackground'}>
       <MealHeader title={meal.name} onBackPress={navigation.goBack} onSavePress={saveMealPortion} />
       <Box flex={0.5} alignItems={'center'} px={'s'}>
-        <Text variant={'cardTitle'} py={'m'}>
+        <Text variant={'subtitle1'} py={'m'}>
           {meal.name}
         </Text>
         <Image source={{uri: meal.images.url}} style={{width: 150, height: 150}} />
       </Box>
       <Box flex={0.2} px={'s'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'cardTitle'}>Portion</Text>
+          <Text variant={'subtitle1'}>Portion</Text>
           <Input
             value={portion.toString()}
             onChangeText={text => {
@@ -125,7 +124,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
         </Box>
       </Box>
       <Box flex={1} p={'s'}>
-        <Text py={'s'} variant={'cardTitle'}>
+        <Text py={'s'} variant={'subtitle1'}>
           Macro-nutriments (100g)
         </Text>
         <NutrimentValueItem label="Calories" value={meal.calories} />

@@ -1,3 +1,5 @@
+import {Gender} from './store/onboarding';
+
 export function dateToString(date: Date): string {
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -39,4 +41,15 @@ export function getSurroundingDates(dateStr: string, datesBefore: number, datesA
   }
 
   return surroundingDates;
+}
+
+export function calculateBMR(gender: Gender, age: number, height: number, weight: number) {
+  let bmr;
+  if (gender === 'male') {
+    bmr = 66.473 + 13.7516 * weight + 5.0033 * height - 6.755 * age;
+  } else {
+    bmr = 655.0955 + 9.5634 * weight + 1.8496 * height - 4.6756 * age;
+  }
+
+  return bmr;
 }

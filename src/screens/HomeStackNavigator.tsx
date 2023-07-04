@@ -11,7 +11,6 @@ import HeaderWithSettings from '../components/HeaderWithSettings';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingsScreen from './SettingsScreen';
 import {Meal} from '../hooks/meal';
-import {useCurrentMealData} from '../hooks/dailyTracker';
 import SearchMealScreen, {SearchMealHeader} from './SearchMealScreen';
 import AddMealScreen from './AddMealScreen';
 

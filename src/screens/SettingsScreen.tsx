@@ -22,7 +22,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({label, onPress}) => {
         justifyContent={'center'}>
         <Icon name="log-out" size={18} color={'$logoutIcon'} />
       </Box>
-      <Text variant={'buttonLabel'}>{label}</Text>
+      <Text variant={'body1'}>{label}</Text>
     </Pressable>
   );
 };

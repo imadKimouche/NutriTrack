@@ -15,27 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export async function fetchUserData(userId: string) {
-  const docRef = doc(db, 'users', userId);
-  return getDoc(docRef);
-}
-
-export function pushUserData(userId: string, userData: UserData) {
-  return setDoc(doc(db, 'users', userId), userData);
-}
-
-export async function pushUserBMR(userId: string, bmr: number) {
-  const userDataRef = doc(db, 'users', userId);
-  const docSnapshot = await getDoc(userDataRef);
-
-  if (docSnapshot.exists()) {
-    return updateDoc(userDataRef, {bmr});
-  } else {
-    return setDoc(userDataRef, {bmr}, {merge: true});
-  }
-}
+export const db = getFirestore(app);
 
 export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
   const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);

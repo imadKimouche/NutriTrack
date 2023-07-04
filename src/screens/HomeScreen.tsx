@@ -7,9 +7,7 @@ import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
-import Loader from '../components/Loader';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
-import {useUserData} from '../hooks/userData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
 import {getSurroundingDates} from '../utils';
@@ -66,10 +64,10 @@ const MacroItem: React.FC<{
         <Box bg={color} mr={'s'} height={fillRatio * 30} width={8} borderRadius={'sm'} />
       </Box>
       <Box>
-        <Text variant={'cardTitle'}>
+        <Text variant={'subtitle1'}>
           {value.toString()} {unit}
         </Text>
-        <Text variant={'cardSubtitle'}>{label}</Text>
+        <Text variant={'subtitle2'}>{label}</Text>
       </Box>
     </Box>
   );
@@ -96,8 +94,8 @@ const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
       <Box flex={1} flexDirection={'row'} alignItems={'center'}>
         <Image />
         <Box marginLeft={'s'}>
-          <Text variant={'cardTitle'}>{meal.name}</Text>
-          <Text variant={'cardSubtitle'}>{meal.calories}kcal - 100G</Text>
+          <Text variant={'subtitle1'}>{meal.name}</Text>
+          <Text variant={'subtitle2'}>{meal.calories}kcal - 100G</Text>
         </Box>
       </Box>
       <Box flex={1} flexDirection={'row'} justifyContent={'space-around'} alignItems={'center'}>
@@ -119,7 +117,7 @@ const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => 
       style={{borderRadius: 12}}
       m={'xs'}
       bg={selected ? '$background' : undefined}>
-      <Text variant={selected ? 'labelSmallSelected' : 'labelSmall'} fontSize={12}>
+      <Text variant={'caption'} fontSize={12}>
         {label}
       </Text>
     </Pressable>
@@ -156,7 +154,7 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
       <Box bg={'$dateSelectorBackground'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box bg={'$seconday'} borderRadius={'sm'} height={8} width={`${progressRatio * 100}%`} />
       </Box>
-      <Text variant={'labelSmall'} mt={'s'}>
+      <Text variant={'caption'} mt={'s'}>
         {currentCalories}kcal / {maxCalories}kcal
       </Text>
     </Box>
@@ -195,14 +193,13 @@ const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => 
 type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
 
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
-  // const {data} = useUserData();
   const {spacing} = useTheme<Theme>();
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const setCurrentSelectedDate = useDashboardStore(state => state.setSelectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
   const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
   const {data} = useUserDailyMeals(currentSelectedDate);
-  const {deleteDailyMeal, isLoading: deleteIsLoading, isError: deleteIsError, error: deleteError} = useDeleteDailyMeal();
+  const {deleteDailyMeal} = useDeleteDailyMeal();
 
   const currentDateMeals = data ?? {
     currentCalories: 0,

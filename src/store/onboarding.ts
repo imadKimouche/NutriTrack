@@ -22,8 +22,14 @@ type OnBoardingState = {
   setWeight: (weight: number) => void;
   addAllergy: (allergy: FoodAllergy) => void;
   removeAllergy: (allergy: FoodAllergy) => void;
+  toggleAllergy: (allergy: FoodAllergy) => void;
   clearAllergies: () => void;
 };
+
+export type UserFitnessData = Pick<
+  OnBoardingState,
+  'fitnessGoal' | 'activityLevel' | 'gender' | 'age' | 'height' | 'weight' | 'allergies'
+>;
 
 export const useOnBoardingStore = create<OnBoardingState>()(
   devtools(
@@ -51,6 +57,20 @@ export const useOnBoardingStore = create<OnBoardingState>()(
         }),
       removeAllergy: (allergy: FoodAllergy) =>
         set(state => ({...state, allergies: state.allergies.filter(item => item !== allergy)})),
+      toggleAllergy: (allergy: FoodAllergy) =>
+        set(state => {
+          if (state.allergies.includes(allergy)) {
+            return {
+              ...state,
+              allergies: state.allergies.filter(item => item !== allergy),
+            };
+          } else {
+            return {
+              ...state,
+              allergies: [...state.allergies, allergy],
+            };
+          }
+        }),
       clearAllergies: () => set(state => ({...state, allergies: []})),
     }),
     {

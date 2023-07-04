@@ -8,7 +8,6 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
-import {useUserTDEE} from '../hooks/userDietData';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
@@ -17,7 +16,6 @@ import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
 
-const MAX_CAL = 2300;
 const MAX_PROT = 120;
 const MAX_FAT = 30;
 const MAX_CARBS = 100;

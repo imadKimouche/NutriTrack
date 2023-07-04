@@ -8,6 +8,8 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Icon from '../components/Icon';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
+import {useUserTDEE} from '../hooks/userDietData';
+import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
 import {getSurroundingDates} from '../utils';
@@ -61,13 +63,15 @@ const MacroItem: React.FC<{
   return (
     <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
       <Box bg={'$progressBarBackground'} mr={'s'} height={30} width={8} borderRadius={'sm'} flexDirection={'column-reverse'}>
-        <Box bg={color} mr={'s'} height={fillRatio * 30} width={8} borderRadius={'sm'} />
+        <Box bg={color} mr={'s'} height={fillRatio * 30} width={8} borderBottomLeftRadius={'sm'} borderBottomRightRadius={'sm'} />
       </Box>
       <Box>
-        <Text variant={'subtitle1'}>
+        <Text variant={'body2'} color={'$labelOff'}>
+          {label}
+        </Text>
+        <Text variant={'caption'}>
           {value.toString()} {unit}
         </Text>
-        <Text variant={'subtitle2'}>{label}</Text>
       </Box>
     </Box>
   );
@@ -84,18 +88,17 @@ const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
         onLongPress(meal.id);
       }}
       bg={'$background'}
-      height={120}
-      padding={'s'}
-      my={'xs'}
-      borderColor={'$textInputBorderColor'}
-      borderWidth={1}
+      p={'s'}
+      mb={'xs'}
       borderStyle={'solid'}
-      borderRadius={'sm'}>
+      borderRadius={'xs'}>
       <Box flex={1} flexDirection={'row'} alignItems={'center'}>
         <Image />
-        <Box marginLeft={'s'}>
+        <Box pb={'s'}>
           <Text variant={'subtitle1'}>{meal.name}</Text>
-          <Text variant={'subtitle2'}>{meal.calories}kcal - 100G</Text>
+          <Text variant={'caption'} color={'$labelOff'}>
+            {meal.calories}kcal - 100G
+          </Text>
         </Box>
       </Box>
       <Box flex={1} flexDirection={'row'} justifyContent={'space-around'} alignItems={'center'}>
@@ -148,15 +151,25 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
 
 const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> = ({currentCalories, maxCalories}) => {
   const progressRatio = currentCalories <= maxCalories ? currentCalories / maxCalories : 1;
+  const normalizedMaxCalories = Math.ceil(maxCalories);
 
   return (
-    <Box width={'80%'} alignItems={'flex-end'} py={'s'}>
-      <Box bg={'$dateSelectorBackground'} borderRadius={'sm'} height={8} width={'100%'}>
-        <Box bg={'$seconday'} borderRadius={'sm'} height={8} width={`${progressRatio * 100}%`} />
+    <Box width={'80%'} py={'s'}>
+      <Text variant={'subtitle2'}>Progression du jour</Text>
+      <Box bg={'$dateSelectorBackground'} my={'s'} borderRadius={'sm'} height={8} width={'100%'}>
+        <Box
+          bg={'$primary'}
+          borderTopLeftRadius={'sm'}
+          borderBottomLeftRadius={'sm'}
+          height={8}
+          width={`${progressRatio * 100}%`}
+        />
       </Box>
-      <Text variant={'caption'} mt={'s'}>
-        {currentCalories}kcal / {maxCalories}kcal
-      </Text>
+      <Box alignItems={'flex-end'}>
+        <Text variant={'caption'}>
+          {currentCalories} kcal / {normalizedMaxCalories} kcal
+        </Text>
+      </Box>
     </Box>
   );
 };
@@ -200,6 +213,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
   const {data} = useUserDailyMeals(currentSelectedDate);
   const {deleteDailyMeal} = useDeleteDailyMeal();
+  const {userFitnessData} = useUserFitnessData();
 
   const currentDateMeals = data ?? {
     currentCalories: 0,
@@ -211,7 +225,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   return (
     <Box flex={1} width={'100%'} alignItems={'center'}>
       <DatePicker currentDate={currentSelectedDate} onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)} />
-      <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={MAX_CAL} />
+      <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
       <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
       <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
       <Box flex={1} alignSelf={'stretch'}>

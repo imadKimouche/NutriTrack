@@ -37,9 +37,10 @@ type ActivityLevelItem = OnboardingListItem<ActivityLevel>;
 
 const ACTIVITY_LEVELS: ActivityLevelItem[] = [
   {id: 'minimal', label: 'Sédentaire', icon: 'monitor', indication: "Travail de bureau, min d'activité"},
-  {id: 'moderate', label: 'Modéré', icon: 'clock', indication: 'Exercice 1-2 fois par semaine'},
-  {id: 'active', label: 'Actif', icon: 'chevrons-up', indication: 'Exercice 3-4 fois par semaine'},
-  {id: 'extreme', label: 'Très actif', icon: 'zap', indication: 'Excercie 6-7 fois par semaine'},
+  {id: 'light', label: 'Léger', icon: 'chevrons-down', indication: 'Exercice 1-3 fois par semaine'},
+  {id: 'moderate', label: 'Modéré', icon: 'clock', indication: 'Exercice 3-5 fois par semaine'},
+  {id: 'active', label: 'Actif', icon: 'chevrons-up', indication: 'Exercice 6-7 fois par semaine'},
+  {id: 'extreme', label: 'Très actif', icon: 'zap', indication: 'exercice très intense/sport et travail physique'},
 ];
 
 const ActivityLevelListItem: React.FC<

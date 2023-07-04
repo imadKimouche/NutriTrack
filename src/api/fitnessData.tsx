@@ -23,6 +23,8 @@ const userFitnessDataConverter = {
         age: data.age,
         height: data.height,
         weight: data.weight,
+        bmr: data.bmr,
+        tdee: data.tdee,
       } as UserFitnessData;
     }
     return {

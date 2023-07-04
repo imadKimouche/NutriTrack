@@ -1,5 +1,5 @@
 import {Picker} from '@react-native-picker/picker';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
@@ -93,7 +93,7 @@ const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedIt
 export type AboutYouTabProps = {navigation: TabNavigationProp};
 
 const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
-  const {gender, setGender, age, setAge, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
+  const {gender, setGender, setAge, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
     gender: state.gender,
     setGender: state.setGender,
     age: state.age,
@@ -103,6 +103,14 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     weight: state.weight,
     setWeight: state.setWeight,
   }));
+  const [ageStr, setAgeStr] = useState('');
+
+  useEffect(() => {
+    const numValue = parseInt(ageStr, 10);
+    if (!isNaN(numValue)) {
+      setAge(numValue);
+    }
+  }, [ageStr, setAge]);
 
   function skipOnBoarding() {}
 
@@ -126,8 +134,8 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
         <Box mt={'s'}>
           <Text variant={'subtitle2'}>Age</Text>
           <Input
-            value={age.toString()}
-            onChangeText={value => setAge(parseInt(value, 10))}
+            value={ageStr}
+            onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
             padding={'s'}
             marginVertical={'s'}
             keyboardType="numeric"

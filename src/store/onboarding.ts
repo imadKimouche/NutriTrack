@@ -2,7 +2,7 @@ import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 
 export type FitnessGoal = 'gain' | 'lose' | 'maintain' | 'recomposition';
-export type ActivityLevel = 'minimal' | 'moderate' | 'active' | 'extreme';
+export type ActivityLevel = 'minimal' | 'light' | 'moderate' | 'active' | 'extreme';
 export type Gender = 'male' | 'female';
 export type FoodAllergy = 'gluten' | 'diary' | 'nut' | 'shellfish' | 'soy' | 'grain' | 'eggs';
 
@@ -29,7 +29,7 @@ type OnBoardingState = {
 export type UserFitnessData = Pick<
   OnBoardingState,
   'fitnessGoal' | 'activityLevel' | 'gender' | 'age' | 'height' | 'weight' | 'allergies'
->;
+> & {bmr?: number; tdee?: number};
 
 export const useOnBoardingStore = create<OnBoardingState>()(
   devtools(

@@ -36,13 +36,13 @@ export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSav
       }}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'caption'}>Recherche</Text>
+        <Text variant={'button'}>Recherche</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'caption'}>{headerTitle}</Text>
+        <Text variant={'h6'}>{headerTitle}</Text>
       </Box>
       <Pressable flex={1} onPress={onSavePress}>
-        <Text variant={'caption'}>Enregistrer</Text>
+        <Text variant={'button'}>Enregistrer</Text>
       </Pressable>
     </Box>
   );

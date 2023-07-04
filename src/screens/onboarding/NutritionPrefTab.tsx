@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 import BaseHeader from '../../components/Header';
 import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
-import {FoodAllergy, useOnBoardingStore} from '../../store/onboarding';
+import {ActivityLevel, FitnessGoal, FoodAllergy, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
 import NoGlutenImage from '../../assets/sans-gluten.svg';
 import NoDiaryImage from '../../assets/lait.svg';
@@ -20,7 +20,7 @@ import {useTheme} from '@shopify/restyle';
 import {Theme} from '../../style/theme';
 import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
-import {useUserBMR} from '../../hooks/userDietData';
+import {useUserBMR, useUserTDEE} from '../../hooks/userDietData';
 
 const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -116,6 +116,21 @@ const AllergyListItem: React.FC<FoodAllergyItem & {selectedItems: FoodAllergy[];
   );
 };
 
+const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
+  minimal: 1.2,
+  light: 1.375,
+  moderate: 1.55,
+  active: 1.725,
+  extreme: 1.9,
+};
+
+const CALORIES_MODIFIERS: Record<FitnessGoal, number> = {
+  gain: 200,
+  lose: -200,
+  maintain: 0,
+  recomposition: -100,
+};
+
 export type AboutYouTabProps = {navigation: TabNavigationProp};
 
 const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
@@ -133,11 +148,14 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   }));
   const {storeUserFitnessData} = useUserFitnessData();
   const {storeUserBMR} = useUserBMR();
+  const {storeUserTDEE} = useUserTDEE();
 
   function skipOnBoarding() {}
   function setUserData() {
     const bmr = calculateBMR(gender, age, height, weight);
+    const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
     storeUserBMR(bmr);
+    storeUserTDEE(tdee);
     storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies});
   }
 

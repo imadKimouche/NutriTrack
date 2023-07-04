@@ -1,5 +1,5 @@
-import {useMutation} from 'react-query';
-import {setUserBMR} from '../api/dietData';
+import {useMutation, useQueryClient} from 'react-query';
+import {setUserBMR, setUserTDEE} from '../api/dietData';
 import {useAuth} from './auth';
 
 export const useUserBMR = () => {
@@ -7,5 +7,18 @@ export const useUserBMR = () => {
   const {mutate} = useMutation((bmr: number) => setUserBMR(user?.uid!, bmr));
   return {
     storeUserBMR: mutate,
+  };
+};
+
+export const useUserTDEE = () => {
+  const {user} = useAuth();
+  const queryClient = useQueryClient();
+  const {mutate} = useMutation((tdee: number) => setUserTDEE(user?.uid!, tdee), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('userFitnessData');
+    },
+  });
+  return {
+    storeUserTDEE: mutate,
   };
 };

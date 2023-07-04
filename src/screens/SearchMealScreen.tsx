@@ -26,10 +26,10 @@ export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation})
       }}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'caption'}>Suivi</Text>
+        <Text variant={'button'}>Suivi</Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'caption'}>Ajout de repas</Text>
+        <Text variant={'h6'}>Ajout de repas</Text>
       </Box>
       <Box flex={1} />
     </Box>
@@ -140,15 +140,23 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
       <SearchList searchValue={searchMeal} navigation={navigation} />
       <Box flex={1} m={'s'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'subtitle1'}>Historique</Text>
+          <Text variant={'body1'} color={'$primary'}>
+            Historique
+          </Text>
           <Text onPress={clearMealSearchHistory} variant={'caption'}>
             Tout effacer
           </Text>
         </Box>
         {mealSearchHistory.map((meal: Meal) => {
           return (
-            <Pressable key={meal.id} onPress={() => navigation.navigate('AddMeal', {meal})} alignSelf={'stretch'} p={'s'}>
-              <Text>{meal.name}</Text>
+            <Pressable
+              key={meal.id}
+              onPress={() => navigation.navigate('AddMeal', {meal})}
+              alignSelf={'stretch'}
+              p={'m'}
+              borderBottomWidth={1}
+              borderColor={'$listItemDivider'}>
+              <Text variant={'body2'}>{meal.name}</Text>
             </Pressable>
           );
         })}

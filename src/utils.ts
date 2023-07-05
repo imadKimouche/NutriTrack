@@ -53,3 +53,20 @@ export function calculateBMR(gender: Gender, age: number, height: number, weight
 
   return bmr;
 }
+
+export function generateHeightOptions(min: number, max: number, increment: number) {
+  const options = [];
+  for (let height = min; height <= max; height += increment) {
+    const label = `${height} cm`;
+    options.push({value: height.toString(), label});
+  }
+  return options;
+}
+
+export const generateWeightOptions = (min: number, max: number, increment: number) => {
+  const options = [];
+  for (let weight = min; weight <= max; weight += increment) {
+    options.push({value: weight.toString(), label: `${weight} kg`});
+  }
+  return options;
+};

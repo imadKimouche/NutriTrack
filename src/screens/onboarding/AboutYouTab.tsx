@@ -9,24 +9,8 @@ import BaseHeader from '../../components/Header';
 import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
+import {generateHeightOptions, generateWeightOptions} from '../../utils';
 import {OnboardingListItem} from './GoalTab';
-
-function generateHeightOptions(min: number, max: number, increment: number) {
-  const options = [];
-  for (let height = min; height <= max; height += increment) {
-    const label = `${height} cm`;
-    options.push({value: height.toString(), label});
-  }
-  return options;
-}
-
-const generateWeightOptions = (min: number, max: number, increment: number) => {
-  const options = [];
-  for (let weight = min; weight <= max; weight += increment) {
-    options.push({value: weight.toString(), label: `${weight} kg`});
-  }
-  return options;
-};
 
 const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
 const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);

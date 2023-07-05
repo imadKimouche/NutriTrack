@@ -9,10 +9,11 @@ import HomeScreen from './HomeScreen';
 import RecipesScreen from './RecipesScreen';
 import HeaderWithSettings from '../components/HeaderWithSettings';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SettingsScreen from './SettingsScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen';
 import {Meal} from '../hooks/meal';
 import SearchMealScreen, {SearchMealHeader} from './SearchMealScreen';
 import AddMealScreen from './AddMealScreen';
+import ProfileSettingsScreen from './settings/ProfileSettingsScreen';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
@@ -23,6 +24,7 @@ export type HomeStackParamList = {
   SearchMeal: undefined;
   AddMeal: {meal: Meal};
   Settings: undefined;
+  ProfileSettings: undefined;
 };
 
 // type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -33,11 +35,12 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 const HomeStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerBackTitleVisible: false}}>
       <Stack.Screen options={{headerShown: false}} name="HomeTabNavigator" component={HomeTabNavigator} />
       <Stack.Screen name="SearchMeal" options={{header: SearchMealHeader}} component={SearchMealScreen} />
       <Stack.Screen name="AddMeal" options={{headerShown: false}} component={AddMealScreen} />
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
+      <Stack.Screen name="ProfileSettings" options={{title: 'Profile'}} component={ProfileSettingsScreen} />
     </Stack.Navigator>
   );
 };

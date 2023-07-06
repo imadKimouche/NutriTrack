@@ -1,17 +1,13 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {Picker} from '@react-native-picker/picker';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
-import Icon from '../../components/Icon';
-import {Gender, useOnBoardingStore} from '../../store/onboarding';
-import {generateHeightOptions, generateWeightOptions} from '../../utils';
-import {OnboardingListItem} from '../onboarding/GoalTab';
-
-const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
-const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
+import {useOnBoardingStore} from '../../store/onboarding';
+import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
 
 const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: string}> = ({onPress, label, value}) => {
   return (
@@ -29,42 +25,8 @@ const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: 
   );
 };
 
-type GenderItem = Omit<OnboardingListItem<Gender>, 'indication'>;
-
-const GENDERS: GenderItem[] = [
-  {id: 'male', label: 'Homme', icon: 'user'},
-  {id: 'female', label: 'Femme', icon: 'user'},
-];
-
-const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedItem: (item: Gender) => void}> = ({
-  id,
-  label,
-  icon,
-  selectedItem,
-  setSelectedItem,
-}) => {
-  const isSelected = id === selectedItem;
-
-  return (
-    <Pressable
-      onPress={() => setSelectedItem(id)}
-      flexDirection={'row'}
-      alignItems={'center'}
-      height={56}
-      borderBottomWidth={1}
-      borderBottomColor={'$listItemDivider'}
-      borderStyle={'solid'}>
-      <Icon name={icon} size={26} color={isSelected ? '$primary' : '$labelOff'} />
-      <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$primary' : 'black'}>
-          {label}
-        </Text>
-      </Box>
-    </Pressable>
-  );
-};
-
 const ProfileSettingsScreen: React.FC = () => {
+  const insets = useSafeAreaInsets();
   const {age, setAge, gender, setGender, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
     age: state.age,
     setAge: state.setAge,
@@ -75,10 +37,12 @@ const ProfileSettingsScreen: React.FC = () => {
     weight: state.weight,
     setWeight: state.setWeight,
   }));
-  const bsAgeRef = useRef<BottomSheet>(null);
-  const bsGenderRef = useRef<BottomSheet>(null);
-  const bsHeightRef = useRef<BottomSheet>(null);
-  const bsWeightRef = useRef<BottomSheet>(null);
+  const bottomSheetRefs = {
+    height: useRef<BottomSheet>(null),
+    weight: useRef<BottomSheet>(null),
+    age: useRef<BottomSheet>(null),
+    gender: useRef<BottomSheet>(null),
+  };
 
   const snapPoints = useMemo(() => ['5%', '25%', '50%'], []);
   const [ageStr, setAgeStr] = useState('');
@@ -90,19 +54,47 @@ const ProfileSettingsScreen: React.FC = () => {
     }
   }, [ageStr, setAge]);
 
+  function closeAllBsExcept(key: keyof typeof bottomSheetRefs) {
+    Object.entries(bottomSheetRefs).forEach(([k, v]) => {
+      k !== key ? v.current?.close() : undefined;
+    });
+  }
+
   return (
     <Box flex={1}>
       <ProfileSettingsItem
         onPress={() => {
-          bsHeightRef.current?.expand();
+          bottomSheetRefs.height.current?.expand();
+          closeAllBsExcept('height');
         }}
         label="Taille"
         value={`${height} cm`}
       />
-      <ProfileSettingsItem onPress={() => bsWeightRef.current?.expand()} label="Poids" value={`${weight} kg`} />
-      <ProfileSettingsItem onPress={() => bsAgeRef.current?.expand()} label="Age" value={`${age} ans`} />
-      <ProfileSettingsItem onPress={() => bsGenderRef.current?.expand()} label="Sexe" value={gender} />
-      <BottomSheet ref={bsAgeRef} index={-1} snapPoints={snapPoints}>
+      <ProfileSettingsItem
+        onPress={() => {
+          bottomSheetRefs.weight.current?.expand();
+          closeAllBsExcept('weight');
+        }}
+        label="Poids"
+        value={`${weight} kg`}
+      />
+      <ProfileSettingsItem
+        onPress={() => {
+          bottomSheetRefs.age.current?.expand();
+          closeAllBsExcept('age');
+        }}
+        label="Age"
+        value={`${age} ans`}
+      />
+      <ProfileSettingsItem
+        onPress={() => {
+          bottomSheetRefs.gender.current?.expand();
+          closeAllBsExcept('gender');
+        }}
+        label="Sexe"
+        value={gender}
+      />
+      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPoints} bottomInset={insets.bottom}>
         <Box>
           <Text variant={'subtitle2'}>Age</Text>
           <Input
@@ -117,7 +109,7 @@ const ProfileSettingsScreen: React.FC = () => {
           />
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bsAgeRef} index={-1} snapPoints={snapPoints}>
+      <BottomSheet ref={bottomSheetRefs.gender} index={-1} snapPoints={snapPoints}>
         <Box>
           <Text variant={'subtitle2'}>Sexe</Text>
           {GENDERS.map(item => (
@@ -125,7 +117,7 @@ const ProfileSettingsScreen: React.FC = () => {
           ))}
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bsHeightRef} index={-1} snapPoints={snapPoints}>
+      <BottomSheet ref={bottomSheetRefs.height} index={-1} snapPoints={snapPoints}>
         <Box>
           <Text variant={'subtitle2'}>Taille</Text>
           <Picker itemStyle={{height: 110}} selectedValue={height} onValueChange={itemValue => setHeight(itemValue)}>
@@ -135,7 +127,7 @@ const ProfileSettingsScreen: React.FC = () => {
           </Picker>
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bsWeightRef} index={-1} snapPoints={snapPoints}>
+      <BottomSheet ref={bottomSheetRefs.weight} index={-1} snapPoints={snapPoints}>
         <Box>
           <Text variant={'subtitle2'}>Poids</Text>
           <Picker itemStyle={{height: 110}} selectedValue={weight} onValueChange={itemValue => setWeight(itemValue)}>

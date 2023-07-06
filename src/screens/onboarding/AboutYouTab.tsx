@@ -12,8 +12,8 @@ import {Gender, useOnBoardingStore} from '../../store/onboarding';
 import {generateHeightOptions, generateWeightOptions} from '../../utils';
 import {OnboardingListItem} from './GoalTab';
 
-const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
-const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
+export const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
+export const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
 
 const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -39,14 +39,14 @@ const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
   );
 };
 
-type GenderItem = Omit<OnboardingListItem<Gender>, 'indication'>;
+export type GenderItem = Omit<OnboardingListItem<Gender>, 'indication'>;
 
-const GENDERS: GenderItem[] = [
+export const GENDERS: GenderItem[] = [
   {id: 'male', label: 'Homme', icon: 'user'},
   {id: 'female', label: 'Femme', icon: 'user'},
 ];
 
-const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedItem: (item: Gender) => void}> = ({
+export const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedItem: (item: Gender) => void}> = ({
   id,
   label,
   icon,

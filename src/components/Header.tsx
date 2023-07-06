@@ -10,7 +10,14 @@ export type HeaderProps = {
 
 const BaseHeader: React.FC<HeaderProps> = ({leftComponent, title, rightComponent}) => {
   return (
-    <Box height={70} flexDirection={'row'} alignItems={'center'} alignSelf={'flex-start'}>
+    <Box
+      bg={'$background'}
+      borderBottomWidth={1}
+      borderColor={'$listItemDivider'}
+      height={50}
+      flexDirection={'row'}
+      alignItems={'center'}
+      alignSelf={'flex-start'}>
       <Box flex={0.3}>{leftComponent}</Box>
       <Box flex={1} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'h6'}>{title}</Text>

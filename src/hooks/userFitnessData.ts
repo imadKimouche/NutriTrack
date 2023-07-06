@@ -7,10 +7,14 @@ export const useUserFitnessData = () => {
   const {user} = useAuth();
   const {data, isLoading, error, isError} = useQuery(['userFitnessData', user?.uid!], () => getFitnessData(user?.uid!));
   const queryClient = useQueryClient();
-  const {mutate} = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
+  const {
+    mutate,
+    isLoading: storeUFDIsLoading,
+    isError: storeUFDIsError,
+  } = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
     onSuccess: () => {
       queryClient.invalidateQueries('userFitnessData');
     },
   });
-  return {userFitnessData: data, storeUserFitnessData: mutate, isLoading, error, isError};
+  return {userFitnessData: data, storeUserFitnessData: mutate, isLoading, error, isError, storeUFDIsLoading, storeUFDIsError};
 };

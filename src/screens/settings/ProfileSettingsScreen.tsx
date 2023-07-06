@@ -1,13 +1,28 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {Picker} from '@react-native-picker/picker';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
+import BaseHeader from '../../components/Header';
+import Icon from '../../components/Icon';
+import LoadingModal from '../../components/LoadingModal';
+import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useOnBoardingStore} from '../../store/onboarding';
+import {HomeStackParamList} from '../HomeStackNavigator';
 import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
+import {ALLERGIES, AllergyListItem, GoBackButton} from '../onboarding/NutritionPrefTab';
+
+const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
+  return (
+    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
+      <Icon name="check" size={24} color={'$primary'} />
+    </Pressable>
+  );
+};
 
 const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: string}> = ({onPress, label, value}) => {
   return (
@@ -25,9 +40,25 @@ const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: 
   );
 };
 
-const ProfileSettingsScreen: React.FC = () => {
+type ProfileSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
+const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigationProp}> = ({navigation}) => {
   const insets = useSafeAreaInsets();
-  const {age, setAge, gender, setGender, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
+  const {
+    fitnessGoal,
+    activityLevel,
+    allergies,
+    toggleAllergy,
+    age,
+    setAge,
+    gender,
+    setGender,
+    height,
+    setHeight,
+    weight,
+    setWeight,
+  } = useOnBoardingStore(state => ({
+    fitnessGoal: state.fitnessGoal,
+    activityLevel: state.activityLevel,
     age: state.age,
     setAge: state.setAge,
     gender: state.gender,
@@ -36,16 +67,21 @@ const ProfileSettingsScreen: React.FC = () => {
     setHeight: state.setHeight,
     weight: state.weight,
     setWeight: state.setWeight,
+    allergies: state.allergies,
+    toggleAllergy: state.toggleAllergy,
   }));
+  const {storeUserFitnessData, storeUFDIsLoading, storeUFDIsError} = useUserFitnessData();
   const bottomSheetRefs = {
     height: useRef<BottomSheet>(null),
     weight: useRef<BottomSheet>(null),
     age: useRef<BottomSheet>(null),
     gender: useRef<BottomSheet>(null),
+    allergies: useRef<BottomSheet>(null),
   };
 
-  const snapPoints = useMemo(() => ['5%', '25%', '50%'], []);
-  const [ageStr, setAgeStr] = useState('');
+  const snapPointLow = useMemo(() => ['33%'], []);
+  const snapPointTop = useMemo(() => ['60%'], []);
+  const [ageStr, setAgeStr] = useState(age.toString());
 
   useEffect(() => {
     const numValue = parseInt(ageStr, 10);
@@ -60,8 +96,26 @@ const ProfileSettingsScreen: React.FC = () => {
     });
   }
 
+  function saveSettings() {
+    storeUserFitnessData({
+      fitnessGoal,
+      activityLevel,
+      age,
+      height,
+      weight,
+      gender,
+      allergies,
+    });
+  }
+
   return (
-    <Box flex={1}>
+    <Box flex={1} style={{paddingTop: insets.top}}>
+      {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours" />}
+      <BaseHeader
+        title="Profile"
+        leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
+        rightComponent={<SaveButton onPress={saveSettings} />}
+      />
       <ProfileSettingsItem
         onPress={() => {
           bottomSheetRefs.height.current?.expand();
@@ -94,8 +148,16 @@ const ProfileSettingsScreen: React.FC = () => {
         label="Sexe"
         value={gender}
       />
-      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPoints} bottomInset={insets.bottom}>
-        <Box>
+      <ProfileSettingsItem
+        onPress={() => {
+          bottomSheetRefs.allergies.current?.expand();
+          closeAllBsExcept('allergies');
+        }}
+        label="Allérgies"
+        value={''}
+      />
+      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPointLow} bottomInset={insets.bottom}>
+        <Box p={'m'}>
           <Text variant={'subtitle2'}>Age</Text>
           <Input
             value={ageStr}
@@ -109,16 +171,16 @@ const ProfileSettingsScreen: React.FC = () => {
           />
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bottomSheetRefs.gender} index={-1} snapPoints={snapPoints}>
-        <Box>
+      <BottomSheet ref={bottomSheetRefs.gender} index={-1} snapPoints={snapPointLow}>
+        <Box p={'m'}>
           <Text variant={'subtitle2'}>Sexe</Text>
           {GENDERS.map(item => (
             <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
           ))}
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bottomSheetRefs.height} index={-1} snapPoints={snapPoints}>
-        <Box>
+      <BottomSheet ref={bottomSheetRefs.height} index={-1} snapPoints={snapPointLow}>
+        <Box p={'m'}>
           <Text variant={'subtitle2'}>Taille</Text>
           <Picker itemStyle={{height: 110}} selectedValue={height} onValueChange={itemValue => setHeight(itemValue)}>
             {HEIGHT_OPTIONS.map(option => {
@@ -127,14 +189,22 @@ const ProfileSettingsScreen: React.FC = () => {
           </Picker>
         </Box>
       </BottomSheet>
-      <BottomSheet ref={bottomSheetRefs.weight} index={-1} snapPoints={snapPoints}>
-        <Box>
+      <BottomSheet ref={bottomSheetRefs.weight} index={-1} snapPoints={snapPointLow}>
+        <Box p={'m'}>
           <Text variant={'subtitle2'}>Poids</Text>
           <Picker itemStyle={{height: 110}} selectedValue={weight} onValueChange={itemValue => setWeight(itemValue)}>
             {WEIGHT_OPTIONS.map(option => {
               return <Picker.Item key={option.label} label={option.label} value={option.value} />;
             })}
           </Picker>
+        </Box>
+      </BottomSheet>
+      <BottomSheet ref={bottomSheetRefs.allergies} index={-1} snapPoints={snapPointTop}>
+        <Box p={'m'}>
+          <Text variant={'subtitle2'}>Allérgies</Text>
+          {ALLERGIES.map(item => (
+            <AllergyListItem key={item.id} {...item} selectedItems={allergies} onPress={toggleAllergy} />
+          ))}
         </Box>
       </BottomSheet>
     </Box>

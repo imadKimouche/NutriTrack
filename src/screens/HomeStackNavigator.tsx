@@ -40,7 +40,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen name="SearchMeal" options={{header: SearchMealHeader}} component={SearchMealScreen} />
       <Stack.Screen name="AddMeal" options={{headerShown: false}} component={AddMealScreen} />
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
-      <Stack.Screen name="ProfileSettings" options={{title: 'Profile'}} component={ProfileSettingsScreen} />
+      <Stack.Screen name="ProfileSettings" options={{headerShown: false}} component={ProfileSettingsScreen} />
     </Stack.Navigator>
   );
 };

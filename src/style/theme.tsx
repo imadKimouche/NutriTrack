@@ -73,6 +73,7 @@ const theme = createTheme({
     $searchbarIcon: p.black40P,
     $searchbarPlaceholder: p.black40P,
     $searchbarShadow: p.orange8P,
+    $modalShadowDrop: p.black8P,
   },
   borderRadii: {
     xs: 4,

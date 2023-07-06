@@ -22,10 +22,10 @@ import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useUserBMR, useUserTDEE} from '../../hooks/userDietData';
 
-const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
+export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
-      <Icon name="arrow-left" color={'$labelOff'} size={24} />
+      <Icon name="arrow-left" color={'$primary'} size={24} />
     </Pressable>
   );
 };
@@ -48,7 +48,7 @@ const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
 
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 
-const ALLERGIES: FoodAllergyItem[] = [
+export const ALLERGIES: FoodAllergyItem[] = [
   {
     id: 'gluten',
     label: 'Allergie au gluten',
@@ -86,13 +86,9 @@ const ALLERGIES: FoodAllergyItem[] = [
   },
 ];
 
-const AllergyListItem: React.FC<FoodAllergyItem & {selectedItems: FoodAllergy[]; onPress: (item: FoodAllergy) => void}> = ({
-  id,
-  label,
-  icon,
-  selectedItems,
-  onPress,
-}) => {
+export const AllergyListItem: React.FC<
+  FoodAllergyItem & {selectedItems: FoodAllergy[]; onPress: (item: FoodAllergy) => void}
+> = ({id, label, icon, selectedItems, onPress}) => {
   const Image = icon;
   const isSelected = selectedItems.includes(id);
   const {colors} = useTheme<Theme>();

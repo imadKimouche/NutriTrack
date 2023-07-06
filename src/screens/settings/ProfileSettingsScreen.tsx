@@ -16,7 +16,7 @@ import {HomeStackParamList} from '../HomeStackNavigator';
 import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
 import {ALLERGIES, AllergyListItem, GoBackButton} from '../onboarding/NutritionPrefTab';
 
-const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
+export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
       <Icon name="check" size={24} color={'$primary'} />
@@ -70,7 +70,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
     allergies: state.allergies,
     toggleAllergy: state.toggleAllergy,
   }));
-  const {storeUserFitnessData, storeUFDIsLoading, storeUFDIsError} = useUserFitnessData();
+  const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();
   const bottomSheetRefs = {
     height: useRef<BottomSheet>(null),
     weight: useRef<BottomSheet>(null),
@@ -96,8 +96,14 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
     });
   }
 
+  function closeAllBottomSheets() {
+    Object.values(bottomSheetRefs).forEach(v => {
+      v.current?.close();
+    });
+  }
+
   function saveSettings() {
-    storeUserFitnessData({
+    storeUFDAsync({
       fitnessGoal,
       activityLevel,
       age,
@@ -105,6 +111,8 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
       weight,
       gender,
       allergies,
+    }).finally(() => {
+      closeAllBottomSheets();
     });
   }
 

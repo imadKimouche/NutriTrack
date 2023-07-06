@@ -14,6 +14,7 @@ import {Meal} from '../hooks/meal';
 import SearchMealScreen, {SearchMealHeader} from './SearchMealScreen';
 import AddMealScreen from './AddMealScreen';
 import ProfileSettingsScreen from './settings/ProfileSettingsScreen';
+import FitnessSettingsScreen from './settings/FitnessSettingsScreen';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
@@ -25,6 +26,7 @@ export type HomeStackParamList = {
   AddMeal: {meal: Meal};
   Settings: undefined;
   ProfileSettings: undefined;
+  FitnessSettings: undefined;
 };
 
 // type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -41,6 +43,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen name="AddMeal" options={{headerShown: false}} component={AddMealScreen} />
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
       <Stack.Screen name="ProfileSettings" options={{headerShown: false}} component={ProfileSettingsScreen} />
+      <Stack.Screen name="FitnessSettings" options={{headerShown: false}} component={FitnessSettingsScreen} />
     </Stack.Navigator>
   );
 };

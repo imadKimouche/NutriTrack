@@ -11,10 +11,20 @@ export const useUserFitnessData = () => {
     mutate,
     isLoading: storeUFDIsLoading,
     isError: storeUFDIsError,
+    mutateAsync: storeUFDAsync,
   } = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
     onSuccess: () => {
       queryClient.invalidateQueries('userFitnessData');
     },
   });
-  return {userFitnessData: data, storeUserFitnessData: mutate, isLoading, error, isError, storeUFDIsLoading, storeUFDIsError};
+  return {
+    userFitnessData: data,
+    storeUserFitnessData: mutate,
+    storeUFDAsync,
+    isLoading,
+    error,
+    isError,
+    storeUFDIsLoading,
+    storeUFDIsError,
+  };
 };

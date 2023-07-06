@@ -33,8 +33,9 @@ const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress}) => {
 type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Settings'>;
 const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({navigation}) => {
   return (
-    <Box flex={1} bg={'$background'}>
+    <Box flex={1} bg={'$background'} p={'s'}>
       <SettingsItem label="Profil" icon="user" onPress={() => navigation.navigate('ProfileSettings')} />
+      <SettingsItem label="Fitness" icon="chevrons-up" onPress={() => navigation.navigate('FitnessSettings')} />
       <SettingsItem label="Se déconnecter" icon="log-out" onPress={signOut} />
     </Box>
   );

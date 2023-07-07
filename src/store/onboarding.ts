@@ -23,7 +23,17 @@ type OnBoardingState = {
   addAllergy: (allergy: FoodAllergy) => void;
   removeAllergy: (allergy: FoodAllergy) => void;
   toggleAllergy: (allergy: FoodAllergy) => void;
+  setAllergies: (allergies: FoodAllergy[]) => void;
   clearAllergies: () => void;
+  updateStore: (
+    fitnessGoal?: FitnessGoal,
+    activityLevel?: ActivityLevel,
+    gender?: Gender,
+    age?: number,
+    height?: number,
+    weight?: number,
+    allergies?: FoodAllergy[],
+  ) => void;
 };
 
 export type UserFitnessData = Pick<
@@ -71,7 +81,17 @@ export const useOnBoardingStore = create<OnBoardingState>()(
             };
           }
         }),
+      setAllergies: (allergies: FoodAllergy[]) => set(state => ({...state, allergies})),
       clearAllergies: () => set(state => ({...state, allergies: []})),
+      updateStore: (
+        fitnessGoal?: FitnessGoal,
+        activityLevel?: ActivityLevel,
+        gender?: Gender,
+        age?: number,
+        height?: number,
+        weight?: number,
+        allergies?: FoodAllergy[],
+      ) => set(state => ({...state, fitnessGoal, activityLevel, gender, age, height, weight, allergies})),
     }),
     {
       name: 'onboarding-store',

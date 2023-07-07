@@ -24,7 +24,7 @@ export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   );
 };
 
-const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: string}> = ({onPress, label, value}) => {
+export const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; value: string}> = ({onPress, label, value}) => {
   return (
     <Pressable
       onPress={onPress}
@@ -118,7 +118,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
 
   return (
     <Box flex={1} style={{paddingTop: insets.top}}>
-      {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours" />}
+      {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Profile"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}

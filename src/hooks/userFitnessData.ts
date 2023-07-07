@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {getFitnessData, setFitnessData} from '../api/fitnessData';
-import {UserFitnessData} from '../store/onboarding';
+import {useOnBoardingStore, UserFitnessData} from '../store/onboarding';
 import {useAuth} from './auth';
 
 export const useUserFitnessData = () => {
@@ -13,8 +13,15 @@ export const useUserFitnessData = () => {
     isError: storeUFDIsError,
     mutateAsync: storeUFDAsync,
   } = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
-    onSuccess: () => {
+    onSuccess: (_, variables, __) => {
       queryClient.invalidateQueries('userFitnessData');
+      // setFitnessGoal(variables.fitnessGoal);
+      // setActivityLevel(variables.activityLevel);
+      // setAge(variables.age);
+      // setHeight(variables.height);
+      // setWeight(variables.weight);
+      // setGender(variables.gender);
+      // setAllergies(variables.allergies);
     },
   });
   return {

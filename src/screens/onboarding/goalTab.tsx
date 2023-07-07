@@ -34,14 +34,14 @@ export type OnboardingListItem<T> = {
 
 type FitnessGoalItem = OnboardingListItem<FitnessGoal>;
 
-const FITNESS_GOALS: FitnessGoalItem[] = [
+export const FITNESS_GOALS: FitnessGoalItem[] = [
   {id: 'gain', label: 'Prise de masse', icon: 'chevrons-up', indication: 'Je veux passer au niveau supérieur'},
   {id: 'lose', label: 'Perte de poids', icon: 'chevrons-down', indication: 'Je veux maigrir'},
   {id: 'maintain', label: 'Résistance', icon: 'circle', indication: 'Je cherche a me tonifier'},
-  {id: 'recomposition', label: 'Résistance', icon: 'refresh-cw', indication: 'Éliminer gras et ganger en muscle'},
+  {id: 'recomposition', label: 'Recomposition', icon: 'refresh-cw', indication: 'Éliminer gras et ganger en muscle'},
 ];
 
-const FitnessGoalListItem: React.FC<
+export const FitnessGoalListItem: React.FC<
   FitnessGoalItem & {selectedItem: FitnessGoal; setSelectedItem: (item: FitnessGoal) => void}
 > = ({id, label, icon, indication, selectedItem, setSelectedItem}) => {
   const isSelected = id === selectedItem;

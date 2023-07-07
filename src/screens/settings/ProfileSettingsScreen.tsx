@@ -81,7 +81,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
 
   const snapPointLow = useMemo(() => ['33%'], []);
   const snapPointTop = useMemo(() => ['60%'], []);
-  const [ageStr, setAgeStr] = useState(age.toString());
+  const [ageStr, setAgeStr] = useState(age?.toString() ?? '');
 
   useEffect(() => {
     const numValue = parseInt(ageStr, 10);

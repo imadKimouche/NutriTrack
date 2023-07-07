@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import {SignUpScreen} from '../screens/SignUpScreen';
 import {SignInScreen} from '../screens/SignInScreen';
 import {useAuth} from '../hooks/auth';
 import {useUserFitnessData} from '../hooks/userFitnessData';
+import {useOnBoardingStore} from '../store/onboarding';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -47,6 +48,13 @@ const ResetPassword = () => {
 
 const Landing = () => {
   const {userFitnessData, isLoading, isError} = useUserFitnessData();
+  const {updateStore} = useOnBoardingStore(state => state);
+
+  useEffect(() => {
+    if (userFitnessData) {
+      updateStore(userFitnessData);
+    }
+  }, [updateStore, userFitnessData]);
 
   if (isLoading) {
     return (

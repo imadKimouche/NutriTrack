@@ -5,7 +5,9 @@ import {useAuth} from './auth';
 
 export const useUserFitnessData = () => {
   const {user} = useAuth();
-  const {data, isLoading, error, isError} = useQuery(['userFitnessData', user?.uid!], () => getFitnessData(user?.uid!));
+  const {data, isLoading, error, isError, isSuccess} = useQuery(['userFitnessData', user?.uid!], () =>
+    getFitnessData(user?.uid!),
+  );
   const queryClient = useQueryClient();
   const {
     mutate,
@@ -30,6 +32,7 @@ export const useUserFitnessData = () => {
     storeUFDAsync,
     isLoading,
     error,
+    isSuccess,
     isError,
     storeUFDIsLoading,
     storeUFDIsError,

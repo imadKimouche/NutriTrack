@@ -13,20 +13,13 @@ import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 
 export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
-  const insets = useSafeAreaInsets();
   return (
-    <Box
-      bg={'$background'}
-      width={'100%'}
-      flexDirection={'row'}
-      alignItems={'center'}
-      pb={'s'}
-      style={{
-        paddingTop: insets.top,
-      }}>
+    <Box bg={'$background'} flexDirection={'row'} alignItems={'center'} pb={'s'}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'button'}>Suivi</Text>
+        <Text variant={'button'} color={'$primary'}>
+          Suivi
+        </Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
         <Text variant={'h6'}>Ajout de repas</Text>

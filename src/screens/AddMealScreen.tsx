@@ -1,7 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
@@ -21,28 +20,22 @@ type MealHeaderProps = {
   onSavePress: () => void;
 };
 
-export const MealHeader: React.FC<MealHeaderProps> = ({title, onBackPress, onSavePress}) => {
-  const insets = useSafeAreaInsets();
-  const headerTitle = title.length > 18 ? title.slice(0, 15) + '...' : title;
-
+export const MealHeader: React.FC<MealHeaderProps> = ({onBackPress, onSavePress}) => {
   return (
-    <Box
-      alignSelf={'stretch'}
-      flexDirection={'row'}
-      alignItems={'center'}
-      pb={'m'}
-      style={{
-        paddingTop: insets.top,
-      }}>
+    <Box alignSelf={'stretch'} flexDirection={'row'} alignItems={'center'} py={'m'}>
       <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
         <Icon name="chevron-left" size={30} />
-        <Text variant={'button'}>Recherche</Text>
+        <Text variant={'button'} color={'$primary'}>
+          Recherche
+        </Text>
       </Pressable>
       <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'h6'}>{headerTitle}</Text>
+        <Text variant={'h6'}>Aliment</Text>
       </Box>
       <Pressable flex={1} onPress={onSavePress}>
-        <Text variant={'button'}>Enregistrer</Text>
+        <Text variant={'button'} color={'$primary'}>
+          Enregistrer
+        </Text>
       </Pressable>
     </Box>
   );
@@ -85,7 +78,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
     <Box flex={1} bg={'$windowBackground'}>
       <MealHeader title={meal.name} onBackPress={navigation.goBack} onSavePress={saveMealPortion} />
       <Box flex={0.5} alignItems={'center'} px={'s'}>
-        <Text variant={'subtitle1'} py={'m'}>
+        <Text variant={'subtitle1'} py={'xs'}>
           {meal.name}
         </Text>
         <Image source={{uri: meal.images.url}} style={{width: 150, height: 150}} />

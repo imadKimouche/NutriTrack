@@ -54,7 +54,7 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
   }
 
   return (
-    <Box flex={1} style={{paddingTop: insets.top}}>
+    <Box flex={1}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Profile"

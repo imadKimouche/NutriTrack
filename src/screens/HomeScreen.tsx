@@ -159,6 +159,8 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
           bg={'$primary'}
           borderTopLeftRadius={'sm'}
           borderBottomLeftRadius={'sm'}
+          borderTopRightRadius={progressRatio >= 1 ? 'sm' : undefined}
+          borderBottomRightRadius={progressRatio >= 1 ? 'sm' : undefined}
           height={8}
           width={`${progressRatio * 100}%`}
         />

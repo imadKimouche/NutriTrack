@@ -17,21 +17,6 @@ const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
     </Pressable>
   );
 };
-const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      alignItems={'center'}
-      justifyContent={'center'}
-      flexDirection={'row'}
-      flex={1}
-      alignSelf={'stretch'}>
-      <Text variant={'subtitle2'} color={'$labelOff'}>
-        Ignorer
-      </Text>
-    </Pressable>
-  );
-};
 
 type ActivityLevelItem = OnboardingListItem<ActivityLevel>;
 
@@ -76,15 +61,9 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
   const activityLevel = useOnBoardingStore(state => state.activityLevel);
   const setActivityLevel = useOnBoardingStore(state => state.setActivityLevel);
 
-  function skipOnBoarding() {}
-
   return (
     <Box flex={1}>
-      <BaseHeader
-        title="Niveau d'activité"
-        leftComponent={<GoBackButton onPress={navigation.goBack} />}
-        rightComponent={<SkipLabel onPress={skipOnBoarding} />}
-      />
+      <BaseHeader title="Niveau d'activité" leftComponent={<GoBackButton onPress={navigation.goBack} />} />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
           Quel est ton niveau d'activité ?

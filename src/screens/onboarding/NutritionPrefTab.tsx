@@ -30,22 +30,6 @@ export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   );
 };
 
-const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      alignItems={'center'}
-      justifyContent={'center'}
-      flexDirection={'row'}
-      flex={1}
-      alignSelf={'stretch'}>
-      <Text variant={'subtitle2'} color={'$labelOff'}>
-        Ignorer
-      </Text>
-    </Pressable>
-  );
-};
-
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 
 export const ALLERGIES: FoodAllergyItem[] = [
@@ -146,8 +130,6 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   const {storeUserBMR} = useUserBMR();
   const {storeUserTDEE} = useUserTDEE();
 
-  function skipOnBoarding() {}
-
   function setUserData() {
     const bmr = calculateBMR(gender, age, height, weight);
     const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
@@ -158,11 +140,7 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
 
   return (
     <Box flex={1}>
-      <BaseHeader
-        title="Nutrition"
-        leftComponent={<GoBackButton onPress={() => navigation.navigate('aboutYou')} />}
-        rightComponent={<SkipLabel onPress={skipOnBoarding} />}
-      />
+      <BaseHeader title="Nutrition" leftComponent={<GoBackButton onPress={() => navigation.navigate('aboutYou')} />} />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
           As-tu des allérgies ?

@@ -23,22 +23,6 @@ const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   );
 };
 
-const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      alignItems={'center'}
-      justifyContent={'center'}
-      flexDirection={'row'}
-      flex={1}
-      alignSelf={'stretch'}>
-      <Text variant={'subtitle2'} color={'$labelOff'}>
-        Ignorer
-      </Text>
-    </Pressable>
-  );
-};
-
 export type GenderItem = Omit<OnboardingListItem<Gender>, 'indication'>;
 
 export const GENDERS: GenderItem[] = [
@@ -96,15 +80,9 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     }
   }, [ageStr, setAge]);
 
-  function skipOnBoarding() {}
-
   return (
     <Box flex={1}>
-      <BaseHeader
-        title="A propos de toi"
-        leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />}
-        rightComponent={<SkipLabel onPress={skipOnBoarding} />}
-      />
+      <BaseHeader title="A propos de toi" leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />} />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
           Encore un peu

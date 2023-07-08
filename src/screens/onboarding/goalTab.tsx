@@ -9,22 +9,6 @@ import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {FitnessGoal, useOnBoardingStore} from '../../store/onboarding';
 
-const SkipLabel: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      alignItems={'center'}
-      justifyContent={'center'}
-      flexDirection={'row'}
-      flex={1}
-      alignSelf={'stretch'}>
-      <Text variant={'subtitle2'} color={'$labelOff'}>
-        Ignorer
-      </Text>
-    </Pressable>
-  );
-};
-
 export type OnboardingListItem<T> = {
   id: T;
   label: string;
@@ -74,11 +58,9 @@ const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
   const fitnessGoal = useOnBoardingStore(state => state.fitnessGoal);
   const setFitnessGoal = useOnBoardingStore(state => state.setFitnessGoal);
 
-  function skipOnBoarding() {}
-
   return (
     <Box flex={1}>
-      <BaseHeader title="Objectif" rightComponent={<SkipLabel onPress={skipOnBoarding} />} />
+      <BaseHeader title="Objectif" />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
           Quel est ton objectif ?

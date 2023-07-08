@@ -17,6 +17,9 @@ export const useUserTDEE = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('userFitnessData');
     },
+    onError: error => {
+      console.log('useUserTDEE::mutate error', error);
+    },
   });
   return {
     storeUserTDEE: mutate,

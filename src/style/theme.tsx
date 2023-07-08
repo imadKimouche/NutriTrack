@@ -74,6 +74,7 @@ const theme = createTheme({
     $searchbarPlaceholder: p.black40P,
     $searchbarShadow: p.orange8P,
     $modalShadowDrop: p.black8P,
+    $statusBarBackground: p.white,
   },
   borderRadii: {
     xs: 4,

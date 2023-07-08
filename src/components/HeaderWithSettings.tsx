@@ -23,8 +23,7 @@ const HEADER_TITLES = {
   Recipes: 'Recettes',
 };
 
-const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, options}) => {
-  const insets = useSafeAreaInsets();
+const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route}) => {
   const {user} = useAuth();
   const {showBadge} = useNotificationBadge();
   const initials = useMemo(() => {
@@ -36,15 +35,7 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route, 
   }
 
   return (
-    <Box
-      width={'100%'}
-      flexDirection={'row'}
-      justifyContent={'space-between'}
-      paddingHorizontal={'l'}
-      alignItems={'center'}
-      style={{
-        paddingTop: insets.top,
-      }}>
+    <Box bg={'$background'} flexDirection={'row'} justifyContent={'space-between'} px={'m'} py={'s'} alignItems={'center'}>
       <Box>
         <Text variant={'h6'}>{route && HEADER_TITLES[route.name]}</Text>
       </Box>

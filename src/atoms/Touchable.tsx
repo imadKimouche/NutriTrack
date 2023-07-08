@@ -18,10 +18,7 @@ import {
 } from '@shopify/restyle';
 import {Theme} from '../style/theme';
 
-type RestyleProps = BackgroundColorProps<Theme> &
-  BackgroundColorShorthandProps<Theme> &
-  BorderProps<Theme> &
-  OpacityProps<Theme>;
+type RestyleProps = BackgroundColorProps<Theme> & BackgroundColorShorthandProps<Theme> & BorderProps<Theme> & OpacityProps<Theme>;
 
 const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
   backgroundColorShorthand,
@@ -36,16 +33,8 @@ export interface TouchableOpacityProps extends PressableProps {
   rippleBorderless?: boolean;
 }
 
-const Touchable = ({
-  pressed,
-  rippleColor,
-  rippleBorderless,
-  style,
-  ...rest
-}: TouchableOpacityProps) => {
-  const {style: pressedStyle} = pressed
-    ? useRestyle(restyleFunctions, pressed)
-    : {style: undefined};
+const Touchable = ({pressed, rippleColor, rippleBorderless, style, ...rest}: TouchableOpacityProps) => {
+  const {style: pressedStyle} = pressed ? useRestyle(restyleFunctions, pressed) : {style: undefined};
   const theme = useTheme<Theme>();
   const rippleColorProp = rippleColor && useResponsiveProp(rippleColor);
   const rippleColorValue = rippleColorProp && theme.colors[rippleColorProp];
@@ -55,19 +44,13 @@ const Touchable = ({
       {...rest}
       android_ripple={{color: rippleColorValue, borderless: rippleBorderless}}
       // @ts-ignore
-      style={({pressed: isPressed}) =>
-        isPressed ? [style, pressedStyle] : style
-      }
+      style={({pressed: isPressed}) => (isPressed ? [style, pressedStyle] : style)}
     />
   );
 };
 
 export const TouchableOpacity: React.FC<TouchableOpacityProps> = props => (
-  <Touchable
-    rippleColor="$foreground"
-    {...props}
-    pressed={{opacity: Platform.select({ios: 0.6})}}
-  />
+  <Touchable rippleColor="$foreground" {...props} pressed={{opacity: Platform.select({ios: 0.6})}} />
 );
 
 export default Touchable;

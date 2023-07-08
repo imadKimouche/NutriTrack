@@ -73,30 +73,36 @@ const Landing = () => {
     </Box>;
   }
 
-  // if (userFitnessData) {
-  //   return <HomeStackNavigator />;
-  // }
+  if (userFitnessData) {
+    return <HomeStackNavigator />;
+  }
 
   return <OnboardingNavigator />;
 };
 
-const StatusBar: React.FC = () => {
-  const {colors} = useTheme<Theme>();
+const StatusBar: React.FC<{backgroundColor?: keyof Theme['colors']; style?: 'light' | 'dark'}> = ({
+  backgroundColor = '$statusBarBackground',
+  style = 'dark',
+}) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <Box bg={'$background'} style={{height: insets.top}}>
-      <NativeStatusBar animated={true} backgroundColor={colors.$background} />
+    <Box style={{height: insets.top, backgroundColor}}>
+      <NativeStatusBar
+        barStyle={style === 'dark' ? 'dark-content' : 'light-content'}
+        animated={true}
+        backgroundColor={backgroundColor}
+      />
     </Box>
   );
 };
 
 export const MainNavigator = () => {
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
+  // const user = {
+  //   email: 'imad.kim@gmail.com',
+  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  // };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

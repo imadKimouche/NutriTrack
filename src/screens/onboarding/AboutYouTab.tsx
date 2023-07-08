@@ -1,5 +1,5 @@
 import {Picker} from '@react-native-picker/picker';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
@@ -61,7 +61,7 @@ export const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSel
 export type AboutYouTabProps = {navigation: TabNavigationProp};
 
 const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
-  const {gender, setGender, setAge, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
+  const {gender, setGender, setAge, age, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
     gender: state.gender,
     setGender: state.setGender,
     age: state.age,
@@ -71,7 +71,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     weight: state.weight,
     setWeight: state.setWeight,
   }));
-  const [ageStr, setAgeStr] = useState('');
+  const [ageStr, setAgeStr] = useState(age?.toString() ?? '');
 
   useEffect(() => {
     const numValue = parseInt(ageStr, 10);
@@ -83,10 +83,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   return (
     <Box flex={1}>
       <BaseHeader title="A propos de toi" leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />} />
-      <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'subtitle1'}>
-          Encore un peu
-        </Text>
+      <Box flex={1} p={'m'}>
         <Box>
           <Text variant={'subtitle2'}>Sexe</Text>
           {GENDERS.map(item => (
@@ -98,7 +95,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           <Input
             value={ageStr}
             onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
-            padding={'s'}
+            padding={'m'}
             marginVertical={'s'}
             keyboardType="numeric"
             borderWidth={1}

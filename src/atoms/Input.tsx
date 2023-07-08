@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   backgroundColor,
   BackgroundColorProps,
@@ -15,18 +16,6 @@ import {
 } from '@shopify/restyle';
 import {TextInput, TextInputProps} from 'react-native';
 import {Theme} from '../style/theme';
-
-// type RestyleProps = VariantProps<Theme, 'inputVariants'> &
-//   SpacingProps<Theme> &
-//   SpacingShorthandProps<Theme> &
-//   BorderProps<Theme> &
-//   BackgroundColorProps<Theme> &
-//   BackgroundColorShorthandProps<Theme> &
-//   ShadowProps<Theme> &
-//   ColorProps<Theme> &
-//   TypographyProps<Theme> &
-//   LayoutProps<Theme> &
-//   TextInputProps;
 
 type RestyleProps = VariantProps<Theme, 'inputVariants'> &
   SpacingProps<Theme> &

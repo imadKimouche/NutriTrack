@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import HomeStackNavigator from '../screens/HomeStackNavigator';
@@ -11,6 +11,9 @@ import {SignInScreen} from '../screens/SignInScreen';
 import {useAuth} from '../hooks/auth';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {useOnBoardingStore} from '../store/onboarding';
+import {StatusBar as NativeStatusBar} from 'react-native';
+import {Theme} from '../style/theme';
+import {useTheme} from '@shopify/restyle';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -70,19 +73,30 @@ const Landing = () => {
     </Box>;
   }
 
-  if (userFitnessData) {
-    return <HomeStackNavigator />;
-  }
+  // if (userFitnessData) {
+  //   return <HomeStackNavigator />;
+  // }
 
   return <OnboardingNavigator />;
 };
 
+const StatusBar: React.FC = () => {
+  const {colors} = useTheme<Theme>();
+  const insets = useSafeAreaInsets();
+
+  return (
+    <Box bg={'$background'} style={{height: insets.top}}>
+      <NativeStatusBar animated={true} backgroundColor={colors.$background} />
+    </Box>
+  );
+};
+
 export const MainNavigator = () => {
-  const {user} = useAuth();
-  // const user = {
-  //   email: 'imad.kim@gmail.com',
-  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  // };
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;
@@ -90,6 +104,7 @@ export const MainNavigator = () => {
 
   return (
     <SafeAreaProvider>
+      <StatusBar />
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {user ? (

@@ -1,10 +1,14 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {getFitnessData, setFitnessData} from '../api/fitnessData';
-import {useOnBoardingStore, UserFitnessData} from '../store/onboarding';
+import {UserFitnessData} from '../store/onboarding';
 import {useAuth} from './auth';
 
 export const useUserFitnessData = () => {
-  const {user} = useAuth();
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
   const {data, isLoading, error, isError, isSuccess} = useQuery(['userFitnessData', user?.uid!], () =>
     getFitnessData(user?.uid!),
   );
@@ -15,15 +19,11 @@ export const useUserFitnessData = () => {
     isError: storeUFDIsError,
     mutateAsync: storeUFDAsync,
   } = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
-    onSuccess: (_, variables, __) => {
+    onSuccess: () => {
       queryClient.invalidateQueries('userFitnessData');
-      // setFitnessGoal(variables.fitnessGoal);
-      // setActivityLevel(variables.activityLevel);
-      // setAge(variables.age);
-      // setHeight(variables.height);
-      // setWeight(variables.weight);
-      // setGender(variables.gender);
-      // setAllergies(variables.allergies);
+    },
+    onError: error => {
+      console.log('useUserFitnessData::mutate error', error);
     },
   });
   return {

@@ -147,6 +147,7 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   const {storeUserTDEE} = useUserTDEE();
 
   function skipOnBoarding() {}
+
   function setUserData() {
     const bmr = calculateBMR(gender, age, height, weight);
     const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];

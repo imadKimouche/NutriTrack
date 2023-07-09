@@ -7,14 +7,14 @@ import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
 import LoadingModal from '../../components/LoadingModal';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useOnBoardingStore} from '../../store/onboarding';
 import {HomeStackParamList} from '../HomeStackNavigator';
 import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
-import {ALLERGIES, AllergyListItem, GoBackButton} from '../onboarding/NutritionPrefTab';
+import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (

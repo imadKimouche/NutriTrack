@@ -3,8 +3,7 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
-import BaseHeader from '../../components/Header';
-import Icon from '../../components/Icon';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {ActivityLevel, FitnessGoal, FoodAllergy, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
@@ -21,14 +20,6 @@ import {Theme} from '../../style/theme';
 import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useUserBMR, useUserTDEE} from '../../hooks/userDietData';
-
-export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
-      <Icon name="arrow-left" color={'$primary'} size={24} />
-    </Pressable>
-  );
-};
 
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 

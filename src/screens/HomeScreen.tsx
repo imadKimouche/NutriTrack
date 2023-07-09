@@ -18,7 +18,7 @@ import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
 
-const ProfileSettingsIcon: React.FC<{email: string; onPress: () => void}> = ({email, onPress}) => {
+const ProfileSettingsIcon: React.FC<{email?: string | null; onPress: () => void}> = ({email, onPress}) => {
   const initials = useMemo(() => {
     return extractInitials(email);
   }, [email]);

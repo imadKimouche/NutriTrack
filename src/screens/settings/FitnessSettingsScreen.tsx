@@ -1,15 +1,13 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useMemo, useRef} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FlatList} from 'react-native';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import {useOnBoardingStore} from '../../store/onboarding';
 import {HomeStackParamList} from '../HomeStackNavigator';
 import {FitnessGoalListItem, FITNESS_GOALS} from '../onboarding/GoalTab';
-import {GoBackButton} from '../onboarding/NutritionPrefTab';
 import {ProfileSettingsItem, SaveButton} from './ProfileSettingsScreen';
 import {ActivityLevelListItem, ACTIVITY_LEVELS} from '../onboarding/ActivityLevelTab';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
@@ -17,7 +15,6 @@ import LoadingModal from '../../components/LoadingModal';
 
 type FitnessSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigationProp}> = ({navigation}) => {
-  const insets = useSafeAreaInsets();
   const {fitnessGoal, setFitnessGoal, activityLevel, setActivityLevel, ...onboardingState} = useOnBoardingStore(state => state);
   const snapPointLow = useMemo(() => ['42%'], []);
   const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();

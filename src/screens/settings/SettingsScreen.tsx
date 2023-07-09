@@ -4,7 +4,7 @@ import React from 'react';
 import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
 import {signOut} from '../../hooks/auth';
 import {Theme} from '../../style/theme';
@@ -32,7 +32,7 @@ type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList
 const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({navigation}) => {
   return (
     <Box flex={1} bg={'$background'}>
-      <BaseHeader title="Paramètres" />
+      <BaseHeader title="Paramètres" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <SettingsItem
         label="Profil"
         bg={'$modalShadowDrop'}

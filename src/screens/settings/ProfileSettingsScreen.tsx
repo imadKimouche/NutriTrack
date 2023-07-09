@@ -18,7 +18,7 @@ import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
-    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
+    <Pressable alignSelf={'stretch'} onPress={onPress} alignItems={'flex-end'} mr={'m'}>
       <Icon name="check" size={24} color={'$primary'} />
     </Pressable>
   );

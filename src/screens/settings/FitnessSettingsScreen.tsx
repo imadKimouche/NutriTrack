@@ -54,7 +54,7 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
     <Box flex={1} bg={'$background'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
-        title="Profile"
+        title="Fitness"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveButton onPress={saveSettings} />}
       />

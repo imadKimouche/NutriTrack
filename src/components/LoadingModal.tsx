@@ -18,6 +18,8 @@ const LoadingModal: React.FC<{label?: string}> = ({label}) => {
       width={width * 0.6}
       borderRadius={'xs'}
       zIndex={5}
+      borderWidth={1}
+      borderColor={'$primary'}
       bg={'$modalShadowDrop'}>
       <Loader color={'$primary'} />
       {label !== undefined && (

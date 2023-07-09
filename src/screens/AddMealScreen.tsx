@@ -10,6 +10,7 @@ import Picker from '../components/Picker';
 import Input from '../atoms/Input';
 import {usePostMeal} from '../hooks/meal';
 import BaseHeader, {GoBackButton} from '../components/Header';
+import LoadingModal from '../components/LoadingModal';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
@@ -46,13 +47,13 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const {meal} = route.params;
   const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
   const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
-  const {saveUserMeal} = usePostMeal(meal);
+  const {saveUserMealAsync, isLoading: saveMealIsLoading} = usePostMeal(meal);
   //TODO handle save meal loading & error state
 
   function saveMealPortion() {
-    saveUserMeal({portion, unit});
-    // // TODO navigate if no error and after loading
-    navigation.navigate('SearchMeal');
+    saveUserMealAsync({portion, unit}).finally(() => {
+      navigation.navigate('SearchMeal');
+    });
   }
 
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
@@ -64,6 +65,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveMealButton onPress={saveMealPortion} />}
       />
+      {saveMealIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <Box flex={0.5} alignItems={'center'} px={'s'}>
         <Text variant={'subtitle1'} py={'xs'}>
           {meal.name}

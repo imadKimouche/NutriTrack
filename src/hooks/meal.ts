@@ -176,7 +176,7 @@ export function usePostMeal(meal: Meal) {
   };
 
   const queryClient = useQueryClient();
-  const {isLoading, error, mutate} = useMutation(
+  const {isLoading, error, mutate, mutateAsync} = useMutation(
     ({portion, unit}: {portion: number; unit: string}) =>
       pushUserMeal(user.uid, currentSelectedDate, currentMealType, meal, portion, unit),
     {
@@ -188,6 +188,7 @@ export function usePostMeal(meal: Meal) {
   );
   return {
     saveUserMeal: mutate,
+    saveUserMealAsync: mutateAsync,
     isLoading,
     error,
   };

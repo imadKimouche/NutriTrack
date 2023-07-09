@@ -117,7 +117,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
   }
 
   return (
-    <Box flex={1}>
+    <Box flex={1} bg={'$background'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Profile"

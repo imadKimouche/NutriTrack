@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
+import BaseHeader, {GoBackButton} from '../components/Header';
 
 export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
   return (
@@ -126,33 +127,36 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
 
   return (
-    <Box flex={1} justifyContent={'flex-start'} bg={'$windowBackground'} style={{paddingBottom: insets.bottom}}>
-      <Box p={'s'}>
-        <Searchbar onSubmitEditing={setSearchMeal} />
-      </Box>
-      <SearchList searchValue={searchMeal} navigation={navigation} />
-      <Box flex={1} m={'s'}>
-        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'body1'} color={'$primary'}>
-            Historique
-          </Text>
-          <Text onPress={clearMealSearchHistory} variant={'caption'}>
-            Tout effacer
-          </Text>
+    <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
+      <BaseHeader title="Trouver un aliment" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+      <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
+        <Box p={'s'}>
+          <Searchbar onSubmitEditing={setSearchMeal} />
         </Box>
-        {mealSearchHistory.map((meal: Meal) => {
-          return (
-            <Pressable
-              key={meal.id}
-              onPress={() => navigation.navigate('AddMeal', {meal})}
-              alignSelf={'stretch'}
-              p={'m'}
-              borderBottomWidth={1}
-              borderColor={'$listItemDivider'}>
-              <Text variant={'body2'}>{meal.name}</Text>
-            </Pressable>
-          );
-        })}
+        <SearchList searchValue={searchMeal} navigation={navigation} />
+        <Box flex={1} m={'s'}>
+          <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+            <Text variant={'body1'} color={'$primary'}>
+              Historique
+            </Text>
+            <Text onPress={clearMealSearchHistory} variant={'caption'}>
+              Tout effacer
+            </Text>
+          </Box>
+          {mealSearchHistory.map((meal: Meal) => {
+            return (
+              <Pressable
+                key={meal.id}
+                onPress={() => navigation.navigate('AddMeal', {meal})}
+                alignSelf={'stretch'}
+                p={'m'}
+                borderBottomWidth={1}
+                borderColor={'$listItemDivider'}>
+                <Text variant={'body2'}>{meal.name}</Text>
+              </Pressable>
+            );
+          })}
+        </Box>
       </Box>
     </Box>
   );

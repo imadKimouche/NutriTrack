@@ -1,7 +1,9 @@
+import {useTheme} from '@shopify/restyle';
 import React, {useState} from 'react';
 import Box from '../atoms/Box';
 import Input from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
+import {Theme} from '../style/theme';
 import Icon from './Icon';
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
 
 const Searchbar: React.FC<Props> = ({onSubmitEditing}) => {
   const [searchValue, setSearchValue] = useState('');
+  const {colors} = useTheme<Theme>();
 
   return (
     <Box width={'100%'} height={50} bg={'$searchbarBackground'} flexDirection={'row'} alignItems={'center'} borderRadius={'sm'}>
@@ -19,6 +22,7 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing}) => {
       <Box flex={1} mx={'s'}>
         <Input
           placeholder={'Riz, lentilles ...'}
+          placeholderTextColor={colors.$searchbarPlaceholder}
           value={searchValue}
           onChangeText={value => setSearchValue(value)}
           onSubmitEditing={e => onSubmitEditing(e.nativeEvent.text)}

@@ -7,14 +7,14 @@ import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import HomeScreen from './HomeScreen';
 import RecipesScreen from './RecipesScreen';
-import HeaderWithSettings from '../components/HeaderWithSettings';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import {Meal} from '../hooks/meal';
-import SearchMealScreen, {SearchMealHeader} from './SearchMealScreen';
+import SearchMealScreen from './SearchMealScreen';
 import AddMealScreen from './AddMealScreen';
 import ProfileSettingsScreen from './settings/ProfileSettingsScreen';
 import FitnessSettingsScreen from './settings/FitnessSettingsScreen';
+import BarCodeScannerScreen from './BarCodeScannerScreen';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
@@ -23,6 +23,7 @@ const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; s
 export type HomeStackParamList = {
   HomeTabNavigator: undefined;
   SearchMeal: undefined;
+  BarCodeScanner: undefined;
   AddMeal: {meal: Meal};
   Settings: undefined;
   ProfileSettings: undefined;
@@ -39,8 +40,9 @@ const HomeStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomeTabNavigator" component={HomeTabNavigator} />
-      <Stack.Screen name="SearchMeal" options={{header: SearchMealHeader}} component={SearchMealScreen} />
+      <Stack.Screen name="SearchMeal" component={SearchMealScreen} />
       <Stack.Screen name="AddMeal" component={AddMealScreen} />
+      <Stack.Screen name="BarCodeScanner" component={BarCodeScannerScreen} />
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
       <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
       <Stack.Screen name="FitnessSettings" component={FitnessSettingsScreen} />

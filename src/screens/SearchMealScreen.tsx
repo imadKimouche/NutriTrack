@@ -1,5 +1,5 @@
-import {NativeStackHeaderProps, NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {useRef, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FlatList, Image} from 'react-native';
 import Box from '../atoms/Box';
@@ -12,26 +12,19 @@ import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 import BaseHeader, {GoBackButton} from '../components/Header';
+import BottomSheet from '@gorhom/bottom-sheet';
+import LoadingModal from '../components/LoadingModal';
+import {Camera, CameraType} from 'react-native-camera-kit';
 
-export const SearchMealHeader: React.FC<NativeStackHeaderProps> = ({navigation}) => {
+const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
-    <Box bg={'$background'} flexDirection={'row'} alignItems={'center'} pb={'s'}>
-      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} onPress={() => navigation.goBack()}>
-        <Icon name="chevron-left" size={30} />
-        <Text variant={'button'} color={'$primary'}>
-          Suivi
-        </Text>
-      </Pressable>
-      <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'h6'}>Ajout de repas</Text>
-      </Box>
-      <Box flex={1} />
-    </Box>
+    <Pressable onPress={onPress} justifyContent={'flex-end'} flexDirection={'row'} alignSelf={'stretch'} mr={'m'}>
+      <Icon name="maximize" color={'$primary'} size={24} />
+    </Pressable>
   );
 };
 
 type MealListItemProps = {meal: Meal; onItemPressed: (meal: Meal) => void};
-
 const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
   return (
     <Pressable
@@ -128,7 +121,11 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
 
   return (
     <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
-      <BaseHeader title="Trouver un aliment" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+      <BaseHeader
+        title="Trouver un aliment"
+        leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
+        rightComponent={<BarCodeButton onPress={() => navigation.navigate('BarCodeScanner')} />}
+      />
       <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
         <Box p={'s'}>
           <Searchbar onSubmitEditing={setSearchMeal} />

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
 import {useDashboardStore} from '../store/dashboard';
@@ -126,6 +126,25 @@ async function fetchOFFMeal(searchText: string, pageNumber: number) {
   return null;
 }
 
+async function fetchOFFMealBC(barcode: string) {
+  if (barcode.trim().length === 0) {
+    return null;
+  }
+
+  const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}`);
+
+  if (!response.ok) {
+    console.log('fetchOFFMealBC(): failed to fetch meal');
+    return null;
+  }
+  const data = await response.json();
+  if (data !== undefined && 'product' in data) {
+    const meal = cleanProduct(data.product);
+    return meal;
+  }
+  return null;
+}
+
 export function useSearchOFFMeal(searchValue: string) {
   const [page, setPage] = useState(1);
   const {
@@ -163,6 +182,11 @@ export function useSearchOFFMeal(searchValue: string) {
     setPage,
     hasNextPage,
   };
+}
+
+export function useSearchOFFMealBC(barcode: string) {
+  const {data, isLoading, error, isError, refetch} = useQuery(['userDailyMeals', barcode], () => fetchOFFMealBC(barcode));
+  return {data, refetch, isLoading, error, isError};
 }
 
 export function usePostMeal(meal: Meal) {

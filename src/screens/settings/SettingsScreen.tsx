@@ -35,14 +35,14 @@ const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({n
       <BaseHeader title="Paramètres" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <SettingsItem
         label="Profil"
-        bg={'$modalShadowDrop'}
+        bg={'$searchbarBackground'}
         c={'$primary'}
         icon="user"
         onPress={() => navigation.navigate('ProfileSettings')}
       />
       <SettingsItem
         label="Fitness"
-        bg={'$modalShadowDrop'}
+        bg={'$searchbarBackground'}
         c={'$primary'}
         icon="chevrons-up"
         onPress={() => navigation.navigate('FitnessSettings')}

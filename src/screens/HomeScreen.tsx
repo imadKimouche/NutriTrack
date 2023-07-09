@@ -1,20 +1,46 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTheme} from '@shopify/restyle';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
+import BaseHeader from '../components/Header';
 import Icon from '../components/Icon';
+import {useAuth} from '../hooks/auth';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
-import {getSurroundingDates} from '../utils';
+import {extractInitials, getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
+
+const ProfileSettingsIcon: React.FC<{email: string; onPress: () => void}> = ({email, onPress}) => {
+  const initials = useMemo(() => {
+    return extractInitials(email);
+  }, [email]);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      width={40}
+      height={40}
+      borderRadius={'lg'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      borderColor={'$headerButtonBorder'}
+      borderStyle={'solid'}
+      borderWidth={1}
+      bg={'$headerButtonBackground'}>
+      <Text variant={'h6'} color={'$buttonTextPrimary'}>
+        {initials}
+      </Text>
+    </Pressable>
+  );
+};
 
 const MAX_PROT = 120;
 const MAX_FAT = 30;
@@ -207,6 +233,7 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   const {spacing} = useTheme<Theme>();
+  const {user} = useAuth();
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const setCurrentSelectedDate = useDashboardStore(state => state.setSelectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
@@ -223,20 +250,29 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   };
 
   return (
-    <Box flex={1} width={'100%'} alignItems={'center'}>
-      <DatePicker currentDate={currentSelectedDate} onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)} />
-      <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
-      <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
-      <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
-      <Box flex={1} alignSelf={'stretch'}>
-        {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
-          <FlatList
-            contentContainerStyle={{padding: spacing.m}}
-            data={currentDateMeals[currentMealType]}
-            renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
-            keyExtractor={item => item.name}
-          />
-        )}
+    <Box bg={'$background'} flex={1}>
+      <BaseHeader
+        title="Suivi journalier"
+        rightComponent={<ProfileSettingsIcon email={user?.email} onPress={() => navigation.navigate('Settings')} />}
+      />
+      <Box bg={'$background'} flex={1} alignItems={'center'}>
+        <DatePicker
+          currentDate={currentSelectedDate}
+          onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
+        />
+        <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
+        <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
+        <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
+        <Box flex={1} alignSelf={'stretch'}>
+          {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
+            <FlatList
+              contentContainerStyle={{padding: spacing.m}}
+              data={currentDateMeals[currentMealType]}
+              renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
+              keyExtractor={item => item.name}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );

@@ -1,14 +1,14 @@
 import React, {useMemo} from 'react';
 import {BottomTabHeaderProps} from '@react-navigation/bottom-tabs';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import {useAuth} from '../hooks/auth';
 import useNotificationBadge from '../hooks/notificationBadge';
 import Pressable from '../atoms/Pressable';
+import StatusBar from './StatusBar';
 
-function extractInitials(email?: string | null) {
-  if (email == null || email === undefined) {
+if (email == null || email === undefined) {
+  function extractInitials(email?: string | null) {
     return 'N/A';
   }
   const emailParts = email.split('@');
@@ -35,28 +35,29 @@ const HeaderWithSettings: React.FC<BottomTabHeaderProps> = ({navigation, route})
   }
 
   return (
-    <Box bg={'$background'} flexDirection={'row'} justifyContent={'space-between'} px={'m'} py={'s'} alignItems={'center'}>
-      <Box>
-        <Text variant={'h6'}>{route && HEADER_TITLES[route.name]}</Text>
+    <Box>
+      <StatusBar />
+      <Box bg={'$background'} flexDirection={'row'} justifyContent={'space-between'} px={'m'} py={'s'} alignItems={'center'}>
+        <Box>{route?.name && <Text variant={'h6'}>{HEADER_TITLES[route.name as keyof typeof HEADER_TITLES]}</Text>}</Box>
+        <Pressable
+          onPress={openSettings}
+          width={40}
+          height={40}
+          borderRadius={'lg'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          borderColor={'$headerButtonBorder'}
+          borderStyle={'solid'}
+          borderWidth={1}
+          bg={'$headerButtonBackground'}>
+          <Text variant={'h6'} color={'$buttonTextPrimary'}>
+            {initials}
+          </Text>
+          {showBadge && (
+            <Box bg={'$primary'} width={16} height={16} borderRadius={'md'} position={'absolute'} top={-5} right={0} zIndex={1} />
+          )}
+        </Pressable>
       </Box>
-      <Pressable
-        onPress={openSettings}
-        width={40}
-        height={40}
-        borderRadius={'lg'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        borderColor={'$headerButtonBorder'}
-        borderStyle={'solid'}
-        borderWidth={1}
-        bg={'$headerButtonBackground'}>
-        <Text variant={'h6'} color={'$buttonTextPrimary'}>
-          {initials}
-        </Text>
-        {showBadge && (
-          <Box bg={'$primary'} width={16} height={16} borderRadius={'md'} position={'absolute'} top={-5} right={0} zIndex={1} />
-        )}
-      </Pressable>
     </Box>
   );
 };

@@ -4,6 +4,7 @@ import React from 'react';
 import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
+import BaseHeader from '../../components/Header';
 import Icon from '../../components/Icon';
 import {signOut} from '../../hooks/auth';
 import {Theme} from '../../style/theme';
@@ -18,7 +19,7 @@ type SettingsItemProps = {
 };
 const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress, bg, c}) => {
   return (
-    <Pressable flexDirection={'row'} alignItems={'center'} onPress={onPress} p={'s'}>
+    <Pressable flexDirection={'row'} alignItems={'center'} onPress={onPress} p={'s'} px={'m'}>
       <Box width={42} height={42} marginRight={'m'} borderRadius={'md'} bg={bg} alignItems={'center'} justifyContent={'center'}>
         <Icon name={icon} size={18} color={c} />
       </Box>
@@ -30,7 +31,8 @@ const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress, bg, c}
 type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Settings'>;
 const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({navigation}) => {
   return (
-    <Box flex={1} bg={'$background'} p={'s'}>
+    <Box flex={1} bg={'$background'}>
+      <BaseHeader title="Paramètres" />
       <SettingsItem
         label="Profil"
         bg={'$modalShadowDrop'}

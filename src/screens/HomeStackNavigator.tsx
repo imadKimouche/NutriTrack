@@ -37,13 +37,13 @@ const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 const HomeStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerBackTitleVisible: false}}>
-      <Stack.Screen options={{headerShown: false}} name="HomeTabNavigator" component={HomeTabNavigator} />
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="HomeTabNavigator" component={HomeTabNavigator} />
       <Stack.Screen name="SearchMeal" options={{header: SearchMealHeader}} component={SearchMealScreen} />
-      <Stack.Screen name="AddMeal" options={{headerShown: false}} component={AddMealScreen} />
+      <Stack.Screen name="AddMeal" component={AddMealScreen} />
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
-      <Stack.Screen name="ProfileSettings" options={{headerShown: false}} component={ProfileSettingsScreen} />
-      <Stack.Screen name="FitnessSettings" options={{headerShown: false}} component={FitnessSettingsScreen} />
+      <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+      <Stack.Screen name="FitnessSettings" component={FitnessSettingsScreen} />
     </Stack.Navigator>
   );
 };
@@ -54,7 +54,7 @@ const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        header: props => <HeaderWithSettings {...props} />,
+        headerShown: false,
         tabBarStyle: {backgroundColor: colors.$tabBarBackground, height: 93},
       }}>
       <Tab.Screen

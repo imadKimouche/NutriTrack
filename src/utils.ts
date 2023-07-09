@@ -70,3 +70,15 @@ export const generateWeightOptions = (min: number, max: number, increment: numbe
   }
   return options;
 };
+
+export function extractInitials(email?: string | null) {
+  if (email === undefined || email == null || email?.trim().length === 0) {
+    return 'N/A';
+  }
+
+  const emailParts = email.split('@');
+  const username = emailParts[0];
+  const nameParts = username.split('.');
+  const initials = nameParts.map(part => part.charAt(0).toUpperCase());
+  return initials.join('');
+}

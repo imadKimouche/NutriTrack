@@ -13,7 +13,6 @@ import {useUserFitnessData} from '../hooks/userFitnessData';
 import {useOnBoardingStore} from '../store/onboarding';
 import {StatusBar as NativeStatusBar} from 'react-native';
 import {Theme} from '../style/theme';
-import {useTheme} from '@shopify/restyle';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -80,23 +79,6 @@ const Landing = () => {
   return <OnboardingNavigator />;
 };
 
-const StatusBar: React.FC<{backgroundColor?: keyof Theme['colors']; style?: 'light' | 'dark'}> = ({
-  backgroundColor = '$statusBarBackground',
-  style = 'dark',
-}) => {
-  const insets = useSafeAreaInsets();
-
-  return (
-    <Box style={{height: insets.top, backgroundColor}}>
-      <NativeStatusBar
-        barStyle={style === 'dark' ? 'dark-content' : 'light-content'}
-        animated={true}
-        backgroundColor={backgroundColor}
-      />
-    </Box>
-  );
-};
-
 export const MainNavigator = () => {
   const {user} = useAuth();
   // const user = {
@@ -110,7 +92,6 @@ export const MainNavigator = () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar />
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {user ? (

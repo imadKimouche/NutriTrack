@@ -7,7 +7,7 @@ import StatusBar from './StatusBar';
 
 export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
-    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
+    <Pressable onPress={onPress} alignItems={'flex-start'} ml={'m'} justifyContent={'center'}>
       <Icon name="arrow-left" color={'$primary'} size={24} />
     </Pressable>
   );
@@ -24,11 +24,11 @@ const BaseHeader: React.FC<HeaderProps> = ({leftComponent, title, rightComponent
     <Box>
       <StatusBar />
       <Box bg={'$background'} height={50} flexDirection={'row'} alignItems={'center'} alignSelf={'flex-start'}>
-        <Box flex={0.3}>{leftComponent}</Box>
+        <Box flex={0.5}>{leftComponent}</Box>
         <Box flex={1} justifyContent={'center'} alignItems={'center'}>
           <Text variant={'h6'}>{title}</Text>
         </Box>
-        <Box flex={0.3} alignItems={'center'} justifyContent={'center'}>
+        <Box flex={0.5} alignItems={'center'} justifyContent={'center'}>
           {rightComponent}
         </Box>
       </Box>

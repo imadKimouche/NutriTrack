@@ -5,39 +5,22 @@ import {Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import Icon from '../components/Icon';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
 import Input from '../atoms/Input';
 import {usePostMeal} from '../hooks/meal';
+import BaseHeader, {GoBackButton} from '../components/Header';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
 
-type MealHeaderProps = {
-  title: string;
-  onBackPress: () => void;
-  onSavePress: () => void;
-};
-
-export const MealHeader: React.FC<MealHeaderProps> = ({onBackPress, onSavePress}) => {
+const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
-    <Box alignSelf={'stretch'} flexDirection={'row'} alignItems={'center'} py={'m'}>
-      <Pressable flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'} onPress={onBackPress}>
-        <Icon name="chevron-left" size={30} />
-        <Text variant={'button'} color={'$primary'}>
-          Recherche
-        </Text>
-      </Pressable>
-      <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-        <Text variant={'h6'}>Aliment</Text>
-      </Box>
-      <Pressable flex={1} onPress={onSavePress}>
-        <Text variant={'button'} color={'$primary'}>
-          Enregistrer
-        </Text>
-      </Pressable>
-    </Box>
+    <Pressable onPress={onPress} px={'s'}>
+      <Text variant={'button'} color={'$primary'}>
+        Enregistrer
+      </Text>
+    </Pressable>
   );
 };
 
@@ -75,8 +58,12 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
 
   return (
-    <Box flex={1} bg={'$windowBackground'}>
-      <MealHeader title={meal.name} onBackPress={navigation.goBack} onSavePress={saveMealPortion} />
+    <Box flex={1} bg={'$background'}>
+      <BaseHeader
+        title="Aliment"
+        leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
+        rightComponent={<SaveMealButton onPress={saveMealPortion} />}
+      />
       <Box flex={0.5} alignItems={'center'} px={'s'}>
         <Text variant={'subtitle1'} py={'xs'}>
           {meal.name}

@@ -72,19 +72,19 @@ const Landing = () => {
     </Box>;
   }
 
-  if (userFitnessData) {
-    return <HomeStackNavigator />;
-  }
+  // if (userFitnessData) {
+  return <HomeStackNavigator />;
+  // }
 
-  return <OnboardingNavigator />;
+  // return <OnboardingNavigator />;
 };
 
 export const MainNavigator = () => {
-  const {user} = useAuth();
-  // const user = {
-  //   email: 'imad.kim@gmail.com',
-  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  // };
+  // const {user} = useAuth();
+  const user = {
+    email: 'imad.kim@gmail.com',
+    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
+  };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

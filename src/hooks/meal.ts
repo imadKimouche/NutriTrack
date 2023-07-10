@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
 import {useDashboardStore} from '../store/dashboard';
@@ -185,8 +185,13 @@ export function useSearchOFFMeal(searchValue: string) {
 }
 
 export function useSearchOFFMealBC(barcode: string) {
-  const {data, isLoading, error, isError, refetch} = useQuery(['userDailyMeals', barcode], () => fetchOFFMealBC(barcode));
-  return {data, refetch, isLoading, error, isError};
+  const {data, isLoading, error, isError, refetch} = useQuery(['searchOFFMealBC', barcode], () => fetchOFFMealBC(barcode));
+
+  useEffect(() => {
+    refetch();
+  }, [barcode, refetch]);
+
+  return {data, isLoading, error, isError};
 }
 
 export function usePostMeal(meal: Meal) {

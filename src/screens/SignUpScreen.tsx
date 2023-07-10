@@ -9,6 +9,7 @@ import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {KeyboardAvoidingView} from 'react-native';
 
 // type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -91,16 +92,18 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
               validate: value => value === password || 'Passwords do not match',
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-              <TextInput
-                inputPropPresets={'newPassword'}
-                icon={'lock'}
-                height={56}
-                placeholder="Confirmer mot de passe"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                error={error?.message}
-              />
+              <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+                <TextInput
+                  inputPropPresets={'newPassword'}
+                  icon={'lock'}
+                  height={56}
+                  placeholder="Confirmer mot de passe"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  error={error?.message}
+                />
+              </KeyboardAvoidingView>
             )}
             name="confirmPassword"
           />

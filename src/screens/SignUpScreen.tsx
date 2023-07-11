@@ -107,6 +107,8 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
                 onChangeText={onChange}
                 value={value}
                 error={error?.message}
+                returnKeyType={'next'}
+                onSubmitEditing={onSubmit}
               />
             )}
             name="confirmPassword"

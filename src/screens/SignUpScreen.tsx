@@ -9,10 +9,11 @@ import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {KeyboardAvoidingView, Platform} from 'react-native';
+import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import StatusBar from '../components/StatusBar';
+import {useKeyboardIsVisible} from '../hooks/keyboard';
 
 // type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -22,6 +23,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
   const {control, watch} = form;
   const password = watch('password', ''); // Retrieve value of the 'password' field
   const {spacing} = useTheme<Theme>();
+  const {keyboardVisible} = useKeyboardIsVisible();
 
   const goToSigninSceen = () => {
     navigation.navigate('SignIn');
@@ -31,7 +33,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
     <Box bg={'$background'} flex={1}>
       <StatusBar />
       <Box justifyContent={'center'} alignItems={'center'}>
-        <DishImage width={390} height={210} />
+        <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'space-between'}>
         <Text variant={'h1'} textAlign={'center'} p={'m'}>
@@ -39,7 +41,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
         </Text>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.l}}>
+          style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.xl}}>
           <Controller
             control={control}
             rules={{

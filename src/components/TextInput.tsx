@@ -30,7 +30,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
   return (
     <Box marginBottom={'s'}>
       <Box
-        bg={'$background'}
+        bg={'$textInputBackground'}
         flexDirection={'row'}
         justifyContent={'flex-start'}
         alignItems={'center'}
@@ -39,7 +39,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
         borderWidth={1}
         borderRadius={'xs'}
         borderColor={'$textInputBorderColor'}>
-        <Icon name={icon} size={28} color={value?.length ? '$foreground' : '$textInputColor'} />
+        <Icon name={icon} size={26} color={value?.length ? '$foreground' : '$textInputColor'} />
         <Input
           {...rest}
           {...presetProps}

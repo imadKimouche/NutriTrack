@@ -31,7 +31,7 @@ export const SignInScreen = () => {
   };
 
   return (
-    <Box bg={'$windowBackground'} flex={1}>
+    <Box bg={'$background'} flex={1}>
       <StatusBar />
       <Box justifyContent={'center'} alignItems={'center'}>
         <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
@@ -88,12 +88,14 @@ export const SignInScreen = () => {
                 onChangeText={onChange}
                 value={value}
                 error={error?.message}
+                returnKeyType={'next'}
+                onSubmitEditing={onSubmit}
               />
             )}
             name="password"
           />
 
-          <TouchableOpacity onPress={goToSignupSceen}>
+          <TouchableOpacity p={'xs'} alignSelf={'flex-end'} onPress={goToSignupSceen}>
             <Text variant={'body2'} textAlign={'right'} paddingVertical={'s'}>
               Créer un compte
             </Text>

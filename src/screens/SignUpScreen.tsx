@@ -112,7 +112,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             name="confirmPassword"
           />
 
-          <TouchableOpacity onPress={goToSigninSceen}>
+          <TouchableOpacity p={'xs'} alignSelf={'flex-end'} onPress={goToSigninSceen}>
             <Text variant={'body2'} textAlign={'right'} paddingVertical={'s'}>
               J'ai déjà un compte
             </Text>

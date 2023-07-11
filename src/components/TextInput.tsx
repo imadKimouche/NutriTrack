@@ -4,6 +4,8 @@ import {NativeSyntheticEvent, Platform, TextInputFocusEventData, TextInputProps}
 import Box from '../atoms/Box';
 import Icon from '../components/Icon';
 import Text from '../atoms/Text';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '../style/theme';
 
 type Props = TextInputProps &
   InputProps & {
@@ -14,6 +16,7 @@ type Props = TextInputProps &
 
 const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...rest}) => {
   const presetProps = inputPropPresets ? defaultInputProps[inputPropPresets] : {};
+  const {colors} = useTheme<Theme>();
 
   const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     if (rest.onBlur) {
@@ -34,10 +37,10 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
         flexDirection={'row'}
         justifyContent={'flex-start'}
         alignItems={'center'}
-        p={'s'}
+        px={'s'}
         borderStyle={'solid'}
         borderWidth={1}
-        borderRadius={'xs'}
+        borderRadius={'sm'}
         borderColor={'$textInputBorderColor'}>
         <Icon name={icon} size={26} color={value?.length ? '$foreground' : '$textInputColor'} />
         <Input
@@ -46,7 +49,10 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
           value={value}
           bg={'$textInputBackground'}
           borderColor={'transparent'}
-          paddingHorizontal={'xs'}
+          placeholderTextColor={colors.$textInputPlaceholderColor}
+          paddingHorizontal={'s'}
+          paddingVertical={'m'}
+          borderRadius={'sm'}
           flex={1}
           onBlur={handleBlur}
           onFocus={handleFocus}

@@ -9,7 +9,10 @@ import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, Platform} from 'react-native';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '../style/theme';
+import StatusBar from '../components/StatusBar';
 
 // type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -18,21 +21,25 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
   const {form, onSubmit, mutation: submitMutation} = useSignup();
   const {control, watch} = form;
   const password = watch('password', ''); // Retrieve value of the 'password' field
+  const {spacing} = useTheme<Theme>();
 
   const goToSigninSceen = () => {
     navigation.navigate('SignIn');
   };
 
   return (
-    <Box bg={'$windowBackground'} flex={1}>
-      <Box flex={1} justifyContent={'center'} alignItems={'center'}>
+    <Box bg={'$background'} flex={1}>
+      <StatusBar />
+      <Box justifyContent={'center'} alignItems={'center'}>
         <DishImage width={390} height={210} />
       </Box>
-      <Box flex={1.2} alignItems={'center'} justifyContent={'space-between'}>
-        <Text variant={'h1'} textAlign={'center'}>
+      <Box flex={1} alignItems={'center'} justifyContent={'space-between'}>
+        <Text variant={'h1'} textAlign={'center'} p={'m'}>
           LeftoverFit
         </Text>
-        <Box width={'80%'} flex={1} justifyContent={'center'}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.l}}>
           <Controller
             control={control}
             rules={{
@@ -46,7 +53,6 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
               <TextInput
                 inputPropPresets={'email'}
                 icon={'mail'}
-                height={56}
                 placeholder="Email"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -74,7 +80,6 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
-                height={56}
                 placeholder="Mot de passe"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -92,18 +97,15 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
               validate: value => value === password || 'Passwords do not match',
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-              <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-                <TextInput
-                  inputPropPresets={'newPassword'}
-                  icon={'lock'}
-                  height={56}
-                  placeholder="Confirmer mot de passe"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  error={error?.message}
-                />
-              </KeyboardAvoidingView>
+              <TextInput
+                inputPropPresets={'newPassword'}
+                icon={'lock'}
+                placeholder="Confirmer mot de passe"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                error={error?.message}
+              />
             )}
             name="confirmPassword"
           />
@@ -113,7 +115,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
               J'ai déjà un compte
             </Text>
           </TouchableOpacity>
-        </Box>
+        </KeyboardAvoidingView>
         {submitMutation.error && (
           <Box>
             <Text variant={'body2'}>{submitMutation.error.message}</Text>

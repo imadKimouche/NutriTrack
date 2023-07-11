@@ -11,6 +11,7 @@ import {
   LayoutProps,
   spacing,
   SpacingProps,
+  SpacingShorthandProps,
   useRestyle,
   VariantProps,
 } from '@shopify/restyle';
@@ -19,6 +20,7 @@ import {Theme} from '../style/theme';
 
 type RestyleProps = VariantProps<Theme, 'inputVariants'> &
   SpacingProps<Theme> &
+  SpacingShorthandProps<Theme> &
   BorderProps<Theme> &
   LayoutProps<Theme> &
   BackgroundColorProps<Theme> &

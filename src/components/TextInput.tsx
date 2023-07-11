@@ -1,6 +1,6 @@
 import React from 'react';
 import Input, {InputProps} from '../atoms/Input';
-import {NativeSyntheticEvent, TextInputFocusEventData, TextInputProps} from 'react-native';
+import {NativeSyntheticEvent, Platform, TextInputFocusEventData, TextInputProps} from 'react-native';
 import Box from '../atoms/Box';
 import Icon from '../components/Icon';
 import Text from '../atoms/Text';
@@ -34,8 +34,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
         flexDirection={'row'}
         justifyContent={'flex-start'}
         alignItems={'center'}
-        paddingRight={'m'}
-        paddingLeft={'m'}
+        p={'s'}
         borderStyle={'solid'}
         borderWidth={1}
         borderRadius={'xs'}
@@ -47,7 +46,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
           value={value}
           bg={'$textInputBackground'}
           borderColor={'transparent'}
-          paddingHorizontal={'s'}
+          paddingHorizontal={'xs'}
           flex={1}
           onBlur={handleBlur}
           onFocus={handleFocus}

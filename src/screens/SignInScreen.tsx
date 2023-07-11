@@ -46,7 +46,6 @@ export const SignInScreen = () => {
               <TextInput
                 inputPropPresets={'email'}
                 icon={'mail'}
-                height={56}
                 placeholder="Email"
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -74,7 +73,6 @@ export const SignInScreen = () => {
               <TextInput
                 inputPropPresets={'newPassword'}
                 icon={'lock'}
-                height={56}
                 placeholder="Mot de passe"
                 onBlur={onBlur}
                 onChangeText={onChange}

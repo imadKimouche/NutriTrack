@@ -1,5 +1,7 @@
 import React from 'react';
 import DishImage from '../assets/dish-illustration.svg';
+import GoogleIcon from '../assets/icons8-google.svg';
+import AppleIcon from '../assets/icons8-apple.svg';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
@@ -15,6 +17,7 @@ import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
+import App from '../../App';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
 type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -107,8 +110,24 @@ export const SignInScreen = () => {
           </Box>
         )}
       </Box>
-      <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
+      <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
         <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
+        <Box>
+          <Button
+            variant={'outlined'}
+            icon={GoogleIcon}
+            label="Se connecter avec Google"
+            onPress={onSubmit}
+            loading={submitMutation.isLoading}
+          />
+          <Button
+            variant={'outlined'}
+            icon={AppleIcon}
+            label="Se connecter avec Apple"
+            onPress={onSubmit}
+            loading={submitMutation.isLoading}
+          />
+        </Box>
       </Box>
     </Box>
   );

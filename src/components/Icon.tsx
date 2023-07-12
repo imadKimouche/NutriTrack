@@ -26,7 +26,7 @@ type RestyleProps = SpacingProps<Theme> &
 
 const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([spacing, border, backgroundColor, color, layout]);
 
-type Props = Omit<IconProps, 'color'> & RestyleProps;
+export type Props = Omit<IconProps, 'color'> & RestyleProps;
 
 const Icon: React.FC<Props> = ({...rest}) => {
   const props = useRestyle(restyleFunctions, rest);

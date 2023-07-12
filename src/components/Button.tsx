@@ -1,5 +1,6 @@
 import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
 import React from 'react';
+import {SvgProps} from 'react-native-svg';
 import Pressable, {PressableProps} from '../atoms/Pressable';
 import Text, {TextProps as TextPropsBase} from '../atoms/Text';
 import {Theme} from '../style/theme';
@@ -17,7 +18,19 @@ const ButtonTextBase = createRestyleComponent<TextProps & VariantProps<Theme, 't
   Text,
 );
 
-const Button = ({label, variant, icon, loading, ...rest}: PropsBase & {label: string; icon?: string; loading?: boolean}) => {
+type ButtonProps = {label: string; icon?: string | React.FC<SvgProps>; loading?: boolean};
+
+const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProps) => {
+  let IconComponent;
+
+  if (icon) {
+    if (typeof icon === 'string') {
+      IconComponent = <Icon name={icon} color={'$background'} size={18} />;
+    } else {
+      IconComponent = icon;
+    }
+  }
+
   return (
     <ButtonBase
       variant={variant}
@@ -30,7 +43,7 @@ const Button = ({label, variant, icon, loading, ...rest}: PropsBase & {label: st
       disabled={loading}
       {...rest}>
       {loading ? <Loader color={'$buttonLoaderPrimary'} /> : <ButtonTextBase variant={variant}>{label}</ButtonTextBase>}
-      {icon !== undefined && <Icon name={icon} color={'$background'} size={18} />}
+      {IconComponent !== undefined && <IconComponent />}
     </ButtonBase>
   );
 };

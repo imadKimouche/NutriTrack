@@ -4,7 +4,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
-import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
@@ -17,6 +16,7 @@ import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboar
 import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../../style/theme';
+import BottomSheetTextInput from '../../components/BottomSheetTextInput';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -167,19 +167,21 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         label="Allérgies"
         value={''}
       />
-      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPointTop} bottomInset={insets.bottom}>
+      <BottomSheet
+        keyboardBehavior="interactive"
+        ref={bottomSheetRefs.age}
+        index={-1}
+        snapPoints={snapPointLow}
+        bottomInset={insets.bottom}>
         <Box p={'m'} flex={1} justifyContent={'flex-start'}>
           <Text variant={'subtitle2'}>Age</Text>
-          <Input
+          <BottomSheetTextInput
             value={ageStr}
             onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
-            padding={'s'}
-            marginVertical={'s'}
             keyboardType="numeric"
-            borderWidth={1}
-            borderColor={'$textInputBorderColor'}
-            borderRadius={'xs'}
             returnKeyType="done"
+            onSubmitEditing={closeAllBottomSheets}
+            marginTop={'m'}
           />
         </Box>
       </BottomSheet>

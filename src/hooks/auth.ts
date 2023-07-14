@@ -1,22 +1,18 @@
 import {useEffect, useState} from 'react';
 import {
   createUserWithEmailAndPassword,
-  getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut as fireSignOut,
   User,
   UserCredential,
 } from 'firebase/auth';
 import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
-import app from '../config/firebase';
 import {FirebaseError} from 'firebase/app';
-
-const auth = getAuth();
-
-// console.log(app);
-app;
+import {auth} from '../config/firebase';
 
 type SignupFormData = {
   email: string;
@@ -98,4 +94,21 @@ export const useSignin = () => {
   });
 
   return {form, onSubmit, mutation};
+};
+
+export const useSignUpWithGoogle = () => {
+  const signUpWithGoogle = () => {
+    return signInWithPopup(auth, new GoogleAuthProvider());
+  };
+
+  const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
+    onSuccess: (userCredentials: UserCredential) => {
+      console.log('google user cred', userCredentials?.user);
+    },
+    onError: (fbError: FirebaseError) => {
+      console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
+    },
+  });
+
+  return {signupUsingGoogle: mutate, isLoading, isError, error};
 };

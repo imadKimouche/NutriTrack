@@ -15,6 +15,8 @@ import {useOnBoardingStore} from '../../store/onboarding';
 import {HomeStackParamList} from '../HomeStackNavigator';
 import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
 import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '../../style/theme';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -43,6 +45,7 @@ export const ProfileSettingsItem: React.FC<{onPress: () => void; label: string; 
 type ProfileSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigationProp}> = ({navigation}) => {
   const insets = useSafeAreaInsets();
+  const {spacing} = useTheme<Theme>();
   const {
     fitnessGoal,
     activityLevel,
@@ -164,8 +167,8 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         label="Allérgies"
         value={''}
       />
-      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPointLow} bottomInset={insets.bottom}>
-        <Box p={'m'}>
+      <BottomSheet ref={bottomSheetRefs.age} index={-1} snapPoints={snapPointTop} bottomInset={insets.bottom}>
+        <Box p={'m'} flex={1} justifyContent={'flex-start'}>
           <Text variant={'subtitle2'}>Age</Text>
           <Input
             value={ageStr}
@@ -176,6 +179,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
             borderWidth={1}
             borderColor={'$textInputBorderColor'}
             borderRadius={'xs'}
+            returnKeyType="done"
           />
         </Box>
       </BottomSheet>

@@ -1,7 +1,7 @@
 import {initializeApp} from 'firebase/app';
+import {getAuth} from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {Meal} from '../hooks/meal';
-import {UserData} from '../hooks/userData';
 import {MealType} from '../store/dashboard';
 
 const firebaseConfig = {
@@ -15,6 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {

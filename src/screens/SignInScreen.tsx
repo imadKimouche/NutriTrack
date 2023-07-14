@@ -6,7 +6,7 @@ import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
-import {useSignin} from '../hooks/auth';
+import {useSignin, useSignUpWithGoogle} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {useNavigation} from '@react-navigation/native';
@@ -17,7 +17,6 @@ import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
-import App from '../../App';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
 type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -28,10 +27,15 @@ export const SignInScreen = () => {
   const {control} = form;
   const {spacing} = useTheme<Theme>();
   const {keyboardVisible} = useKeyboardIsVisible();
+  const {signupUsingGoogle, isLoading: googleIsLoading} = useSignUpWithGoogle();
 
   const goToSignupSceen = () => {
     navigation.navigate('SignUp');
   };
+
+  async function signInWithGoogle() {
+    signupUsingGoogle();
+  }
 
   return (
     <Box bg={'$background'} flex={1}>
@@ -112,17 +116,18 @@ export const SignInScreen = () => {
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
         <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
-        <Box>
+        <Box mt={'s'}>
           <Button
             variant={'outlined'}
-            icon={GoogleIcon}
+            svgIcon={GoogleIcon}
             label="Se connecter avec Google"
-            onPress={onSubmit}
-            loading={submitMutation.isLoading}
+            onPress={signInWithGoogle}
+            loading={googleIsLoading}
           />
           <Button
+            my={'s'}
             variant={'outlined'}
-            icon={AppleIcon}
+            svgIcon={AppleIcon}
             label="Se connecter avec Apple"
             onPress={onSubmit}
             loading={submitMutation.isLoading}

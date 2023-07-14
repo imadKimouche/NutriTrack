@@ -1,6 +1,7 @@
-import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
+import {createRestyleComponent, createVariant, useTheme, VariantProps} from '@shopify/restyle';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
+import Box from '../atoms/Box';
 import Pressable, {PressableProps} from '../atoms/Pressable';
 import Text, {TextProps as TextPropsBase} from '../atoms/Text';
 import {Theme} from '../style/theme';
@@ -18,18 +19,11 @@ const ButtonTextBase = createRestyleComponent<TextProps & VariantProps<Theme, 't
   Text,
 );
 
-type ButtonProps = {label: string; icon?: string | React.FC<SvgProps>; loading?: boolean};
+type ButtonProps = {label: string; icon?: string; svgIcon?: React.FC<SvgProps>; loading?: boolean};
 
-const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProps) => {
-  let IconComponent;
-
-  if (icon) {
-    if (typeof icon === 'string') {
-      IconComponent = <Icon name={icon} color={'$background'} size={18} />;
-    } else {
-      IconComponent = icon;
-    }
-  }
+const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & ButtonProps) => {
+  const SvgIcon = svgIcon;
+  const {spacing} = useTheme<Theme>();
 
   return (
     <ButtonBase
@@ -42,8 +36,11 @@ const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProp
       flexDirection={'row'}
       disabled={loading}
       {...rest}>
-      {loading ? <Loader color={'$buttonLoaderPrimary'} /> : <ButtonTextBase variant={variant}>{label}</ButtonTextBase>}
-      {IconComponent !== undefined && <IconComponent />}
+      <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
+        {SvgIcon !== undefined && <SvgIcon height={32} width={18} style={{marginHorizontal: spacing.xs}} />}
+        {loading ? <Loader color={'$buttonLoaderPrimary'} /> : <ButtonTextBase variant={variant}>{label}</ButtonTextBase>}
+      </Box>
+      {icon !== undefined && <Icon name={icon} color={'$background'} size={18} />}
     </ButtonBase>
   );
 };

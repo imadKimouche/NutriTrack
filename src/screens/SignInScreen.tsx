@@ -6,7 +6,7 @@ import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
-import {useSignin, useSignUpWithGoogle} from '../hooks/auth';
+import {signUpWithGoogle, useSignin, useSignUpWithGoogle} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {useNavigation} from '@react-navigation/native';
@@ -17,6 +17,8 @@ import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
+import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
+import {FirebaseError} from 'firebase/app';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
 type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -27,14 +29,34 @@ export const SignInScreen = () => {
   const {control} = form;
   const {spacing} = useTheme<Theme>();
   const {keyboardVisible} = useKeyboardIsVisible();
-  const {signupUsingGoogle, isLoading: googleIsLoading} = useSignUpWithGoogle();
 
   const goToSignupSceen = () => {
     navigation.navigate('SignUp');
   };
 
   async function signInWithGoogle() {
-    signupUsingGoogle();
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error: FirebaseError) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData?.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   }
 
   return (
@@ -117,21 +139,8 @@ export const SignInScreen = () => {
       <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
         <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
         <Box mt={'s'}>
-          <Button
-            variant={'outlined'}
-            svgIcon={GoogleIcon}
-            label="Se connecter avec Google"
-            onPress={signInWithGoogle}
-            loading={googleIsLoading}
-          />
-          <Button
-            my={'s'}
-            variant={'outlined'}
-            svgIcon={AppleIcon}
-            label="Se connecter avec Apple"
-            onPress={onSubmit}
-            loading={submitMutation.isLoading}
-          />
+          <Button variant={'outlined'} svgIcon={GoogleIcon} label="Se connecter avec Google" onPress={signInWithGoogle} />
+          <Button my={'s'} variant={'outlined'} svgIcon={AppleIcon} label="Se connecter avec Apple" onPress={onSubmit} />
         </Box>
       </Box>
     </Box>

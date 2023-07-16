@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState, useCallback} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {Picker} from '@react-native-picker/picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';

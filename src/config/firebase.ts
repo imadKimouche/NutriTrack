@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import {getAuth} from 'firebase/auth';
+import {getAuth} from '@react-native-firebase/auth';
 import {getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, DocumentSnapshot, SnapshotOptions} from 'firebase/firestore';
 import {Meal} from '../hooks/meal';
 import {MealType} from '../store/dashboard';

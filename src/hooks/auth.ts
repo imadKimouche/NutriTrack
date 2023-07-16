@@ -1,18 +1,7 @@
 import {useEffect, useState} from 'react';
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut as fireSignOut,
-  User,
-  UserCredential,
-} from 'firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
-import {FirebaseError} from 'firebase/app';
-import {auth} from '../config/firebase';
 
 type SignupFormData = {
   email: string;
@@ -28,14 +17,14 @@ type MutationData = {
 };
 
 export function signOut() {
-  return fireSignOut(auth);
+  return auth().signOut();
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<FirebaseAuthTypes.User>();
 
   useEffect(() => {
-    const unsubscribeFromAuthStateChanged = onAuthStateChanged(auth, fireUser => {
+    const unsubscribeFromAuthStateChanged = auth().onAuthStateChanged(fireUser => {
       if (fireUser) {
         setUser(fireUser);
       } else {
@@ -96,19 +85,22 @@ export const useSignin = () => {
   return {form, onSubmit, mutation};
 };
 
-export const useSignUpWithGoogle = () => {
-  const signUpWithGoogle = () => {
-    return signInWithPopup(auth, new GoogleAuthProvider());
-  };
-
-  const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
-    onSuccess: (userCredentials: UserCredential) => {
-      console.log('google user cred', userCredentials?.user);
-    },
-    onError: (fbError: FirebaseError) => {
-      console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
-    },
-  });
-
-  return {signupUsingGoogle: mutate, isLoading, isError, error};
+export const signUpWithGoogle = () => {
+  return signInWithPopup(auth, new GoogleAuthProvider());
 };
+
+// export const useSignUpWithGoogle = () => {
+//   const signUpWithGoogle = () => {
+//     return signInWithPopup(auth, new GoogleAuthProvider());
+//   };
+//   const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
+//     onSuccess: (userCredentials: UserCredential) => {
+//       console.log('google user cred', userCredentials?.user);
+//     },
+//     onError: (fbError: FirebaseError) => {
+//       console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
+//     },
+//   });
+//
+//   return {signupUsingGoogle: mutate, isLoading, isError, error};
+// };

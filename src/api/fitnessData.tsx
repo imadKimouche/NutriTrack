@@ -1,5 +1,4 @@
-import {doc, DocumentSnapshot, getDoc, setDoc, SnapshotOptions} from 'firebase/firestore';
-import {db} from '../config/firebase';
+import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {UserFitnessData} from '../store/onboarding';
 
 const userFitnessDataConverter = {
@@ -13,8 +12,8 @@ const userFitnessDataConverter = {
       weight: userFitnessData.weight,
     };
   },
-  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-    const data = snapshot.data(options);
+  fromFirestore: (snapshot: FirebaseFirestoreTypes.DocumentSnapshot) => {
+    const data = snapshot.data();
     if (data !== undefined) {
       return {
         fitnessGoal: data.fitnessGoal,
@@ -39,13 +38,12 @@ const userFitnessDataConverter = {
 };
 
 export async function getFitnessData(userId: string) {
-  const docRef = doc(db, 'users', userId).withConverter(userFitnessDataConverter);
-  const snapshot = await getDoc(docRef);
-  if (snapshot.exists()) {
-    return snapshot.data();
+  const result = await firestore().collection('users').doc(userId).get();
+  if (result) {
+    return userFitnessDataConverter.fromFirestore(result);
   }
 }
 
 export async function setFitnessData(userId: string, data: UserFitnessData) {
-  return setDoc(doc(db, 'users', userId), data);
+  return firestore().collection('users').doc(userId).set(userFitnessDataConverter.toFirestore(data));
 }

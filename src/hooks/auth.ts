@@ -41,8 +41,8 @@ export function useAuth() {
 
 export function useSignup() {
   const form = useForm<SignupFormData>();
-  const mutation = useMutation<UserCredential, FirebaseError, MutationData>((data: MutationData) =>
-    createUserWithEmailAndPassword(auth, data.email, data.password),
+  const mutation = useMutation<FirebaseAuthTypes.UserCredential, FirebaseAuthTypes.NativeFirebaseAuthError, MutationData>(
+    (data: MutationData) => auth().createUserWithEmailAndPassword(data.email, data.password),
   );
 
   const queryClient = useQueryClient();
@@ -64,8 +64,8 @@ export function useSignup() {
 export const useSignin = () => {
   const form = useForm<SigninFormData>();
 
-  const mutation = useMutation<UserCredential, FirebaseError, MutationData>((data: MutationData) =>
-    signInWithEmailAndPassword(auth, data.email, data.password),
+  const mutation = useMutation<FirebaseAuthTypes.UserCredential, FirebaseAuthTypes.NativeFirebaseAuthError, MutationData>(
+    (data: MutationData) => auth().signInWithEmailAndPassword(data.email, data.password),
   );
 
   const queryClient = useQueryClient();
@@ -85,9 +85,7 @@ export const useSignin = () => {
   return {form, onSubmit, mutation};
 };
 
-export const signUpWithGoogle = () => {
-  return signInWithPopup(auth, new GoogleAuthProvider());
-};
+export const signUpWithGoogle = () => {};
 
 // export const useSignUpWithGoogle = () => {
 //   const signUpWithGoogle = () => {

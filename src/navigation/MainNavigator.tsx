@@ -50,13 +50,13 @@ const ResetPassword = () => {
 
 const Landing = () => {
   const {userFitnessData, isLoading, isError} = useUserFitnessData();
-  const {updateStore} = useOnBoardingStore(state => state);
-
-  useEffect(() => {
-    if (userFitnessData) {
-      updateStore(userFitnessData);
-    }
-  }, [updateStore, userFitnessData]);
+  // const {updateStore} = useOnBoardingStore(state => state);
+  //
+  // useEffect(() => {
+  //   if (userFitnessData) {
+  //     updateStore(userFitnessData);
+  //   }
+  // }, [updateStore, userFitnessData]);
 
   if (isLoading) {
     return (
@@ -73,10 +73,10 @@ const Landing = () => {
   }
 
   // if (userFitnessData) {
-  return <HomeStackNavigator />;
+  //   return <HomeStackNavigator />;
   // }
 
-  // return <OnboardingNavigator />;
+  return <OnboardingNavigator />;
 };
 
 export const MainNavigator = () => {

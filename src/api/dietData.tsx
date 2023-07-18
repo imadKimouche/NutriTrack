@@ -1,14 +1,17 @@
-export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
-  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
-  const docSnapshot = await getDoc(dailyMealsRef);
+import firestore from '@react-native-firebase/firestore';
+import {Meal} from '../hooks/meal';
+import {MealType} from '../store/dashboard';
 
-  if (docSnapshot.exists()) {
-    return updateDoc(dailyMealsRef, {
-      [mealType]: arrayUnion({...meal, portion, unit}),
+export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
+  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+  const docSnapshot = await dailyMealsRef.get();
+
+  if (docSnapshot.exists) {
+    return dailyMealsRef.update({
+      [mealType]: firestore.FieldValue.arrayUnion({...meal, portion, unit}),
     });
   } else {
-    return setDoc(
-      dailyMealsRef,
+    return dailyMealsRef.set(
       {
         [mealType]: [{...meal, portion, unit}],
       },
@@ -25,11 +28,10 @@ export async function updateUserDailyMacros(
   carbs?: number,
   fat?: number,
 ) {
-  // TODO share same ref across functions ?
-  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
-  const docSnapshot = await getDoc(dailyMealsRef);
+  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+  const docSnapshot = await dailyMealsRef.get();
 
-  if (docSnapshot.exists()) {
+  if (docSnapshot.exists) {
     const currentData = docSnapshot.data() as DailyMeals;
     const updatedMacros: Partial<DailyMeals> = {};
 
@@ -49,7 +51,7 @@ export async function updateUserDailyMacros(
       updatedMacros.currentFat = (currentData.currentFat || 0) + fat;
     }
 
-    return updateDoc(dailyMealsRef, updatedMacros);
+    return dailyMealsRef.update(updatedMacros);
   } else {
     const newMacros: DailyMeals = {
       currentCalories: calories || 0,
@@ -58,7 +60,7 @@ export async function updateUserDailyMacros(
       currentFat: fat || 0,
     };
 
-    return setDoc(dailyMealsRef, newMacros, {merge: true});
+    return dailyMealsRef.set(newMacros, {merge: true});
   }
 }
 
@@ -113,11 +115,11 @@ export async function fetchUserDailyMeals(userId: string, date: string) {
   if (userId.trim().length === 0 || date.trim().length === 0) {
     return undefined;
   }
-  const dailyMealsDocRef = doc(db, 'users', userId, 'dailyMeals', date).withConverter(dailyMealsConverter);
-  const dailyMeals = await getDoc(dailyMealsDocRef);
+  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+  const docSnapshot = await dailyMealsRef.get();
 
-  if (dailyMeals.exists()) {
-    return dailyMeals.data();
+  if (docSnapshot.exists) {
+    return docSnapshot.data();
   }
   return undefined;
 }
@@ -127,10 +129,10 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
     return undefined;
   }
 
-  const dailyMealsRef = doc(db, 'users', userId, 'dailyMeals', date);
-  const docSnapshot = await getDoc(dailyMealsRef);
+  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+  const docSnapshot = await dailyMealsRef.get();
 
-  if (docSnapshot.exists()) {
+  if (docSnapshot.exists) {
     const mealTypeData = docSnapshot.get(mealType) as Meal[] | undefined;
 
     if (mealTypeData) {
@@ -148,7 +150,7 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
 
         const updatedMeals = mealTypeData.filter(meal => meal.id !== mealId);
 
-        return updateDoc(dailyMealsRef, {
+        return dailyMealsRef.set({
           [mealType]: updatedMeals,
           currentCalories: updatedCalories,
           currentProt: updatedProt,
@@ -161,23 +163,23 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
 }
 
 export async function setUserBMR(userId: string, bmr: number) {
-  const userDataRef = doc(db, 'users', userId);
-  const snapshot = await getDoc(userDataRef);
+  const userDataRef = firestore().doc(`users/${userId}`);
+  const snapshot = await userDataRef.get();
 
-  if (snapshot.exists()) {
-    return updateDoc(userDataRef, {bmr});
+  if (snapshot.exists) {
+    return userDataRef.set({bmr});
   } else {
-    return setDoc(userDataRef, {bmr}, {merge: true});
+    return userDataRef.set({bmr}, {merge: true});
   }
 }
 
 export async function setUserTDEE(userId: string, tdee: number) {
-  const userDataRef = doc(db, 'users', userId);
-  const snapshot = await getDoc(userDataRef);
+  const userDataRef = firestore().doc(`users/${userId}`);
+  const snapshot = await userDataRef.get();
 
-  if (snapshot.exists()) {
-    return updateDoc(userDataRef, {tdee});
+  if (snapshot.exists) {
+    return userDataRef.set({tdee});
   } else {
-    return setDoc(userDataRef, {tdee}, {merge: true});
+    return userDataRef.set({tdee}, {merge: true});
   }
 }

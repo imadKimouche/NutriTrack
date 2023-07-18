@@ -1,6 +1,6 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
-import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../config/firebase';
+import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {

@@ -85,20 +85,18 @@ export const useSignin = () => {
   return {form, onSubmit, mutation};
 };
 
-export const signUpWithGoogle = () => {};
+export const useSignUpWithGoogle = () => {
+  const signUpWithGoogle = () => {
+    return signInWithPopup(auth, new GoogleAuthProvider());
+  };
+  const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
+    onSuccess: (userCredentials: UserCredential) => {
+      console.log('google user cred', userCredentials?.user);
+    },
+    onError: (fbError: FirebaseError) => {
+      console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
+    },
+  });
 
-// export const useSignUpWithGoogle = () => {
-//   const signUpWithGoogle = () => {
-//     return signInWithPopup(auth, new GoogleAuthProvider());
-//   };
-//   const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
-//     onSuccess: (userCredentials: UserCredential) => {
-//       console.log('google user cred', userCredentials?.user);
-//     },
-//     onError: (fbError: FirebaseError) => {
-//       console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
-//     },
-//   });
-//
-//   return {signupUsingGoogle: mutate, isLoading, isError, error};
-// };
+  return {signupUsingGoogle: mutate, isLoading, isError, error};
+};

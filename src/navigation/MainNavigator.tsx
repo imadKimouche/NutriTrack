@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import HomeStackNavigator from '../screens/HomeStackNavigator';
@@ -11,8 +11,6 @@ import {SignInScreen} from '../screens/SignInScreen';
 import {useAuth} from '../hooks/auth';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {useOnBoardingStore} from '../store/onboarding';
-import {StatusBar as NativeStatusBar} from 'react-native';
-import {Theme} from '../style/theme';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -22,8 +20,7 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-//
-//
+
 // type ResetPasswordScreenRouteProp = RouteProp<
 //   RootStackParamList,
 //   'ResetPassword'
@@ -50,13 +47,13 @@ const ResetPassword = () => {
 
 const Landing = () => {
   const {userFitnessData, isLoading, isError} = useUserFitnessData();
-  // const {updateStore} = useOnBoardingStore(state => state);
-  //
-  // useEffect(() => {
-  //   if (userFitnessData) {
-  //     updateStore(userFitnessData);
-  //   }
-  // }, [updateStore, userFitnessData]);
+  const {updateStore} = useOnBoardingStore(state => state);
+
+  useEffect(() => {
+    if (userFitnessData) {
+      updateStore(userFitnessData);
+    }
+  }, [updateStore, userFitnessData]);
 
   if (isLoading) {
     return (
@@ -72,9 +69,9 @@ const Landing = () => {
     </Box>;
   }
 
-  // if (userFitnessData) {
-  //   return <HomeStackNavigator />;
-  // }
+  if (userFitnessData) {
+    return <HomeStackNavigator />;
+  }
 
   return <OnboardingNavigator />;
 };

@@ -95,7 +95,9 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
       weight,
       gender,
       allergies,
-    }).finally(() => {});
+    }).finally(() => {
+      bottomSheetRef.current?.close();
+    });
   }
 
   function openBottomSheetFor(type: BottomSheetType) {
@@ -141,7 +143,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         )}
         {bottomSheetType === 'gender' && (
           <Box p={'m'}>
-            <Text variant={'subtitle2'}>Sexe</Text>
+            <Text variant={'subtitle2'}>Genre</Text>
             {GENDERS.map(item => (
               <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
             ))}

@@ -1,6 +1,6 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useMemo, useRef} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {FlatList} from 'react-native';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
@@ -13,11 +13,13 @@ import {ActivityLevelListItem, ACTIVITY_LEVELS} from '../onboarding/ActivityLeve
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import LoadingModal from '../../components/LoadingModal';
 
+type BottomSheetType = 'fitnessGoal' | 'activityLevel' | undefined;
 type FitnessSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigationProp}> = ({navigation}) => {
   const {fitnessGoal, setFitnessGoal, activityLevel, setActivityLevel, ...onboardingState} = useOnBoardingStore(state => state);
   const snapPointLow = useMemo(() => ['42%'], []);
   const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();
+  const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
 
   function saveSettings() {
     storeUFDAsync({
@@ -29,25 +31,19 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
       gender: onboardingState.gender,
       allergies: onboardingState.allergies,
     }).finally(() => {
-      closeAllBottomSheets();
+      bottomSheetRef.current?.close();
     });
   }
 
-  const bottomSheetRefs = {
-    fitnessGoal: useRef<BottomSheet>(null),
-    activityLevel: useRef<BottomSheet>(null),
-  };
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
-  function closeAllBsExcept(key: keyof typeof bottomSheetRefs) {
-    Object.entries(bottomSheetRefs).forEach(([k, v]) => {
-      k !== key ? v.current?.close() : undefined;
-    });
-  }
-
-  function closeAllBottomSheets() {
-    Object.values(bottomSheetRefs).forEach(v => {
-      v.current?.close();
-    });
+  function openBottomSheetFor(type: BottomSheetType) {
+    if (type === undefined) {
+      bottomSheetRef.current?.close();
+    } else {
+      setBottomSheetType(type);
+      bottomSheetRef.current?.expand();
+    }
   }
 
   return (
@@ -59,42 +55,48 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
         rightComponent={<SaveButton onPress={saveSettings} />}
       />
       <ProfileSettingsItem
-        onPress={() => {
-          bottomSheetRefs.fitnessGoal.current?.expand();
-          closeAllBsExcept('fitnessGoal');
-        }}
         label="Objectif fitness"
         value={fitnessGoal}
+        onPress={() => {
+          openBottomSheetFor('fitnessGoal');
+        }}
       />
       <ProfileSettingsItem
-        onPress={() => {
-          bottomSheetRefs.activityLevel.current?.expand();
-          closeAllBsExcept('activityLevel');
-        }}
         label="Niveau d'activité"
         value={activityLevel}
+        onPress={() => {
+          openBottomSheetFor('activityLevel');
+        }}
       />
-      <BottomSheet ref={bottomSheetRefs.fitnessGoal} index={-1} snapPoints={snapPointLow}>
-        <Box p={'m'}>
-          <Text variant={'subtitle2'}>Objectif Fitness</Text>
-          <FlatList
-            data={FITNESS_GOALS}
-            renderItem={({item}) => <FitnessGoalListItem {...item} selectedItem={fitnessGoal} setSelectedItem={setFitnessGoal} />}
-            keyExtractor={item => item.id}
-          />
-        </Box>
-      </BottomSheet>
-      <BottomSheet ref={bottomSheetRefs.activityLevel} index={-1} snapPoints={snapPointLow}>
-        <Box p={'m'}>
-          <Text variant={'subtitle2'}>Votre niveau d'activité</Text>
-          <FlatList
-            data={ACTIVITY_LEVELS}
-            renderItem={({item}) => (
-              <ActivityLevelListItem {...item} selectedItem={activityLevel} setSelectedItem={setActivityLevel} />
-            )}
-            keyExtractor={item => item.id}
-          />
-        </Box>
+      <BottomSheet ref={bottomSheetRef} index={-1} snapPoints={snapPointLow} enablePanDownToClose={true}>
+        {bottomSheetType === 'fitnessGoal' && (
+          <Box px={'m'}>
+            <Text mb={'s'} variant={'subtitle2'}>
+              Objectif Fitness
+            </Text>
+            <FlatList
+              data={FITNESS_GOALS}
+              renderItem={({item}) => (
+                <FitnessGoalListItem {...item} selectedItem={fitnessGoal} setSelectedItem={setFitnessGoal} />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </Box>
+        )}
+        {bottomSheetType === 'activityLevel' && (
+          <Box px={'m'}>
+            <Text mb={'s'} variant={'subtitle2'}>
+              Votre niveau d'activité
+            </Text>
+            <FlatList
+              data={ACTIVITY_LEVELS}
+              renderItem={({item}) => (
+                <ActivityLevelListItem {...item} selectedItem={activityLevel} setSelectedItem={setActivityLevel} />
+              )}
+              keyExtractor={item => item.id}
+            />
+          </Box>
+        )}
       </BottomSheet>
     </Box>
   );

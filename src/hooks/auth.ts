@@ -4,6 +4,10 @@ import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
+GoogleSignin.configure({
+  webClientId: '1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com',
+});
+
 type SignupFormData = {
   email: string;
   password: string;

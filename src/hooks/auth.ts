@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 type SignupFormData = {
   email: string;
@@ -85,18 +86,34 @@ export const useSignin = () => {
   return {form, onSubmit, mutation};
 };
 
-export const useSignUpWithGoogle = () => {
-  const signUpWithGoogle = () => {
-    return signInWithPopup(auth, new GoogleAuthProvider());
-  };
-  const {isLoading, isError, error, mutate} = useMutation<UserCredential, FirebaseError>(signUpWithGoogle, {
-    onSuccess: (userCredentials: UserCredential) => {
-      console.log('google user cred', userCredentials?.user);
-    },
-    onError: (fbError: FirebaseError) => {
-      console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
-    },
-  });
+export const signInWithGoogle = async () => {
+  try {
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
 
-  return {signupUsingGoogle: mutate, isLoading, isError, error};
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  } catch (error) {
+    console.log('sign in with google', error);
+  }
 };
+
+// export const useSignInWithGoogle = () => {
+//   const {isLoading, isError, error, mutate} = useMutation<
+//     FirebaseAuthTypes.UserCredential,
+//     FirebaseAuthTypes.NativeFirebaseAuthError
+//   >(signInWithGoogle, {
+//     onSuccess: (userCredentials: FirebaseAuthTypes.UserCredential) => {
+//       console.log('google user cred', userCredentials?.user);
+//     },
+//     onError: (fbError: FirebaseAuthTypes.NativeFirebaseAuthError) => {
+//       console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
+//     },
+//   });
+//
+//   return {signInWithGoogle: mutate, isLoading, isError, error};
+// };

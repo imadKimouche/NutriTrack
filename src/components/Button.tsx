@@ -23,7 +23,6 @@ type ButtonProps = {label: string; icon?: string; svgIcon?: React.FC<SvgProps>; 
 
 const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & ButtonProps) => {
   const SvgIcon = svgIcon;
-  const {spacing} = useTheme<Theme>();
 
   return (
     <ButtonBase
@@ -37,8 +36,14 @@ const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & B
       disabled={loading}
       {...rest}>
       <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-        {SvgIcon !== undefined && <SvgIcon height={32} width={18} style={{marginHorizontal: spacing.xs}} />}
-        {loading ? <Loader color={'$buttonLoaderPrimary'} /> : <ButtonTextBase variant={variant}>{label}</ButtonTextBase>}
+        <Box alignItems={'center'}>{SvgIcon !== undefined && <SvgIcon height={28} width={28} />}</Box>
+        <Box flex={1} alignItems={'center'}>
+          {loading ? (
+            <Loader color={variant === 'primary' ? 'white' : '$primary'} />
+          ) : (
+            <ButtonTextBase variant={variant}>{label}</ButtonTextBase>
+          )}
+        </Box>
       </Box>
       {icon !== undefined && <Icon name={icon} color={'$background'} size={18} />}
     </ButtonBase>

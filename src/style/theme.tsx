@@ -113,10 +113,11 @@ const theme = createTheme({
   textButtonVariants: {
     defaults: {
       backgroundColor: '$primary',
+      fontWeight: 500,
+      fontSize: 16,
     },
     primary: {
       color: '$buttonTextPrimary',
-      fontSize: 16,
     },
     outlined: {
       backgroundColor: '$background',

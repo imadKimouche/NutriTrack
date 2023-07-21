@@ -1,24 +1,16 @@
 import React from 'react';
-import {BoxProps, ResponsiveValue, useTheme} from '@shopify/restyle';
+import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, ActivityIndicatorProps} from 'react-native';
 
 type LoaderProps = {
   color?: keyof Theme['colors'];
-  variant?: ResponsiveValue<
-    'primary' | 'outlined',
-    {
-      phone: number;
-      tablet: number;
-    }
-  >;
-} & BoxProps<Theme>;
+} & ActivityIndicatorProps;
 
 const Loader: React.FC<LoaderProps> = ({color, ...rest}) => {
-  const theme = useTheme<Theme>();
-  // let v = useResponsiveProp(variant) || 'primary';
+  const {colors} = useTheme<Theme>();
 
-  return <ActivityIndicator {...(color ? {color: theme.colors[color]} : {})} {...rest} />;
+  return <ActivityIndicator color={color ? colors[color] : undefined} {...rest} />;
 };
 
 export default Loader;

@@ -95,8 +95,8 @@ export const MainNavigator = () => {
             <Stack.Screen name="Landing" component={Landing} />
           ) : (
             <>
-              <Stack.Screen name="SignUp" component={SignUpScreen} />
               <Stack.Screen name="SignIn" component={SignInScreen} />
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
               <Stack.Screen name="ResetPassword" component={ResetPassword} />
             </>
           )}

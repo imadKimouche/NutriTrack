@@ -91,33 +91,17 @@ export const useSignin = () => {
 };
 
 export const signInWithGoogle = async () => {
-  try {
-    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  } catch (error) {
-    console.log('sign in with google', error);
-  }
+  await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+  const {idToken} = await GoogleSignin.signIn();
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  return auth().signInWithCredential(googleCredential);
 };
 
-// export const useSignInWithGoogle = () => {
-//   const {isLoading, isError, error, mutate} = useMutation<
-//     FirebaseAuthTypes.UserCredential,
-//     FirebaseAuthTypes.NativeFirebaseAuthError
-//   >(signInWithGoogle, {
-//     onSuccess: (userCredentials: FirebaseAuthTypes.UserCredential) => {
-//       console.log('google user cred', userCredentials?.user);
-//     },
-//     onError: (fbError: FirebaseAuthTypes.NativeFirebaseAuthError) => {
-//       console.log('useSignUpWithGoogle(): ', fbError.code, fbError.message);
-//     },
-//   });
-//
-//   return {signInWithGoogle: mutate, isLoading, isError, error};
-// };
+export const useSignInWithGoogle = () => {
+  const {isLoading, isError, error, mutate} = useMutation<
+    FirebaseAuthTypes.UserCredential,
+    FirebaseAuthTypes.NativeFirebaseAuthError
+  >(signInWithGoogle);
+
+  return {signInWithGoogle: mutate, isLoading, isError, error};
+};

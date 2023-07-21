@@ -6,7 +6,7 @@ import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
-import {signInWithGoogle, useSignin} from '../hooks/auth';
+import {useSignin, useSignInWithGoogle} from '../hooks/auth';
 import Button from '../components/Button';
 import {TouchableOpacity} from '../atoms/Touchable';
 import {useNavigation} from '@react-navigation/native';
@@ -27,6 +27,7 @@ export const SignInScreen = () => {
   const {control} = form;
   const {spacing} = useTheme<Theme>();
   const {keyboardVisible} = useKeyboardIsVisible();
+  const {signInWithGoogle, isLoading: signInGoogleLoading} = useSignInWithGoogle();
 
   const goToSignupSceen = () => {
     navigation.navigate('SignUp');
@@ -112,7 +113,13 @@ export const SignInScreen = () => {
       <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
         <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
         <Box mt={'s'}>
-          <Button variant={'outlined'} svgIcon={GoogleIcon} label="Se connecter avec Google" onPress={signInWithGoogle} />
+          <Button
+            variant={'outlined'}
+            svgIcon={GoogleIcon}
+            label="Se connecter avec Google"
+            onPress={() => signInWithGoogle()}
+            loading={signInGoogleLoading}
+          />
           <Button my={'s'} variant={'outlined'} svgIcon={AppleIcon} label="Se connecter avec Apple" onPress={onSubmit} />
         </Box>
       </Box>

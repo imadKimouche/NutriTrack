@@ -106,6 +106,14 @@ interface MealItemProps extends Meal {
 }
 
 const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
+  const bmr = 1600;
+  const carbPercentage = 40;
+  const proteinPercentage = 30;
+  const fatPercentage = 30;
+
+  const macroNutrients = calculateMacronutrients(bmr, carbPercentage, proteinPercentage, fatPercentage);
+  console.log(macroNutrients);
+
   return (
     <Pressable
       onLongPress={() => {
@@ -279,3 +287,6 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
 };
 
 export default HomeScreen;
+function calculateMacronutrients(bmr: number, carbPercentage: number, proteinPercentage: number, fatPercentage: number) {
+  throw new Error('Function not implemented.');
+}

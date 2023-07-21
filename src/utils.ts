@@ -82,3 +82,17 @@ export function extractInitials(email?: string | null) {
   const initials = nameParts.map(part => part.charAt(0).toUpperCase());
   return initials.join('');
 }
+
+export function calculateMacronutrients(tdee: number, carbPercentage: number, proteinPercentage: number, fatPercentage: number) {
+  const totalCalories = tdee;
+  const carbCalories = (totalCalories * carbPercentage) / 100;
+  const proteinCalories = (totalCalories * proteinPercentage) / 100;
+  const fatCalories = (totalCalories * fatPercentage) / 100;
+
+  // Convert calorie values to gram values (1g of carbs/proteins = 4 calories, 1g of fat = 9 calories)
+  const carbs = carbCalories / 4;
+  const protein = proteinCalories / 4;
+  const fat = fatCalories / 9;
+
+  return {carbs, protein, fat};
+}

@@ -111,7 +111,13 @@ export const SignInScreen = () => {
         )}
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button variant={'primary'} label="Se connecter" onPress={onSubmit} loading={submitMutation.isLoading} />
+        <Button
+          variant={'primary'}
+          label="Se connecter"
+          onPress={onSubmit}
+          loading={submitMutation.isLoading}
+          disabled={signInGoogleLoading}
+        />
         <Box mt={'s'}>
           <Button
             variant={'outlined'}
@@ -119,6 +125,7 @@ export const SignInScreen = () => {
             label="Se connecter avec Google"
             onPress={() => signInWithGoogle()}
             loading={signInGoogleLoading}
+            disabled={submitMutation.isLoading}
           />
           <Button my={'s'} variant={'outlined'} svgIcon={AppleIcon} label="Se connecter avec Apple" onPress={onSubmit} />
         </Box>

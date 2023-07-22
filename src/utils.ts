@@ -1,14 +1,15 @@
 import {Gender} from './store/onboarding';
 
 export function dateToString(date: Date): string {
+  const dayInWeek = date.toLocaleDateString('default', {weekday: 'short'}).split('.')[0];
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${dayInWeek}-${day}-${month}-${year}`;
 }
 
 export function convertDateStringToDate(dateString: string): Date | null {
-  const [day, month, year] = dateString.split('-').map(Number);
+  const [_, day, month, year] = dateString.split('-').map(Number);
 
   if (isNaN(day) || isNaN(month) || isNaN(year)) {
     return null;

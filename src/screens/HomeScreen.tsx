@@ -48,22 +48,31 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
   return (
     <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} py={'m'}>
       {dates.map(date => {
-        const isSelected = currentDate === date;
+        console.log('date', date);
+
+        const selected = currentDate === date;
+        const dateSplit = date.split('-');
+        const dayInWeek = dateSplit[0];
+        const day = dateSplit[1];
 
         return (
           <Pressable
             key={date}
             onPress={() => onPress(date)}
-            width={42}
-            height={42}
+            width={58}
+            height={78}
             alignItems={'center'}
-            justifyContent={'center'}
-            bg={isSelected ? '$primary' : '$background'}
-            borderRadius={'xs'}
-            borderColor={'black'}
-            borderStyle={'solid'}
-            borderWidth={isSelected ? 0 : 1}>
-            <Text color={isSelected ? 'white' : 'black'}>{date.split('-')[0]}</Text>
+            justifyContent={'space-evenly'}
+            bg={selected ? '$primary' : '$background'}
+            borderRadius={'sm'}
+            borderColor={selected ? undefined : '$textInputBorderColor'}
+            borderWidth={selected ? 0 : 1}>
+            <Text color={selected ? 'white' : 'black'} variant={'body2'}>
+              {dayInWeek}
+            </Text>
+            <Text color={selected ? 'white' : 'black'} variant={'subtitle1'}>
+              {day}
+            </Text>
           </Pressable>
         );
       })}

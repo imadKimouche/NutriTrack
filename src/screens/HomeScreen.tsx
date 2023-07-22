@@ -13,7 +13,7 @@ import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
-import {calculateMacronutrients, extractInitials, getSurroundingDates} from '../utils';
+import {extractInitials, getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
@@ -48,8 +48,6 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
   return (
     <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} py={'m'}>
       {dates.map(date => {
-        console.log('date', date);
-
         const selected = currentDate === date;
         const dateSplit = date.split('-');
         const dayInWeek = dateSplit[0];

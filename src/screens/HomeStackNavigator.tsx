@@ -57,23 +57,21 @@ const HomeTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {backgroundColor: colors.$tabBarBackground, height: 93},
+        tabBarShowLabel: false,
       }}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Suivi journalier',
           tabBarActiveTintColor: colors.$primary,
           tabBarInactiveTintColor: colors.$tabBarInactiveTint,
-          tabBarIcon: props => <BottomTabIcon name="home" {...props} />,
+          tabBarIcon: props => <BottomTabIcon name="calendar" {...props} />,
         }}
       />
       <Tab.Screen
         name="Recipes"
         component={RecipesScreen}
         options={{
-          title: 'Recettes',
           tabBarActiveTintColor: colors.$primary,
           tabBarInactiveTintColor: colors.$tabBarInactiveTint,
           tabBarIcon: props => <BottomTabIcon name="book" {...props} />,

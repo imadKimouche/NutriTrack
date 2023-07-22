@@ -13,7 +13,7 @@ import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
-import {extractInitials, getSurroundingDates} from '../utils';
+import {calculateMacronutrients, extractInitials, getSurroundingDates} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
@@ -42,15 +42,11 @@ const ProfileSettingsIcon: React.FC<{email?: string | null; onPress: () => void}
   );
 };
 
-const MAX_PROT = 120;
-const MAX_FAT = 30;
-const MAX_CARBS = 100;
-
 const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void}> = ({currentDate, onPress}) => {
   const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
 
   return (
-    <Box flexDirection={'row'} justifyContent={'space-around'} width={'100%'} px={'l'} py={'l'}>
+    <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} py={'m'}>
       {dates.map(date => {
         const isSelected = currentDate === date;
 
@@ -75,68 +71,29 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
   );
 };
 
-const MacroItem: React.FC<{
-  value: number;
-  maxValue: number;
-  unit: string;
-  label: string;
-  color: keyof Theme['colors'];
-}> = ({value, maxValue, unit, label, color}) => {
-  const fillRatio = value <= maxValue ? value / maxValue : 1;
-
-  return (
-    <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-      <Box bg={'$progressBarBackground'} mr={'s'} height={30} width={8} borderRadius={'sm'} flexDirection={'column-reverse'}>
-        <Box bg={color} mr={'s'} height={fillRatio * 30} width={8} borderBottomLeftRadius={'sm'} borderBottomRightRadius={'sm'} />
-      </Box>
-      <Box>
-        <Text variant={'body2'} color={'$labelOff'}>
-          {label}
-        </Text>
-        <Text variant={'caption'}>
-          {value.toString()} {unit}
-        </Text>
-      </Box>
-    </Box>
-  );
-};
-
 interface MealItemProps extends Meal {
   onLongPress: (id: number) => void;
 }
 
 const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
-  const bmr = 1600;
-  const carbPercentage = 40;
-  const proteinPercentage = 30;
-  const fatPercentage = 30;
-
-  const macroNutrients = calculateMacronutrients(bmr, carbPercentage, proteinPercentage, fatPercentage);
-  console.log(macroNutrients);
-
   return (
     <Pressable
       onLongPress={() => {
         onLongPress(meal.id);
       }}
       bg={'$background'}
-      p={'s'}
+      py={'m'}
       mb={'xs'}
-      borderStyle={'solid'}
-      borderRadius={'xs'}>
+      borderBottomWidth={1}
+      borderColor={'$textInputBorderColor'}>
       <Box flex={1} flexDirection={'row'} alignItems={'center'}>
         <Image />
-        <Box pb={'s'}>
+        <Box>
           <Text variant={'subtitle1'}>{meal.name}</Text>
-          <Text variant={'caption'} color={'$labelOff'}>
-            {meal.calories}kcal - 100G
+          <Text variant={'body2'} color={'$labelOff'}>
+            {meal.calories} kcal
           </Text>
         </Box>
-      </Box>
-      <Box flex={1} flexDirection={'row'} justifyContent={'space-around'} alignItems={'center'}>
-        <MacroItem value={meal.proteins} maxValue={MAX_PROT} unit="g" label="Protein" color="$proteinBar" />
-        <MacroItem value={meal.carbs} maxValue={MAX_CARBS} unit="g" label="Carbs" color="$carbsBar" />
-        <MacroItem value={meal.fat} maxValue={MAX_FAT} unit="g" label="Fat" color="$fatBar" />
       </Box>
     </Pressable>
   );
@@ -151,10 +108,8 @@ const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => 
       justifyContent={'center'}
       style={{borderRadius: 12}}
       m={'xs'}
-      bg={selected ? '$background' : undefined}>
-      <Text variant={'caption'} fontSize={12}>
-        {label}
-      </Text>
+      bg={selected ? '$background1' : undefined}>
+      <Text variant={selected ? 'subtitle2' : 'body2'}>{label}</Text>
     </Pressable>
   );
 };
@@ -172,7 +127,7 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
       width={'80%'}
       height={32}
       justifyContent={'space-between'}
-      my={'xs'}>
+      my={'s'}>
       <MealTypeItem label="Petit déj" selected={currentMealType === 'breakfast'} onPress={() => onMealTypePress('breakfast')} />
       <MealTypeItem label="Déjeuner" selected={currentMealType === 'lunch'} onPress={() => onMealTypePress('lunch')} />
       <MealTypeItem label="Diner" selected={currentMealType === 'dinner'} onPress={() => onMealTypePress('dinner')} />
@@ -186,8 +141,8 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
   const normalizedMaxCalories = Math.ceil(maxCalories);
 
   return (
-    <Box width={'80%'} py={'s'}>
-      <Text variant={'subtitle2'}>Progression du jour</Text>
+    <Box alignSelf={'stretch'} py={'m'} px={'l'}>
+      <Text variant={'subtitle1'}>Progression du jour</Text>
       <Box bg={'$dateSelectorBackground'} my={'s'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box
           bg={'$primary'}
@@ -200,7 +155,7 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
         />
       </Box>
       <Box alignItems={'flex-end'}>
-        <Text variant={'caption'}>
+        <Text variant={'subtitle2'}>
           {currentCalories} kcal / {normalizedMaxCalories} kcal
         </Text>
       </Box>
@@ -287,6 +242,3 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
 };
 
 export default HomeScreen;
-function calculateMacronutrients(bmr: number, carbPercentage: number, proteinPercentage: number, fatPercentage: number) {
-  throw new Error('Function not implemented.');
-}

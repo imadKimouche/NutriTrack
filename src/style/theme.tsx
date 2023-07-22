@@ -42,6 +42,7 @@ const theme = createTheme({
     $primary: p.orange,
     $seconday: p.green,
     $background: p.white8P,
+    $background1: p.white52P,
     $slideTabBackground: p.black100,
     $foreground: p.black,
     $textInputBackground: p.white,

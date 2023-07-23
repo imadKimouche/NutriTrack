@@ -1,5 +1,5 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FlatList, Image} from 'react-native';
 import Box from '../atoms/Box';
@@ -12,9 +12,6 @@ import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 import BaseHeader, {GoBackButton} from '../components/Header';
-import BottomSheet from '@gorhom/bottom-sheet';
-import LoadingModal from '../components/LoadingModal';
-import {Camera, CameraType} from 'react-native-camera-kit';
 
 const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -128,7 +125,7 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
       />
       <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
         <Box p={'s'}>
-          <Searchbar onSubmitEditing={setSearchMeal} />
+          <Searchbar onSubmitEditing={setSearchMeal} placeholder={'Riz, lentilles ...'} />
         </Box>
         <SearchList searchValue={searchMeal} navigation={navigation} />
         <Box flex={1} m={'s'}>

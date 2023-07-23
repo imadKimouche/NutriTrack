@@ -1,16 +1,16 @@
 import {useTheme} from '@shopify/restyle';
 import React, {useState} from 'react';
 import Box from '../atoms/Box';
-import Input from '../atoms/Input';
+import Input, {InputProps} from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
 import {Theme} from '../style/theme';
 import Icon from './Icon';
 
 type Props = {
-  onSubmitEditing: (value: string) => void;
-};
+  onSubmitEditing?: (value: string) => void;
+} & Omit<InputProps, 'onSubmitEditing'>;
 
-const Searchbar: React.FC<Props> = ({onSubmitEditing}) => {
+const Searchbar: React.FC<Props> = ({onSubmitEditing, ...rest}) => {
   const [searchValue, setSearchValue] = useState('');
   const {colors} = useTheme<Theme>();
 
@@ -21,18 +21,20 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing}) => {
       </Box>
       <Box flex={1} mx={'s'}>
         <Input
-          placeholder={'Riz, lentilles ...'}
           placeholderTextColor={colors.$searchbarPlaceholder}
           value={searchValue}
           onChangeText={value => setSearchValue(value)}
-          onSubmitEditing={e => onSubmitEditing(e.nativeEvent.text)}
+          onSubmitEditing={e => {
+            onSubmitEditing && onSubmitEditing(e.nativeEvent.text);
+          }}
           returnKeyType={'search'}
+          {...rest}
         />
       </Box>
       {searchValue.length > 0 && (
         <Pressable
           onPress={() => {
-            onSubmitEditing('');
+            onSubmitEditing && onSubmitEditing('');
             setSearchValue('');
           }}>
           <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />

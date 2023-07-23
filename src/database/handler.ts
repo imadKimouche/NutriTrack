@@ -9,35 +9,29 @@ function onDatabaseOpenError(err: SQLite.SQLError) {
 }
 
 const databaseName = 'anses_ciqual';
-SQLite.enablePromise(true);
 const db = SQLite.openDatabase({name: databaseName, createFromLocation: 1}, onDatabaseOpenSuccess, onDatabaseOpenError);
 
-export function searchIngredient(text: string) {
-  db.transaction(async (tx: SQLite.Transaction) => {
-    const [_, results] = await tx.executeSql(
-      `
+export function searchIngredient(text: string): Promise<SQLite.ResultSet> {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        `
 		SELECT
-		  a.alim_code,
-		  a.nom_fr AS aliment_nom_fr,
-		  c.const_code,
-		  c.nom_fr AS constituant_nom_fr,
-		  c.unit
+		  alim_code,
+		  nom_fr
 		FROM
-		  aliment a
-		LEFT JOIN
-		  composition comp ON a.alim_code = comp.alim_code
-		LEFT JOIN
-		  constituant c ON comp.const_code = c.const_code
+		  aliment
 		WHERE
-		  a.nom_fr LIKE '%' || ? || '%';
+		  nom_fr LIKE '%' || ? || '%';
 	`,
-      [text],
-    );
-
-    var len = results.rows.length;
-    for (let i = 0; i < len; i++) {
-      let row = results.rows.item(i);
-      console.log(`${row.nom_en}`);
-    }
+        [text],
+        (_, results) => {
+          resolve(results);
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
   });
 }

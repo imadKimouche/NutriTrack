@@ -21,6 +21,7 @@ const p = {
   black24P: 'rgba(102, 102, 102, 0.24)',
   black40P: 'rgba(102, 102, 102, 0.4)',
   black80P: 'rgba(102, 102, 102, 0.8)',
+  blackShadow: 'rgba(50, 50, 71, 0.08)',
   white: '#FFFFFF',
   white8P: 'rgba(255, 255, 255, 0.08)',
   white16P: 'rgba(255, 255, 255, 0.16)',
@@ -59,6 +60,9 @@ const theme = createTheme({
     $listItemDivider: p.black100,
     $iconColor: p.black900,
     $buttonTextPrimary: p.white,
+    $buttonShadow: p.blackShadow,
+    $buttonDisabledBackground: p.black100,
+    $buttonDisabledText: p.black300,
     $headerButtonBackground: p.orange400,
     $headerButtonBorder: p.black24P,
     $tabBarBackground: p.black800,
@@ -106,6 +110,13 @@ const theme = createTheme({
     defaults: {
       backgroundColor: '$primary',
       borderRadius: 'md',
+      shadowColor: '$buttonShadow',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 1,
+      shadowRadius: 8,
     },
     primary: {
       backgroundColor: '$primary',
@@ -116,11 +127,13 @@ const theme = createTheme({
       borderStyle: 'solid',
       borderWidth: 1,
     },
-    // link: {},
+    disabled: {
+      backgroundColor: '$buttonDisabledBackground',
+    },
   },
   textButtonVariants: {
     defaults: {
-      backgroundColor: '$primary',
+      color: '$buttonTextPrimary',
       fontWeight: 500,
       fontSize: 16,
     },
@@ -129,6 +142,10 @@ const theme = createTheme({
     },
     outlined: {
       backgroundColor: '$background',
+      color: '$foreground',
+    },
+    disabled: {
+      color: '$buttonDisabledText',
     },
   },
   loaderButtonVariants: {

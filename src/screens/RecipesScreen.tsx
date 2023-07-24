@@ -3,6 +3,7 @@ import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
+import Button from '../components/Button';
 import BaseHeader from '../components/Header';
 import Searchbar from '../components/Searchbar';
 import Tag from '../components/Tag';
@@ -74,24 +75,33 @@ const RecipesScreen = () => {
     <Box bg={'$background'} flex={1} alignItems={'center'}>
       <BaseHeader title="Recettes" />
       <Box px={'s'}>
-        <Searchbar onSubmitEditing={setIngredient} placeholder="Miel, ail, citron..." />
+        <Searchbar onSubmitEditing={setIngredient} placeholder="Miel, Poulet, Citron..." />
       </Box>
       <SearchList searchValue={ingredient} />
       <Box flex={1} my={'m'} px={'s'} alignSelf={'stretch'}>
         <Text variant={'subtitle1'}>Vos ingrédients</Text>
-        <Box p={'s'} flexDirection={'row'} flexWrap={'wrap'} gap={'s'}>
-          {addedIngredients.map(ing => {
-            return (
+        <Box p={'s'} flex={1}>
+          <FlatList
+            numColumns={2}
+            data={addedIngredients}
+            renderItem={({item}) => (
               <Tag
-                label={ing.name.length > 16 ? ing.name.slice(0, 16) + '...' : ing.name}
+                label={item.name.length > 16 ? item.name.slice(0, 16) + '...' : item.name}
                 rightIcon={'x-circle'}
                 type="outlined"
-                onRightIconPress={() => removeIngredient(ing)}
+                onRightIconPress={() => removeIngredient(item)}
               />
-            );
-          })}
+            )}
+            keyExtractor={item => `${item.code}-${item.name}`}
+          />
         </Box>
       </Box>
+      <Button
+        label="J'ai faim 🍜"
+        variant={addedIngredients.length ? 'primary' : 'disabled'}
+        disabled={addedIngredients.length === 0}
+        my={'m'}
+      />
     </Box>
   );
 };

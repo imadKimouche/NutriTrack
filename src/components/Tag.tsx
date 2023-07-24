@@ -29,6 +29,7 @@ const Tag: React.FC<TagProps> = ({
       borderWidth={type === 'normal' ? undefined : 1}
       borderColor={'$tagBorderOutline'}
       p={'s'}
+      m={'xs'}
       flexDirection={'row'}
       alignItems={'center'}
       bg={type === 'normal' ? '$tagBackgroundNormal' : '$tagBackgroundOutlined'}>

@@ -37,15 +37,15 @@ const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & B
       {...rest}>
       <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
         <Box alignItems={'center'}>{SvgIcon !== undefined && <SvgIcon height={28} width={28} />}</Box>
-        <Box flex={1} alignItems={'center'}>
+        <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
           {loading ? (
             <Loader color={variant === 'primary' ? 'white' : '$primary'} />
           ) : (
             <ButtonTextBase variant={variant}>{label}</ButtonTextBase>
           )}
+          {icon !== undefined && <Icon name={icon} color={'white'} size={18} marginLeft={'s'} />}
         </Box>
       </Box>
-      {icon !== undefined && <Icon name={icon} color={'$background'} size={18} />}
     </ButtonBase>
   );
 };

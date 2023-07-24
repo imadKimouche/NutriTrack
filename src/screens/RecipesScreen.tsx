@@ -9,6 +9,7 @@ import Searchbar from '../components/Searchbar';
 import Tag from '../components/Tag';
 import {Ingredient, useSearchIngredient} from '../hooks/meal';
 import {useSearchMealStore} from '../store/ingredients';
+import {HomeTabNavigationProps} from './HomeStackNavigator';
 import {SearchError, SearchLoader} from './SearchMealScreen';
 
 type IngredientListItemProps = {
@@ -64,7 +65,7 @@ const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
   return <></>;
 };
 
-const RecipesScreen = () => {
+const RecipesScreen: React.FC<{navigation: HomeTabNavigationProps<'Recipes'>}> = ({navigation}) => {
   const [ingredient, setIngredient] = useState<string | undefined>(undefined);
   const {addedIngredients, removeIngredient} = useSearchMealStore(state => ({
     addedIngredients: state.addedIngredients,

@@ -1,7 +1,7 @@
 /* eslint react/no-unstable-nested-components: 0 */ // --> OFF
 //https://github.com/react-navigation/react-navigation/issues/11371
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {BottomTabNavigationProp, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from '../components/Icon';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
@@ -15,6 +15,9 @@ import AddMealScreen from './AddMealScreen';
 import ProfileSettingsScreen from './settings/ProfileSettingsScreen';
 import FitnessSettingsScreen from './settings/FitnessSettingsScreen';
 import BarCodeScannerScreen from './BarCodeScannerScreen';
+import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {RootStackParamList} from '../navigation/MainNavigator';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
@@ -49,6 +52,18 @@ const HomeStackNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+export type HomeTabParamList = {
+  Home: undefined;
+  Recipes: undefined;
+};
+
+export type HomeTabNavigationProps<T extends keyof HomeTabParamList> = CompositeNavigationProp<
+  BottomTabNavigationProp<HomeTabParamList, T>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+export type HomeTabRouteProps<T extends keyof HomeTabParamList> = RouteProp<HomeTabParamList, T>;
 
 const HomeTabNavigator = () => {
   const {colors} = useTheme<Theme>();

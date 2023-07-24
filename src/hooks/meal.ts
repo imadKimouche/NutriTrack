@@ -272,6 +272,13 @@ function parseRawIngredients(raw: ResultSet | undefined): Ingredient[] {
   if (!raw) {
     return [];
   }
+  const parsedData = [];
+  const len = raw.rows.length;
+  for (let i = 0; i < len; i++) {
+    let row = raw.rows.item(i);
+    parsedData.push({code: row.alim_code, name: row.nom_fr});
+  }
+  return parsedData;
 }
 
 export function useSearchIngredient(text: string) {
@@ -281,5 +288,5 @@ export function useSearchIngredient(text: string) {
     refetch();
   }, [text, refetch]);
 
-  return {data, isLoading, error, isError};
+  return {data: parseRawIngredients(data), isLoading, error, isError};
 }

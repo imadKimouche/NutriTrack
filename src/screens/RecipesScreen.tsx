@@ -15,12 +15,7 @@ const RecipesScreen = () => {
       <Box p={'s'}>
         <Searchbar onSubmitEditing={setIngredient} placeholder="Miel, ail, citron..." />
       </Box>
-      <Box>
-        {data &&
-          data.rows.raw().map(result => {
-            return <Text>{result.nom_fr}</Text>;
-          })}
-      </Box>
+      <Box>{data && data.map(ingr => <Text>{ingr.name}</Text>)}</Box>
     </Box>
   );
 };

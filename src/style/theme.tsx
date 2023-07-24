@@ -2,7 +2,9 @@ import {createTheme} from '@shopify/restyle';
 
 const p = {
   orange: '#DE6B48',
+  orange300: '#DEAB9B',
   orange400: '#DE9A85',
+  orange700: '#DE6743',
   orange8P: 'rgba(222, 107, 72, 0.08)',
   orange16P: 'rgba(222, 107, 72, 0.16)',
   green: '#18F0B7',
@@ -76,6 +78,11 @@ const theme = createTheme({
     $searchbarShadow: p.orange8P,
     $modalShadowDrop: p.white,
     $statusBarBackground: p.white,
+    $tagBackgroundNormal: p.orange300,
+    $tagBackgroundOutlined: p.white,
+    $tagTextNormal: p.orange700,
+    $tagTextOutlined: p.orange700,
+    $tagBorderOutline: p.orange300,
   },
   borderRadii: {
     xs: 4,

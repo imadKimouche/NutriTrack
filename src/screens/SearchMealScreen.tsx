@@ -43,15 +43,15 @@ const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
   );
 };
 
-const SearchError: React.FC = () => {
+export const SearchError: React.FC = () => {
   return (
     <Box>
-      <Text variant={'caption'}>Oups, je rencontre un problème</Text>
+      <Text variant={'caption'}>Oups, je rencontre un problème 😬</Text>
     </Box>
   );
 };
 
-const SearchLoader: React.FC = () => {
+export const SearchLoader: React.FC = () => {
   return (
     <Box my={'s'}>
       <Loader color="$primary" />

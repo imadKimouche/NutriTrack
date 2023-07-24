@@ -11,10 +11,10 @@ function onDatabaseOpenError(err: SQLite.SQLError) {
 const databaseName = 'anses_ciqual';
 const db = SQLite.openDatabase({name: databaseName, createFromLocation: 1}, onDatabaseOpenSuccess, onDatabaseOpenError);
 
-export function searchIngredient(text: string): Promise<SQLite.ResultSet> {
+export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> {
   return new Promise((resolve, reject) => {
-    if (text.trim().length === 0) {
-      return;
+    if (text === undefined || text.trim().length === 0) {
+      resolve([]);
     }
     db.transaction((tx: SQLite.Transaction) => {
       tx.executeSql(

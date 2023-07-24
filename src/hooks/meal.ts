@@ -268,8 +268,8 @@ export type Ingredient = {
   name: string;
 };
 
-function parseRawIngredients(raw: ResultSet | undefined): Ingredient[] {
-  if (!raw) {
+function parseRawIngredients(raw: ResultSet | [] | undefined): Ingredient[] {
+  if (!raw || Array.isArray(raw)) {
     return [];
   }
   const parsedData = [];
@@ -281,8 +281,10 @@ function parseRawIngredients(raw: ResultSet | undefined): Ingredient[] {
   return parsedData;
 }
 
-export function useSearchIngredient(text: string) {
-  const {data, isLoading, error, isError, refetch} = useQuery(['searchIngredient', text], () => searchIngredient(text));
+export function useSearchIngredient(text?: string) {
+  const {data, isLoading, error, isError, refetch} = useQuery(['searchIngredient', text], () => searchIngredient(text), {
+    enabled: false,
+  });
 
   useEffect(() => {
     refetch();

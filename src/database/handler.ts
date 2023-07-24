@@ -13,6 +13,9 @@ const db = SQLite.openDatabase({name: databaseName, createFromLocation: 1}, onDa
 
 export function searchIngredient(text: string): Promise<SQLite.ResultSet> {
   return new Promise((resolve, reject) => {
+    if (text.trim().length === 0) {
+      return;
+    }
     db.transaction((tx: SQLite.Transaction) => {
       tx.executeSql(
         `

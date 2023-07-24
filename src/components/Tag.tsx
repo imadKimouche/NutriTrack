@@ -37,7 +37,11 @@ const Tag: React.FC<TagProps> = ({
           <Icon name={leftIcon} color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'} size={16} />
         </Pressable>
       )}
-      <Text variant={'body2'} color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'}>
+      <Text
+        variant={'body2'}
+        color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'}
+        ellipsizeMode={'tail'}
+        numberOfLines={1}>
         {label}
       </Text>
       {rightIcon && (

@@ -4,7 +4,6 @@ import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import BaseHeader from '../components/Header';
-import Icon from '../components/Icon';
 import Searchbar from '../components/Searchbar';
 import Tag from '../components/Tag';
 import {Ingredient, useSearchIngredient} from '../hooks/meal';
@@ -64,22 +63,6 @@ const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
   return <></>;
 };
 
-// <Box
-//   key={ing.code}
-//   m={'xs'}
-//   p={'s'}
-//   borderRadius={'sm'}
-//   bg={'$headerButtonBackground'}
-//   flexDirection={'row'}
-//   alignItems={'center'}>
-//   <Text variant={'subtitle2'} color={'white'}>
-//     {ing.name}
-//   </Text>
-//   <Pressable ml={'s'} onPress={() => removeIngredient(ing)}>
-//     <Icon name="x-circle" color={'white'} size={16} />
-//   </Pressable>
-// </Box>
-
 const RecipesScreen = () => {
   const [ingredient, setIngredient] = useState<string | undefined>(undefined);
   const {addedIngredients, removeIngredient} = useSearchMealStore(state => ({
@@ -96,9 +79,16 @@ const RecipesScreen = () => {
       <SearchList searchValue={ingredient} />
       <Box flex={1} my={'m'} px={'s'} alignSelf={'stretch'}>
         <Text variant={'subtitle1'}>Vos ingrédients</Text>
-        <Box m={'s'} flexDirection={'row'} flexWrap={'wrap'} gap={'s'}>
+        <Box p={'s'} flexDirection={'row'} flexWrap={'wrap'} gap={'s'}>
           {addedIngredients.map(ing => {
-            return <Tag label={ing.name} rightIcon={'x-circle'} type="outlined" onRightIconPress={() => removeIngredient(ing)} />;
+            return (
+              <Tag
+                label={ing.name.length > 16 ? ing.name.slice(0, 16) + '...' : ing.name}
+                rightIcon={'x-circle'}
+                type="outlined"
+                onRightIconPress={() => removeIngredient(ing)}
+              />
+            );
           })}
         </Box>
       </Box>

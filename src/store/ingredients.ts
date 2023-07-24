@@ -14,9 +14,12 @@ export const useSearchMealStore = create<MealSearchState>()(
     set => ({
       addedIngredients: [],
       addIngredient: (ingredient: Ingredient) => {
-        set(state => ({
-          addedIngredients: [...state.addedIngredients, ingredient],
-        }));
+        set(state => {
+          if (state.addedIngredients.find(ing => ing.code === ingredient.code)) {
+            return state;
+          }
+          return {addedIngredients: [...state.addedIngredients, ingredient]};
+        });
       },
       removeIngredient: (ingredient: Ingredient) => {
         set(state => ({

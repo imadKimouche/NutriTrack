@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import {FlatList} from 'react-native';
-import Box from '../atoms/Box';
-import Pressable from '../atoms/Pressable';
-import Text from '../atoms/Text';
-import Button from '../components/Button';
-import BaseHeader from '../components/Header';
-import Searchbar from '../components/Searchbar';
-import Tag from '../components/Tag';
-import {Ingredient, useSearchIngredient} from '../hooks/meal';
-import {useSearchMealStore} from '../store/ingredients';
-import {HomeTabNavigationProps} from './HomeStackNavigator';
-import {SearchError, SearchLoader} from './SearchMealScreen';
+import Box from '../../atoms/Box';
+import Pressable from '../../atoms/Pressable';
+import Text from '../../atoms/Text';
+import Button from '../../components/Button';
+import BaseHeader from '../../components/Header';
+import Searchbar from '../../components/Searchbar';
+import Tag from '../../components/Tag';
+import {Ingredient, useSearchIngredient} from '../../hooks/meal';
+import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
+import {useSearchMealStore} from '../../store/ingredients';
+import {HomeTabNavigationProps} from '../HomeStackNavigator';
+import {SearchError, SearchLoader} from '../SearchMealScreen';
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -65,7 +66,7 @@ const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
   return <></>;
 };
 
-const RecipesScreen: React.FC<{navigation: HomeTabNavigationProps<'Recipes'>}> = ({navigation}) => {
+const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps<'ingredientSearch'>}> = ({navigation}) => {
   const [ingredient, setIngredient] = useState<string | undefined>(undefined);
   const {addedIngredients, removeIngredient} = useSearchMealStore(state => ({
     addedIngredients: state.addedIngredients,
@@ -102,9 +103,10 @@ const RecipesScreen: React.FC<{navigation: HomeTabNavigationProps<'Recipes'>}> =
         variant={addedIngredients.length ? 'primary' : 'disabled'}
         disabled={addedIngredients.length === 0}
         my={'m'}
+        onPress={() => navigation.navigate('recipesSearchResult')}
       />
     </Box>
   );
 };
 
-export default RecipesScreen;
+export default IngredientsSearchScreen;

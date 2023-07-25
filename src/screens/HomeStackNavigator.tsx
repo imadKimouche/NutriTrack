@@ -6,7 +6,6 @@ import Icon from '../components/Icon';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import HomeScreen from './HomeScreen';
-import RecipesScreen from './RecipesScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import {Meal} from '../hooks/meal';
@@ -18,6 +17,8 @@ import BarCodeScannerScreen from './BarCodeScannerScreen';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {RootStackParamList} from '../navigation/MainNavigator';
+import RecipesSearchResultsScreen from './Recipes/RecipesResultsScreen';
+import RecipesStackNavigator from '../navigation/RecipesStackNavigator';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
   return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
@@ -31,6 +32,7 @@ export type HomeStackParamList = {
   Settings: undefined;
   ProfileSettings: undefined;
   FitnessSettings: undefined;
+  RecipesSearchResult: undefined;
 };
 
 // type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -49,6 +51,7 @@ const HomeStackNavigator = () => {
       <Stack.Screen name="Settings" options={{title: 'Paramètres'}} component={SettingsScreen} />
       <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
       <Stack.Screen name="FitnessSettings" component={FitnessSettingsScreen} />
+      <Stack.Screen name="RecipesSearchResult" component={RecipesSearchResultsScreen} />
     </Stack.Navigator>
   );
 };
@@ -85,7 +88,7 @@ const HomeTabNavigator = () => {
       />
       <Tab.Screen
         name="Recipes"
-        component={RecipesScreen}
+        component={RecipesStackNavigator}
         options={{
           tabBarActiveTintColor: colors.$primary,
           tabBarInactiveTintColor: colors.$tabBarInactiveTint,

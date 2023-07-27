@@ -87,6 +87,7 @@ const theme = createTheme({
     $tagTextNormal: p.orange700,
     $tagTextOutlined: p.orange700,
     $tagBorderOutline: p.orange300,
+    $overlay: p.black16P,
   },
   borderRadii: {
     xs: 4,

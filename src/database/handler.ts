@@ -69,11 +69,6 @@ export function searchRecipe(ingredients: Ingredient[]): Promise<SQLite.ResultSe
 	`,
         [],
         (_, results) => {
-          var len = results.rows.length;
-          for (let i = 0; i < len; i++) {
-            let row = results.rows.item(i);
-            console.log(row);
-          }
           resolve(results);
         },
         err => {

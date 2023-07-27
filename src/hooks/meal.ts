@@ -3,6 +3,7 @@ import {ResultSet} from 'react-native-sqlite-storage';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
 import {searchIngredient, searchRecipe} from '../database/handler';
+import {SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
@@ -293,6 +294,26 @@ export function useSearchIngredient(text?: string) {
   return {data: parseRawIngredients(data), isLoading, error, isError};
 }
 
+function parseRawRecipes(raw: ResultSet | [] | undefined): SearchRecipe[] {
+  if (!raw || Array.isArray(raw)) {
+    return [];
+  }
+  const parsedData: SearchRecipe[] = [];
+  const len = raw.rows.length;
+  for (let i = 0; i < len; i++) {
+    let row = raw.rows.item(i);
+    parsedData.push({
+      id: row.id,
+      name: row.name,
+      photo: row.photo,
+      quantity: row.quantity,
+      time: row.time,
+      matching_ingredients_count: row.matching_ingredients_count,
+    });
+  }
+  return parsedData;
+}
+
 export function useSearchRecipe(ingredients: Ingredient[]) {
   const {data, isLoading, error, isError, refetch} = useQuery(['searchRecipe', ingredients], () => searchRecipe(ingredients), {
     enabled: false,
@@ -302,5 +323,5 @@ export function useSearchRecipe(ingredients: Ingredient[]) {
     refetch();
   }, [ingredients, refetch]);
 
-  return {data, isLoading, error, isError};
+  return {data: parseRawRecipes(data), isLoading, error, isError};
 }

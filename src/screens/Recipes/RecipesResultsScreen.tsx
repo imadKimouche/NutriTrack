@@ -6,6 +6,16 @@ import Loader from '../../components/Loader';
 import {useSearchRecipe} from '../../hooks/meal';
 import {useSearchMealStore} from '../../store/ingredients';
 
+export type Recipe = {
+  id: number;
+  name: string;
+  photo: string;
+  quantity: number;
+  time: string;
+};
+
+export type SearchRecipe = Recipe & {matching_ingredients_count: number};
+
 const RecipesSearchResultsScreen = () => {
   const {addedIngredients} = useSearchMealStore(state => ({
     addedIngredients: state.addedIngredients,

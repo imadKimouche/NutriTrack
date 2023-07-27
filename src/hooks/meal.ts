@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
-import {searchIngredient} from '../database/handler';
+import {searchIngredient, searchRecipe} from '../database/handler';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
@@ -291,4 +291,16 @@ export function useSearchIngredient(text?: string) {
   }, [text, refetch]);
 
   return {data: parseRawIngredients(data), isLoading, error, isError};
+}
+
+export function useSearchRecipe(ingredients: Ingredient[]) {
+  const {data, isLoading, error, isError, refetch} = useQuery(['searchRecipe', ingredients], () => searchRecipe(ingredients), {
+    enabled: false,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [ingredients, refetch]);
+
+  return {data, isLoading, error, isError};
 }

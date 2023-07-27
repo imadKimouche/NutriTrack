@@ -10,7 +10,6 @@ import Tag from '../../components/Tag';
 import {Ingredient, useSearchIngredient} from '../../hooks/meal';
 import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
 import {useSearchMealStore} from '../../store/ingredients';
-import {HomeTabNavigationProps} from '../HomeStackNavigator';
 import {SearchError, SearchLoader} from '../SearchMealScreen';
 
 type IngredientListItemProps = {

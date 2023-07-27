@@ -1,4 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
+import {Ingredient} from '../hooks/meal';
 
 function onDatabaseOpenSuccess() {
   console.log('database open');
@@ -33,6 +34,52 @@ export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> 
         },
         error => {
           reject(error);
+        },
+      );
+    });
+  });
+}
+
+export function searchRecipe(ingredients: Ingredient[]): Promise<SQLite.ResultSet | []> {
+  return new Promise((resolve, reject) => {
+    if (ingredients.length === 0) {
+      resolve([]);
+    }
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        `SELECT
+		r.id,
+		r.name,
+		r.photo,
+		r.quantity,
+		r.time,
+		COUNT(ri.alim_code) AS matching_ingredients_count
+	  FROM
+		m_recipe AS r
+	  INNER JOIN
+		m_recipe_ingredient AS ri ON r.id = ri.recipe_id
+	  INNER JOIN
+		aliment AS a ON ri.alim_code = a.alim_code
+	  WHERE
+		a.nom_fr IN (${ingredients.map(ingredient => `'${ingredient.name}'`).join(', ')})
+	  GROUP BY
+		r.id
+	  ORDER BY
+		matching_ingredients_count DESC;
+	`,
+        [],
+        (_, results) => {
+          var len = results.rows.length;
+          for (let i = 0; i < len; i++) {
+            let row = results.rows.item(i);
+            console.log(row);
+          }
+          resolve(results);
+        },
+        err => {
+          if (err) {
+            reject(err);
+          }
         },
       );
     });

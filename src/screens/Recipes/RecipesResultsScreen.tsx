@@ -28,17 +28,14 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
   const {addedIngredients} = useSearchMealStore(state => ({
     addedIngredients: state.addedIngredients,
   }));
-  const {data, isLoading} = useSearchRecipe(addedIngredients);
+  const {data, isLoading, fetchNextPage, isFetchingNextPage} = useSearchRecipe(addedIngredients);
   const {spacing, borderRadii} = useTheme<Theme>();
   const insets = useSafeAreaInsets();
   const bottomTabBarHeight = useBottomTabBarHeight();
 
   return (
     <Box flex={1} style={{paddingBottom: insets.bottom + bottomTabBarHeight}}>
-      <BaseHeader
-        leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
-        title={`${data.length} Recettes trouvées`}
-      />
+      <BaseHeader leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} title={'Recettes trouvées'} />
       {isLoading ? (
         <Loader />
       ) : (
@@ -46,13 +43,15 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
           <FlatList
             numColumns={2}
             data={data}
+            onEndReached={() => fetchNextPage()}
+            onEndReachedThreshold={0.2}
+            ListFooterComponent={isFetchingNextPage ? <Loader color="$primary" /> : undefined}
             renderItem={({item}) => {
               return (
                 <Box m={'m'} borderRadius={'xs'} bg={'$background1'} width={150} height={150}>
                   <ImageBackground
                     source={{uri: item.photo}}
                     defaultSource={require('../../assets/recipe_placeholder.png')}
-                    onError={err => console.log(err)}
                     style={{flex: 1, borderRadius: borderRadii.xs}}
                     imageStyle={{borderRadius: borderRadii.xs}}>
                     <LinearGradient

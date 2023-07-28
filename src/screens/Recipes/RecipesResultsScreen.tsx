@@ -51,6 +51,8 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
                 <Box m={'m'} borderRadius={'xs'} bg={'$background1'} width={150} height={150}>
                   <ImageBackground
                     source={{uri: item.photo}}
+                    defaultSource={require('../../assets/recipe_placeholder.png')}
+                    onError={err => console.log(err)}
                     style={{flex: 1, borderRadius: borderRadii.xs}}
                     imageStyle={{borderRadius: borderRadii.xs}}>
                     <LinearGradient

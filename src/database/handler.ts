@@ -71,7 +71,6 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
         query,
         [],
         (_, results) => {
-          console.log('query result', results);
           resolve(results);
         },
         (_, err) => {

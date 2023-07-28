@@ -3,11 +3,12 @@ import {createNativeStackNavigator, NativeStackNavigationProp} from '@react-navi
 import IngredientsSearchScreen from '../screens/Recipes/IngredientsSearchScreen';
 import RecipesSearchResultsScreen from '../screens/Recipes/RecipesResultsScreen';
 import {RouteProp} from '@react-navigation/native';
+import RecipeDetailsScreen from '../screens/Recipes/RecipeDetailsScreen';
 
 export type RecipesStackParamList = {
   ingredientSearch: undefined;
   recipesSearchResult: undefined;
-  recipeDetails: undefined;
+  recipeDetails: {recipe_id: number};
 };
 
 export type RecipesStackRouteProps<T extends keyof RecipesStackParamList> = RouteProp<RecipesStackParamList, T>;
@@ -23,6 +24,7 @@ const RecipesStackNavigator = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="ingredientSearch" component={IngredientsSearchScreen} />
       <Stack.Screen name="recipesSearchResult" component={RecipesSearchResultsScreen} />
+      <Stack.Screen name="recipeDetails" component={RecipeDetailsScreen} />
     </Stack.Navigator>
   );
 };

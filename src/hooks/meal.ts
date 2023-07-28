@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
-import {searchIngredient, searchRecipe} from '../database/handler';
-import {SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
+import {getRecipe, searchIngredient, searchRecipe} from '../database/handler';
+import {Recipe, SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
 import {useDashboardStore} from '../store/dashboard';
 
 export type Meal = {
@@ -346,4 +346,27 @@ export function useSearchRecipe(ingredients: Ingredient[]) {
   }, [hasNextPage, isFetchingNextPage]);
 
   return {data: parseRawRecipes(data), isLoading, isError, currentPage, fetchNextPage, hasNextPage, isFetchingNextPage};
+}
+
+export type CompleteRecipe = Recipe & {ingredients: Ingredient[]; steps: string[]};
+function parseRawRecipe(raw: ResultSet | undefined) {
+  let recipe: Recipe;
+
+  if (raw?.rows.length) {
+    recipe = {
+      id: raw.rows.item(0).id,
+      name: raw.rows.item(0).name,
+      photo: raw.rows.item(0).photo,
+      quantity: raw.rows.item(0).quantity,
+      time: raw.rows.item(0).time,
+    };
+    return recipe;
+  }
+  return undefined;
+}
+
+export function useRecipe(id: number) {
+  const {data, isLoading, isError} = useQuery(['recipe', id], () => getRecipe(id));
+
+  return {data: parseRawRecipe(data), isError, isLoading};
 }

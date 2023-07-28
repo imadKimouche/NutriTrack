@@ -82,3 +82,49 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
     });
   });
 }
+
+export function getRecipe(id: number): Promise<SQLite.ResultSet> {
+  const query = `SELECT r.name, ri.alim_nom_fr FROM m_recipe as r LEFT JOIN m_recipe_ingredient AS ri ON r.id = ri.recipe_id WHERE id = ${id}`;
+  // const query = `SELECT
+  // r.id AS recipe_id,
+  // r.name AS recipe_name,
+  // r.photo AS recipe_photo,
+  // r.quantity AS recipe_quantity,
+  // r.time AS recipe_time,
+  // ri.alim_code AS ingredient_id,
+  // ri.alim_nom_fr AS ingredient_name,
+  // ri.quantity AS ingredient_quantity,
+  // s.text AS step_text,
+  //  FROM
+  // m_recipe AS r
+  //  LEFT JOIN
+  // m_recipe_ingredient AS ri ON r.id = ri.recipe_id
+  //  LEFT JOIN
+  // m_step AS s ON r.id = s.recipe_id
+  //  WHERE
+  // r.id = ${id}`;
+
+  return new Promise((resolve, reject) => {
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        query,
+        [],
+        (_, results) => {
+          console.log(results);
+
+          var len = results.rows.length;
+          for (let i = 0; i < len; i++) {
+            let row = results.rows.item(i);
+            console.log(row);
+          }
+          resolve(results);
+        },
+        (_, err) => {
+          if (err) {
+            reject('getRecipe' + err.message);
+          }
+        },
+      );
+    });
+  });
+}

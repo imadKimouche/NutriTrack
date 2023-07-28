@@ -5,6 +5,7 @@ import {FlatList, ImageBackground} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
+import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
@@ -48,7 +49,13 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
             ListFooterComponent={isFetchingNextPage ? <Loader color="$primary" /> : undefined}
             renderItem={({item}) => {
               return (
-                <Box m={'m'} borderRadius={'xs'} bg={'$background1'} width={150} height={150}>
+                <Pressable
+                  m={'m'}
+                  borderRadius={'xs'}
+                  bg={'$background1'}
+                  width={150}
+                  height={150}
+                  onPress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})}>
                   <ImageBackground
                     source={{uri: item.photo}}
                     defaultSource={require('../../assets/recipe_placeholder.png')}
@@ -79,7 +86,7 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
                       </Box>
                     </LinearGradient>
                   </ImageBackground>
-                </Box>
+                </Pressable>
               );
             }}
             keyExtractor={item => `${item.id}-${item.name}`}

@@ -267,6 +267,8 @@ export function useDeleteDailyMeal() {
 export type Ingredient = {
   code: number;
   name: string;
+  quantity?: number;
+  unit?: string;
 };
 
 function parseRawIngredients(raw: ResultSet | [] | undefined): Ingredient[] {
@@ -349,18 +351,35 @@ export function useSearchRecipe(ingredients: Ingredient[]) {
 }
 
 export type CompleteRecipe = Recipe & {ingredients: Ingredient[]; steps: string[]};
-function parseRawRecipe(raw: ResultSet | undefined) {
-  let recipe: Recipe;
+function parseRawRecipe(raw: {recipe: ResultSet; ingredients: ResultSet; steps: ResultSet} | undefined) {
+  if (!raw) {
+    return undefined;
+  }
 
-  if (raw?.rows.length) {
-    recipe = {
-      id: raw.rows.item(0).id,
-      name: raw.rows.item(0).name,
-      photo: raw.rows.item(0).photo,
-      quantity: raw.rows.item(0).quantity,
-      time: raw.rows.item(0).time,
-    };
-    return recipe;
+  let completeRecipe: CompleteRecipe = {id: 0, name: '', photo: '', quantity: 0, time: '', ingredients: [], steps: []};
+  if (raw.recipe.rows.length) {
+    completeRecipe.id = raw.recipe.rows.item(0).id;
+    completeRecipe.name = raw.recipe.rows.item(0).name;
+    completeRecipe.photo = raw.recipe.rows.item(0).photo;
+    completeRecipe.quantity = raw.recipe.rows.item(0).quantity;
+    completeRecipe.time = raw.recipe.rows.item(0).time;
+
+    if (raw.ingredients.rows.length) {
+      var len = raw.ingredients.rows.length;
+      for (let i = 0; i < len; i++) {
+        let row = raw.ingredients.rows.item(i);
+        completeRecipe.ingredients.push({code: row.alim_code, name: row.alim_nom_fr, quantity: row.quantity, unit: row.unit});
+      }
+    }
+
+    if (raw.steps.rows.length) {
+      var len = raw.steps.rows.length;
+      for (let i = 0; i < len; i++) {
+        let row = raw.steps.rows.item(i);
+        completeRecipe.steps.push(row.text);
+      }
+    }
+    return completeRecipe;
   }
   return undefined;
 }

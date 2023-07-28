@@ -83,8 +83,13 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
   });
 }
 
-export function getRecipe(id: number): Promise<SQLite.ResultSet> {
-  const query = `SELECT r.name, ri.alim_nom_fr FROM m_recipe as r LEFT JOIN m_recipe_ingredient AS ri ON r.id = ri.recipe_id WHERE id = ${id}`;
+export function getRecipe(
+  id: number,
+): Promise<{recipe: SQLite.ResultSet; ingredients: SQLite.ResultSet; steps: SQLite.ResultSet}> {
+  const queryRecipe = `SELECT * FROM m_recipe WHERE id = ${id}`;
+  const queryRecipeIngredients = `SELECT * FROM m_recipe_ingredient WHERE recipe_id = ${id}`;
+  const queryRecipeSteps = `SELECT * FROM m_step WHERE recipe_id = ${id}`;
+
   // const query = `SELECT
   // r.id AS recipe_id,
   // r.name AS recipe_name,
@@ -107,17 +112,33 @@ export function getRecipe(id: number): Promise<SQLite.ResultSet> {
   return new Promise((resolve, reject) => {
     db.transaction((tx: SQLite.Transaction) => {
       tx.executeSql(
-        query,
+        queryRecipe,
         [],
-        (_, results) => {
-          console.log(results);
+        (tx1, recipe) => {
+          tx1.executeSql(
+            queryRecipeIngredients,
+            [],
+            (tx2, ingredients) => {
+              tx2.executeSql(
+                queryRecipeSteps,
+                [],
+                (_, steps) => {
+                  resolve({recipe, ingredients, steps});
+                },
 
-          var len = results.rows.length;
-          for (let i = 0; i < len; i++) {
-            let row = results.rows.item(i);
-            console.log(row);
-          }
-          resolve(results);
+                (_, err) => {
+                  if (err) {
+                    reject('getRecipe' + err.message);
+                  }
+                },
+              );
+            },
+            (_, err) => {
+              if (err) {
+                reject('getRecipe' + err.message);
+              }
+            },
+          );
         },
         (_, err) => {
           if (err) {

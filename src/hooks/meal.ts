@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {ResultSet} from 'react-native-sqlite-storage';
-import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
+import {InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
 import {searchIngredient, searchRecipe} from '../database/handler';
 import {SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
@@ -294,34 +294,56 @@ export function useSearchIngredient(text?: string) {
   return {data: parseRawIngredients(data), isLoading, error, isError};
 }
 
-function parseRawRecipes(raw: ResultSet | [] | undefined): SearchRecipe[] {
-  if (!raw || Array.isArray(raw)) {
+function parseRawRecipes(raw: InfiniteData<ResultSet | []> | undefined): SearchRecipe[] {
+  if (!raw) {
     return [];
   }
+
   const parsedData: SearchRecipe[] = [];
-  const len = raw.rows.length;
-  for (let i = 0; i < len; i++) {
-    let row = raw.rows.item(i);
-    parsedData.push({
-      id: row.id,
-      name: row.name,
-      photo: row.photo,
-      quantity: row.quantity,
-      time: row.time,
-      matching_ingredients_count: row.matching_ingredients_count,
-    });
-  }
+  raw.pages.forEach(page => {
+    if (Array.isArray(page)) {
+      return;
+    }
+    const len = page.rows.length;
+    for (let i = 0; i < len; i++) {
+      let row = page.rows.item(i);
+      parsedData.push({
+        id: row.id,
+        name: row.name,
+        photo: row.photo,
+        quantity: row.quantity,
+        time: row.time,
+        matching_ingredients_count: row.matching_ingredients_count,
+      });
+    }
+  });
   return parsedData;
 }
 
 export function useSearchRecipe(ingredients: Ingredient[]) {
-  const {data, isLoading, error, isError, refetch} = useQuery(['searchRecipe', ingredients], () => searchRecipe(ingredients), {
-    enabled: false,
-  });
+  const itemsPerPage = 20;
+  const [currentPage, setCurrentPage] = useState(1);
+  const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery(
+    ['searchRecipe', ingredients, itemsPerPage],
+    ({pageParam = 1}) => searchRecipe(ingredients, pageParam, itemsPerPage),
+    {
+      getNextPageParam: lastPage => {
+        if (!Array.isArray(lastPage)) {
+          if (lastPage.rows.length === itemsPerPage) {
+            return currentPage + 1;
+          }
+        }
+        return undefined;
+      },
+    },
+  );
 
   useEffect(() => {
-    refetch();
-  }, [ingredients, refetch]);
+    if (hasNextPage && isFetchingNextPage) {
+      // Increment the current page when fetching the next page
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  }, [hasNextPage, isFetchingNextPage]);
 
-  return {data: parseRawRecipes(data), isLoading, error, isError};
+  return {data: parseRawRecipes(data), isLoading, isError, currentPage, fetchNextPage, hasNextPage, isFetchingNextPage};
 }

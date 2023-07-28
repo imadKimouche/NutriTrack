@@ -40,18 +40,12 @@ export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> 
   });
 }
 
-export function searchRecipe(ingredients: Ingredient[]): Promise<SQLite.ResultSet | []> {
-  return new Promise((resolve, reject) => {
-    if (ingredients.length === 0) {
-      resolve([]);
-    }
-    db.transaction((tx: SQLite.Transaction) => {
-      tx.executeSql(
-        `SELECT
-		r.id,
-		r.name,
-		r.photo,
-		r.quantity,
+export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPage: number = 10): Promise<SQLite.ResultSet | []> {
+  const query = `SELECT
+		r.id, 
+		r.name, 
+		r.photo, 
+		r.quantity, 
 		r.time,
 		COUNT(ri.alim_code) AS matching_ingredients_count
 	  FROM
@@ -65,15 +59,24 @@ export function searchRecipe(ingredients: Ingredient[]): Promise<SQLite.ResultSe
 	  GROUP BY
 		r.id
 	  ORDER BY
-		matching_ingredients_count DESC;
-	`,
+		matching_ingredients_count DESC
+	  LIMIT ${itemsPerPage} OFFSET ${(page - 1) * itemsPerPage};`;
+
+  return new Promise((resolve, reject) => {
+    if (ingredients.length === 0) {
+      resolve([]);
+    }
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        query,
         [],
         (_, results) => {
+          console.log('query result', results);
           resolve(results);
         },
-        err => {
+        (_, err) => {
           if (err) {
-            reject(err);
+            reject('searchRecipe' + err.message);
           }
         },
       );

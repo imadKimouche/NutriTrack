@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
+import {FlatList, Image} from 'react-native';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
@@ -11,23 +11,51 @@ const RecipeDetailsScreen: React.FC<{
   route: RecipesStackRouteProps<'recipeDetails'>;
 }> = ({navigation, route}) => {
   const {recipe_id} = route.params;
-  const {data, isLoading} = useRecipe(recipe_id);
+  const {data: recipe, isLoading} = useRecipe(recipe_id);
 
   return (
     <Box flex={1}>
-      <BaseHeader title={data ? data.name : '...'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
-      {data && (
+      <BaseHeader title={'Détails'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+      {recipe && (
         <Box>
-          <Image source={{uri: data.photo}} style={{height: 250, width: 250, alignSelf: 'center'}} />
+          <Image source={{uri: recipe.photo}} style={{height: 200, width: '100%', alignSelf: 'center', resizeMode: 'contain'}} />
+          <Box alignItems={'center'} my={'s'}>
+            <Text variant={'h6'} textAlign={'center'}>
+              {recipe.name}
+            </Text>
+          </Box>
+
           <Box p={'s'}>
-            <Text variant={'subtitle1'}>Ingrédients</Text>
-            {data.ingredients.map(ing => {
-              return <Text>{ing.name}</Text>;
-            })}
+            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              <Text variant={'subtitle1'}>Ingrédients</Text>
+              <Text variant={'subtitle2'} color={'$labelOff'}>
+                {`${recipe.ingredients.length} ${recipe.ingredients.length > 1 ? 'ingrédients' : 'ingrédient'}`}
+              </Text>
+            </Box>
+            <FlatList
+              data={recipe.ingredients}
+              horizontal={true}
+              renderItem={({item}) => {
+                return (
+                  <Box bg={'$background1'} borderRadius={'xs'} p={'s'}>
+                    <Text variant={'body2'}>{item.name}</Text>
+                    <Box flexDirection={'row'}>
+                      <Text variant={'caption'} color={'$labelOff'}>
+                        {item.quantity}
+                      </Text>
+                      <Text variant={'caption'} color={'$labelOff'} ml={'xs'}>
+                        {item.unit ?? 'parts'}
+                      </Text>
+                    </Box>
+                  </Box>
+                );
+              }}
+              keyExtractor={item => `${item.code}-${item.name}`}
+            />
           </Box>
           <Box p={'s'}>
             <Text variant={'subtitle1'}>Etapes</Text>
-            {data.steps.map(step => {
+            {recipe.steps.map(step => {
               return <Text>{step}</Text>;
             })}
           </Box>

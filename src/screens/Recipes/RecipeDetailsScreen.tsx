@@ -18,15 +18,20 @@ const RecipeDetailsScreen: React.FC<{
       <BaseHeader title={'Détails'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       {recipe && (
         <Box>
-          <Image source={{uri: recipe.photo}} style={{height: 200, width: '100%', alignSelf: 'center', resizeMode: 'contain'}} />
-          <Box alignItems={'center'} my={'s'}>
+          <Box bg={'$imageBackground'}>
+            <Image
+              source={{uri: recipe.photo}}
+              style={{height: 200, width: '100%', alignSelf: 'center', resizeMode: 'contain'}}
+            />
+          </Box>
+          <Box alignItems={'center'} mt={'m'}>
             <Text variant={'h6'} textAlign={'center'}>
               {recipe.name}
             </Text>
           </Box>
 
           <Box p={'s'}>
-            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} my={'s'}>
               <Text variant={'subtitle1'}>Ingrédients</Text>
               <Text variant={'subtitle2'} color={'$labelOff'}>
                 {`${recipe.ingredients.length} ${recipe.ingredients.length > 1 ? 'ingrédients' : 'ingrédient'}`}
@@ -34,13 +39,18 @@ const RecipeDetailsScreen: React.FC<{
             </Box>
             <FlatList
               data={recipe.ingredients}
-              horizontal={true}
               renderItem={({item}) => {
                 return (
-                  <Box bg={'$background1'} borderRadius={'xs'} p={'s'}>
-                    <Text variant={'body2'}>{item.name}</Text>
+                  <Box
+                    bg={'$imageBackground'}
+                    borderRadius={'sm'}
+                    p={'m'}
+                    my={'xs'}
+                    flexDirection={'row'}
+                    justifyContent={'space-between'}>
+                    <Text variant={'subtitle2'}>{item.name}</Text>
                     <Box flexDirection={'row'}>
-                      <Text variant={'caption'} color={'$labelOff'}>
+                      <Text variant={'body2'} color={'$labelOff'}>
                         {item.quantity}
                       </Text>
                       <Text variant={'caption'} color={'$labelOff'} ml={'xs'}>

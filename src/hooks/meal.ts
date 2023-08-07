@@ -265,10 +265,11 @@ export function useDeleteDailyMeal() {
 }
 
 export type Ingredient = {
-  code: number;
+  id: number;
   name: string;
+  image: string;
+  unit: string;
   quantity?: number;
-  unit?: string;
 };
 
 function parseRawIngredients(raw: ResultSet | [] | undefined): Ingredient[] {
@@ -279,7 +280,7 @@ function parseRawIngredients(raw: ResultSet | [] | undefined): Ingredient[] {
   const len = raw.rows.length;
   for (let i = 0; i < len; i++) {
     let row = raw.rows.item(i);
-    parsedData.push({code: row.alim_code, name: row.nom_fr});
+    parsedData.push({id: row.id, name: row.name, image: row.image, unit: row.unit});
   }
   return parsedData;
 }
@@ -312,10 +313,11 @@ function parseRawRecipes(raw: InfiniteData<ResultSet | []> | undefined): SearchR
       parsedData.push({
         id: row.id,
         name: row.name,
-        photo: row.photo,
+        image: row.image,
         quantity: row.quantity,
         time: row.time,
         matching_ingredients_count: row.matching_ingredients_count,
+        missing_ingredients: row.missing_ingredients,
       });
     }
   });
@@ -356,11 +358,11 @@ function parseRawRecipe(raw: {recipe: ResultSet; ingredients: ResultSet; steps: 
     return undefined;
   }
 
-  let completeRecipe: CompleteRecipe = {id: 0, name: '', photo: '', quantity: 0, time: '', ingredients: [], steps: []};
+  let completeRecipe: CompleteRecipe = {id: 0, name: '', image: '', quantity: 0, time: '', ingredients: [], steps: []};
   if (raw.recipe.rows.length) {
     completeRecipe.id = raw.recipe.rows.item(0).id;
     completeRecipe.name = raw.recipe.rows.item(0).name;
-    completeRecipe.photo = raw.recipe.rows.item(0).photo;
+    completeRecipe.image = raw.recipe.rows.item(0).photo;
     completeRecipe.quantity = raw.recipe.rows.item(0).quantity;
     completeRecipe.time = raw.recipe.rows.item(0).time;
 
@@ -368,7 +370,7 @@ function parseRawRecipe(raw: {recipe: ResultSet; ingredients: ResultSet; steps: 
       var len = raw.ingredients.rows.length;
       for (let i = 0; i < len; i++) {
         let row = raw.ingredients.rows.item(i);
-        completeRecipe.ingredients.push({code: row.alim_code, name: row.alim_nom_fr, quantity: row.quantity, unit: row.unit});
+        completeRecipe.ingredients.push({id: row.id, name: row.alim_nom_fr, quantity: row.quantity, unit: row.unit});
       }
     }
 

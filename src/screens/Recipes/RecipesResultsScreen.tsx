@@ -18,12 +18,12 @@ import {Theme} from '../../style/theme';
 export type Recipe = {
   id: number;
   name: string;
-  photo: string;
+  image: string;
   quantity: number;
   time: string;
 };
 
-export type SearchRecipe = Recipe & {matching_ingredients_count: number};
+export type SearchRecipe = Recipe & {matching_ingredients_count: number; missing_ingredients: string};
 
 const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationProps<'recipesSearchResult'>}> = ({navigation}) => {
   const {addedIngredients} = useSearchMealStore(state => ({
@@ -57,7 +57,7 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
                   height={150}
                   onPress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})}>
                   <ImageBackground
-                    source={{uri: item.photo}}
+                    source={{uri: item.image}}
                     defaultSource={require('../../assets/recipe_placeholder.png')}
                     style={{flex: 1, borderRadius: borderRadii.xs}}
                     imageStyle={{borderRadius: borderRadii.xs}}>

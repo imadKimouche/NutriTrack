@@ -9,7 +9,7 @@ function onDatabaseOpenError(err: SQLite.SQLError) {
   console.log(`database open error ${err.code}: ${err.message}`);
 }
 
-const databaseName = 'anses_ciqual';
+const databaseName = 'recipes.db';
 const db = SQLite.openDatabase({name: databaseName, createFromLocation: 1}, onDatabaseOpenSuccess, onDatabaseOpenError);
 
 export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> {
@@ -21,12 +21,14 @@ export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> 
       tx.executeSql(
         `
 		SELECT
-		  alim_code,
-		  nom_fr
+		  id,
+		  name,
+		  image,
+		  unit
 		FROM
-		  aliment
+		  Ingredient
 		WHERE
-		  nom_fr LIKE '%' || ? || '%';
+		  name LIKE '%' || ? || '%';
 	`,
         [text],
         (_, results) => {
@@ -41,25 +43,36 @@ export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> 
 }
 
 export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPage: number = 10): Promise<SQLite.ResultSet | []> {
-  const query = `SELECT
-		r.id, 
-		r.name, 
-		r.photo, 
-		r.quantity, 
-		r.time,
-		COUNT(ri.alim_code) AS matching_ingredients_count
-	  FROM
-		m_recipe AS r
-	  INNER JOIN
-		m_recipe_ingredient AS ri ON r.id = ri.recipe_id
-	  INNER JOIN
-		aliment AS a ON ri.alim_code = a.alim_code
-	  WHERE
-		a.nom_fr IN (${ingredients.map(ingredient => `'${ingredient.name}'`).join(', ')})
-	  GROUP BY
-		r.id
-	  ORDER BY
-		matching_ingredients_count DESC
+  const ingredientsStr = ingredients.map(ingredient => `'${ingredient.name}'`).join(', ');
+  const query = `
+  				SELECT
+				  r.id,
+				  r.name,
+				  r.image,
+				  r.quantity,
+				  r.time,
+				  COUNT(ri.ingredient_id) AS matching_ingredients_count,
+				  (
+					SELECT
+					  GROUP_CONCAT(i.name)
+					FROM
+					  Ingredient AS i
+					WHERE
+					  i.name IN (${ingredientsStr}) 
+					  AND i.id NOT IN (SELECT ingredient_id FROM Recipe_Ingredients WHERE recipe_id = r.id)
+				  ) AS missing_ingredients
+					FROM
+					  Recipe AS r
+					INNER JOIN
+					  Recipe_Ingredients AS ri ON r.id = ri.recipe_id
+					INNER JOIN
+					  Ingredient AS i ON ri.ingredient_id = i.id
+					WHERE
+					  i.name IN (${ingredientsStr}) 
+					GROUP BY
+					  r.id
+					ORDER BY
+					  matching_ingredients_count DESC
 	  LIMIT ${itemsPerPage} OFFSET ${(page - 1) * itemsPerPage};`;
 
   return new Promise((resolve, reject) => {
@@ -86,28 +99,9 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
 export function getRecipe(
   id: number,
 ): Promise<{recipe: SQLite.ResultSet; ingredients: SQLite.ResultSet; steps: SQLite.ResultSet}> {
-  const queryRecipe = `SELECT * FROM m_recipe WHERE id = ${id}`;
+  const queryRecipe = `SELECT * FROM recipe WHERE id = ${id}`;
   const queryRecipeIngredients = `SELECT * FROM m_recipe_ingredient WHERE recipe_id = ${id}`;
   const queryRecipeSteps = `SELECT * FROM m_step WHERE recipe_id = ${id}`;
-
-  // const query = `SELECT
-  // r.id AS recipe_id,
-  // r.name AS recipe_name,
-  // r.photo AS recipe_photo,
-  // r.quantity AS recipe_quantity,
-  // r.time AS recipe_time,
-  // ri.alim_code AS ingredient_id,
-  // ri.alim_nom_fr AS ingredient_name,
-  // ri.quantity AS ingredient_quantity,
-  // s.text AS step_text,
-  //  FROM
-  // m_recipe AS r
-  //  LEFT JOIN
-  // m_recipe_ingredient AS ri ON r.id = ri.recipe_id
-  //  LEFT JOIN
-  // m_step AS s ON r.id = s.recipe_id
-  //  WHERE
-  // r.id = ${id}`;
 
   return new Promise((resolve, reject) => {
     db.transaction((tx: SQLite.Transaction) => {

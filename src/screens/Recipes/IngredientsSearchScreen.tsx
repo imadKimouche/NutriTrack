@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Image} from 'react-native';
 import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
@@ -22,13 +22,14 @@ const IngredientListItem: React.FC<IngredientListItemProps> = ({ingredient, onIt
     <Pressable
       onPress={() => onItemPressed(ingredient)}
       alignSelf={'stretch'}
-      p={'m'}
+      p={'xs'}
       borderBottomColor={'$listItemDivider'}
       bg={'$searchbarBackground'}
       borderBottomWidth={1}
       flexDirection={'row'}
       alignItems={'center'}>
-      <Text variant={'body2'} ellipsizeMode={'tail'}>
+      <Image source={{uri: ingredient.image}} style={{width: 50, height: 50}} />
+      <Text ml={'s'} variant={'body1'} ellipsizeMode={'tail'} textTransform={'capitalize'}>
         {ingredient.name}
       </Text>
     </Pressable>
@@ -57,7 +58,7 @@ const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
         <FlatList
           data={data}
           renderItem={item => <IngredientListItem ingredient={item.item} onItemPressed={onIngredientPressed} />}
-          keyExtractor={item => `${item.code}-${item.name}`}
+          keyExtractor={item => `${item.id}-${item.name}`}
         />
       </Box>
     );

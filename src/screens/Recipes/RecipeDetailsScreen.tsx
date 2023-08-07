@@ -20,7 +20,7 @@ const RecipeDetailsScreen: React.FC<{
         <Box>
           <Box bg={'$imageBackground'}>
             <Image
-              source={{uri: recipe.photo}}
+              source={{uri: recipe.image}}
               style={{height: 200, width: '100%', alignSelf: 'center', resizeMode: 'contain'}}
             />
           </Box>
@@ -60,7 +60,7 @@ const RecipeDetailsScreen: React.FC<{
                   </Box>
                 );
               }}
-              keyExtractor={item => `${item.code}-${item.name}`}
+              keyExtractor={item => `${item.id}-${item.name}`}
             />
           </Box>
           <Box p={'s'}>

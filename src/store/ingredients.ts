@@ -15,7 +15,7 @@ export const useSearchMealStore = create<MealSearchState>()(
       addedIngredients: [],
       addIngredient: (ingredient: Ingredient) => {
         set(state => {
-          if (state.addedIngredients.find(ing => ing.code === ingredient.code)) {
+          if (state.addedIngredients.find(ing => ing.id === ingredient.id)) {
             return state;
           }
           return {addedIngredients: [...state.addedIngredients, ingredient]};
@@ -23,7 +23,7 @@ export const useSearchMealStore = create<MealSearchState>()(
       },
       removeIngredient: (ingredient: Ingredient) => {
         set(state => ({
-          addedIngredients: state.addedIngredients.filter(item => item.code !== ingredient.code),
+          addedIngredients: state.addedIngredients.filter(item => item.id !== ingredient.id),
         }));
       },
       clearAddedIngredients: () => {

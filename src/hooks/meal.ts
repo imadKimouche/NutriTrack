@@ -353,33 +353,32 @@ export function useSearchRecipe(ingredients: Ingredient[]) {
 }
 
 export type CompleteRecipe = Recipe & {ingredients: Ingredient[]; steps: string[]};
-function parseRawRecipe(raw: {recipe: ResultSet; ingredients: ResultSet; steps: ResultSet} | undefined) {
+function parseRawRecipe(raw: ResultSet | undefined) {
   if (!raw) {
     return undefined;
   }
 
   let completeRecipe: CompleteRecipe = {id: 0, name: '', image: '', quantity: 0, time: '', ingredients: [], steps: []};
-  if (raw.recipe.rows.length) {
-    completeRecipe.id = raw.recipe.rows.item(0).id;
-    completeRecipe.name = raw.recipe.rows.item(0).name;
-    completeRecipe.image = raw.recipe.rows.item(0).photo;
-    completeRecipe.quantity = raw.recipe.rows.item(0).quantity;
-    completeRecipe.time = raw.recipe.rows.item(0).time;
+  if (raw.rows.length) {
+    completeRecipe.id = raw.rows.item(0).recipe_id;
+    completeRecipe.name = raw.rows.item(0).recipe_name;
+    completeRecipe.image = raw.rows.item(0).recipe_image;
+    completeRecipe.quantity = raw.rows.item(0).recipe_quantity;
+    completeRecipe.time = raw.rows.item(0).recipe_time;
+    completeRecipe.steps = raw.rows
+      .item(0)
+      .recipe_instructions.split('\n')
+      .filter((s: string) => s.trim() !== '');
 
-    if (raw.ingredients.rows.length) {
-      var len = raw.ingredients.rows.length;
-      for (let i = 0; i < len; i++) {
-        let row = raw.ingredients.rows.item(i);
-        completeRecipe.ingredients.push({id: row.id, name: row.alim_nom_fr, quantity: row.quantity, unit: row.unit});
-      }
-    }
-
-    if (raw.steps.rows.length) {
-      var len = raw.steps.rows.length;
-      for (let i = 0; i < len; i++) {
-        let row = raw.steps.rows.item(i);
-        completeRecipe.steps.push(row.text);
-      }
+    for (let i = 0; i < raw.rows.length; i++) {
+      const row = raw.rows.item(i);
+      completeRecipe.ingredients.push({
+        id: row.ingredient_id,
+        name: row.ingredient_name,
+        image: row.ingredient_image,
+        unit: row.ingredient_unit,
+        quantity: row.ingredient_quantity,
+      });
     }
     return completeRecipe;
   }

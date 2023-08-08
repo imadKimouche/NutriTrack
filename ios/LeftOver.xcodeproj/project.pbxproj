@@ -14,7 +14,7 @@
 		815D5CA32A69E19800794FCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 812CFDF62A6478F700A00285 /* GoogleService-Info.plist */; };
 		816A932C2A2359640036550A /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 816A932B2A2359640036550A /* Feather.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		81D8900A2A81A87C00474312 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 81D890092A81A87C00474312 /* www */; };
+		81D8900C2A82882F00474312 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 81D8900B2A82882F00474312 /* www */; };
 		BF54C62B44E608F6214E1BEA /* Pods_LeftOver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D7157ACFCA8D4F2D799F24F /* Pods_LeftOver.framework */; };
 		E688930A7091B4CD1403A435 /* Pods_LeftOver_LeftOverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CC9BDCCBA630D3462FFEFE8 /* Pods_LeftOver_LeftOverTests.framework */; };
 /* End PBXBuildFile section */
@@ -47,7 +47,7 @@
 		812CFDF62A6478F700A00285 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		816A932B2A2359640036550A /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LeftOver/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		81D890092A81A87C00474312 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		81D8900B2A82882F00474312 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-LeftOver-LeftOverTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeftOver-LeftOverTests.release.xcconfig"; path = "Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -92,7 +92,7 @@
 		13B07FAE1A68108700A75B9A /* LeftOver */ = {
 			isa = PBXGroup;
 			children = (
-				81D890092A81A87C00474312 /* www */,
+				81D8900B2A82882F00474312 /* www */,
 				816A93292A23583F0036550A /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -263,7 +263,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				815D5CA32A69E19800794FCA /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				81D8900A2A81A87C00474312 /* www in Resources */,
+				81D8900C2A82882F00474312 /* www in Resources */,
 				816A932C2A2359640036550A /* Feather.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

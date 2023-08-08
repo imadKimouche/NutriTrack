@@ -1,75 +1,109 @@
+import {useTheme} from '@shopify/restyle';
 import React from 'react';
-import {FlatList, Image} from 'react-native';
+import {Image, ScrollView} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
+import Collapsible from '../../components/Collapsible';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import {useRecipe} from '../../hooks/meal';
+import Icon from '../../components/Icon';
+import {Ingredient, useRecipe} from '../../hooks/meal';
 import {RecipesStackNavigationProps, RecipesStackRouteProps} from '../../navigation/RecipesStackNavigator';
+import {Theme} from '../../style/theme';
+
+const StepListItem: React.FC<{step: string; index: number}> = ({step, index}) => {
+  return (
+    <Box flexDirection={'row'} bg={'$slideTabBackground'} borderRadius={'xs'} p={'s'} m={'s'}>
+      <Text mr={'s'} variant={'subtitle2'}>
+        {index + 1}
+      </Text>
+      <Text variant={'body1'}>{step}</Text>
+    </Box>
+  );
+};
+
+const IngredientListItem: React.FC<{ingredient: Ingredient}> = ({ingredient}) => {
+  const {borderRadii} = useTheme<Theme>();
+
+  return (
+    <Box bg={'$slideTabBackground'} borderRadius={'sm'} p={'s'} my={'xs'} flexDirection={'row'} alignItems={'center'}>
+      <Image source={{uri: ingredient.image}} style={{width: 50, height: 50, borderRadius: borderRadii.sm}} />
+      <Text flex={1} ml={'m'} variant={'subtitle1'} textTransform={'capitalize'}>
+        {ingredient.name}
+      </Text>
+      <Box flexDirection={'row'}>
+        <Text variant={'subtitle2'} color={'$labelOff'}>
+          {`${ingredient.quantity} ${ingredient.unit !== 'N/A' ? ingredient.unit : ''}`}
+        </Text>
+      </Box>
+    </Box>
+  );
+};
 
 const RecipeDetailsScreen: React.FC<{
   navigation: RecipesStackNavigationProps<'recipeDetails'>;
   route: RecipesStackRouteProps<'recipeDetails'>;
 }> = ({navigation, route}) => {
   const {recipe_id} = route.params;
-  const {data: recipe, isLoading} = useRecipe(recipe_id);
+  const {data: recipe} = useRecipe(recipe_id);
+  const {borderRadii, spacing} = useTheme<Theme>();
+  const insets = useSafeAreaInsets();
 
   return (
-    <Box flex={1}>
-      <BaseHeader title={'Détails'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+    <Box flex={1} style={{paddingBottom: insets.bottom}}>
+      <BaseHeader title={recipe?.name ?? 'Détails'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       {recipe && (
-        <Box>
-          <Box bg={'$imageBackground'}>
+        <ScrollView style={{padding: spacing.s}}>
+          <Box my={'s'} mb={'xl'}>
             <Image
               source={{uri: recipe.image}}
-              style={{height: 200, width: '100%', alignSelf: 'center', resizeMode: 'contain'}}
+              style={{
+                height: 200,
+                resizeMode: 'cover',
+                borderRadius: borderRadii.sm,
+                marginHorizontal: spacing.l,
+              }}
             />
-          </Box>
-          <Box alignItems={'center'} mt={'m'}>
-            <Text variant={'h6'} textAlign={'center'}>
-              {recipe.name}
-            </Text>
+            <Box
+              position={'absolute'}
+              bottom={-25}
+              alignSelf={'center'}
+              bg={'white'}
+              flexDirection={'row'}
+              p={'m'}
+              borderRadius={'md'}
+              alignItems={'center'}
+              justifyContent={'space-around'}>
+              <Box flexDirection={'row'} alignItems={'center'} mr={'l'}>
+                <Icon name="users" size={20} color={'$primary'} />
+                <Text ml={'s'} variant={'h6'}>
+                  {recipe.quantity}
+                </Text>
+              </Box>
+              <Box flexDirection={'row'} alignItems={'center'}>
+                <Icon name="clock" size={20} color={'$primary'} />
+                <Text ml={'s'} variant={'h6'}>
+                  {recipe.time}
+                </Text>
+              </Box>
+            </Box>
           </Box>
 
-          <Box p={'s'}>
-            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} my={'s'}>
-              <Text variant={'subtitle1'}>Ingrédients</Text>
-              <Text variant={'subtitle2'} color={'$labelOff'}>
-                {`${recipe.ingredients.length} ${recipe.ingredients.length > 1 ? 'ingrédients' : 'ingrédient'}`}
-              </Text>
-            </Box>
-            <FlatList
-              data={recipe.ingredients}
-              renderItem={({item}) => {
-                return (
-                  <Box
-                    bg={'$imageBackground'}
-                    borderRadius={'sm'}
-                    p={'m'}
-                    my={'xs'}
-                    flexDirection={'row'}
-                    justifyContent={'space-between'}>
-                    <Text variant={'subtitle2'}>{item.name}</Text>
-                    <Box flexDirection={'row'}>
-                      <Text variant={'body2'} color={'$labelOff'}>
-                        {item.quantity}
-                      </Text>
-                      <Text variant={'caption'} color={'$labelOff'} ml={'xs'}>
-                        {item.unit ?? 'parts'}
-                      </Text>
-                    </Box>
-                  </Box>
-                );
-              }}
-              keyExtractor={item => `${item.id}-${item.name}`}
-            />
+          <Box px={'s'} py={'xs'}>
+            <Collapsible title={`ingrédients (${recipe.ingredients.length})`} open={true}>
+              {recipe.ingredients.map(ing => (
+                <IngredientListItem ingredient={ing} />
+              ))}
+            </Collapsible>
           </Box>
-          <Box p={'s'}>
-            <Text variant={'subtitle1'}>Etapes</Text>
-            {recipe.steps.map(step => {
-              return <Text>{step}</Text>;
-            })}
+          <Box px={'s'} py={'xs'}>
+            <Collapsible title={`Étapes (${recipe.time})`}>
+              {recipe.steps.map((step, index) => (
+                <StepListItem step={step} index={index} />
+              ))}
+            </Collapsible>
           </Box>
-        </Box>
+        </ScrollView>
       )}
     </Box>
   );

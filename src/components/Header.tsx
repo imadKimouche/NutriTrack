@@ -26,7 +26,9 @@ const BaseHeader: React.FC<HeaderProps> = ({leftComponent, title, rightComponent
       <Box bg={'$background'} height={50} flexDirection={'row'} alignItems={'center'} alignSelf={'flex-start'}>
         <Box flex={0.5}>{leftComponent}</Box>
         <Box flex={1} justifyContent={'center'} alignItems={'center'}>
-          <Text variant={'h6'}>{title}</Text>
+          <Text variant={'h6'} textAlign={'center'}>
+            {title}
+          </Text>
         </Box>
         <Box flex={0.5} alignItems={'center'} justifyContent={'center'}>
           {rightComponent}

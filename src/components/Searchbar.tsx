@@ -8,9 +8,10 @@ import Icon from './Icon';
 
 type Props = {
   onSubmitEditing?: (value: string) => void;
+  onUpdateValue?: (value: string) => void;
 } & Omit<InputProps, 'onSubmitEditing'>;
 
-const Searchbar: React.FC<Props> = ({onSubmitEditing, ...rest}) => {
+const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) => {
   const [searchValue, setSearchValue] = useState('');
   const {colors} = useTheme<Theme>();
 
@@ -23,7 +24,10 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, ...rest}) => {
         <Input
           placeholderTextColor={colors.$searchbarPlaceholder}
           value={searchValue}
-          onChangeText={value => setSearchValue(value)}
+          onChangeText={value => {
+            setSearchValue(value);
+            onUpdateValue && onUpdateValue(value);
+          }}
           onSubmitEditing={e => {
             onSubmitEditing && onSubmitEditing(e.nativeEvent.text);
           }}

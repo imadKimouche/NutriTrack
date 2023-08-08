@@ -96,44 +96,35 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
   });
 }
 
-export function getRecipe(
-  id: number,
-): Promise<{recipe: SQLite.ResultSet; ingredients: SQLite.ResultSet; steps: SQLite.ResultSet}> {
-  const queryRecipe = `SELECT * FROM recipe WHERE id = ${id}`;
-  const queryRecipeIngredients = `SELECT * FROM m_recipe_ingredient WHERE recipe_id = ${id}`;
-  const queryRecipeSteps = `SELECT * FROM m_step WHERE recipe_id = ${id}`;
+export function getRecipe(id: number): Promise<SQLite.ResultSet> {
+  const query = `
+			SELECT
+				r.id AS recipe_id,
+				r.name AS recipe_name,
+				r.image AS recipe_image,
+				r.quantity AS recipe_quantity,
+				r.time AS recipe_time,
+				r.instructions AS recipe_instructions,
+				i.id AS ingredient_id,
+				i.name AS ingredient_name,
+				i.image AS ingredient_image,
+				i.unit AS ingredient_unit,
+				ri.quantity AS ingredient_quantity
+			FROM
+				Recipe AS r
+			JOIN
+				Recipe_Ingredients AS ri ON r.id = ri.recipe_id
+			JOIN
+				Ingredient AS i ON ri.ingredient_id = i.id
+			WHERE
+				r.id = ${id};`;
 
   return new Promise((resolve, reject) => {
     db.transaction((tx: SQLite.Transaction) => {
       tx.executeSql(
-        queryRecipe,
+        query,
         [],
-        (tx1, recipe) => {
-          tx1.executeSql(
-            queryRecipeIngredients,
-            [],
-            (tx2, ingredients) => {
-              tx2.executeSql(
-                queryRecipeSteps,
-                [],
-                (_, steps) => {
-                  resolve({recipe, ingredients, steps});
-                },
-
-                (_, err) => {
-                  if (err) {
-                    reject('getRecipe' + err.message);
-                  }
-                },
-              );
-            },
-            (_, err) => {
-              if (err) {
-                reject('getRecipe' + err.message);
-              }
-            },
-          );
-        },
+        (_, results) => resolve(results),
         (_, err) => {
           if (err) {
             reject('getRecipe' + err.message);

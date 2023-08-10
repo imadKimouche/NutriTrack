@@ -8,7 +8,7 @@ import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {OnboardingNavigator} from './OnboardingNavigator';
 import {SignUpScreen} from '../screens/SignUpScreen';
 import {SignInScreen} from '../screens/SignInScreen';
-import {useAuth} from '../hooks/auth';
+import {signOut, useAuth} from '../hooks/auth';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {useOnBoardingStore} from '../store/onboarding';
 
@@ -78,10 +78,6 @@ const Landing = () => {
 
 export const MainNavigator = () => {
   const {user} = useAuth();
-  // const user = {
-  //   email: 'imad.kim@gmail.com',
-  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  // };
 
   // if (state.isLoading) {
   //   return <SplashScreen />;

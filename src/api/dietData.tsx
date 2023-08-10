@@ -3,20 +3,24 @@ import {Meal} from '../hooks/meal';
 import {MealType} from '../store/dashboard';
 
 export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
-  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
-  const docSnapshot = await dailyMealsRef.get();
+  try {
+    const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+    const docSnapshot = await dailyMealsRef.get();
 
-  if (docSnapshot.exists) {
-    return dailyMealsRef.update({
-      [mealType]: firestore.FieldValue.arrayUnion({...meal, portion, unit}),
-    });
-  } else {
-    return dailyMealsRef.set(
-      {
-        [mealType]: [{...meal, portion, unit}],
-      },
-      {merge: true},
-    );
+    if (docSnapshot.exists) {
+      return dailyMealsRef.update({
+        [mealType]: firestore.FieldValue.arrayUnion({...meal, portion, unit}),
+      });
+    } else {
+      return dailyMealsRef.set(
+        {
+          [mealType]: [{...meal, portion, unit}],
+        },
+        {merge: true},
+      );
+    }
+  } catch (err) {
+    console.log('pushUserMeal(): ', err);
   }
 }
 
@@ -28,39 +32,43 @@ export async function updateUserDailyMacros(
   carbs?: number,
   fat?: number,
 ) {
-  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
-  const docSnapshot = await dailyMealsRef.get();
+  try {
+    const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+    const docSnapshot = await dailyMealsRef.get();
 
-  if (docSnapshot.exists) {
-    const currentData = docSnapshot.data() as DailyMeals;
-    const updatedMacros: Partial<DailyMeals> = {};
+    if (docSnapshot.exists) {
+      const currentData = docSnapshot.data() as DailyMeals;
+      const updatedMacros: Partial<DailyMeals> = {};
 
-    if (calories !== undefined) {
-      updatedMacros.currentCalories = (currentData.currentCalories || 0) + calories;
+      if (calories !== undefined) {
+        updatedMacros.currentCalories = (currentData.currentCalories || 0) + calories;
+      }
+
+      if (proteins !== undefined) {
+        updatedMacros.currentProt = (currentData.currentProt || 0) + proteins;
+      }
+
+      if (carbs !== undefined) {
+        updatedMacros.currentCarbs = (currentData.currentCarbs || 0) + carbs;
+      }
+
+      if (fat !== undefined) {
+        updatedMacros.currentFat = (currentData.currentFat || 0) + fat;
+      }
+
+      return dailyMealsRef.update(updatedMacros);
+    } else {
+      const newMacros: DailyMeals = {
+        currentCalories: calories || 0,
+        currentProt: proteins || 0,
+        currentCarbs: carbs || 0,
+        currentFat: fat || 0,
+      };
+
+      return dailyMealsRef.set(newMacros, {merge: true});
     }
-
-    if (proteins !== undefined) {
-      updatedMacros.currentProt = (currentData.currentProt || 0) + proteins;
-    }
-
-    if (carbs !== undefined) {
-      updatedMacros.currentCarbs = (currentData.currentCarbs || 0) + carbs;
-    }
-
-    if (fat !== undefined) {
-      updatedMacros.currentFat = (currentData.currentFat || 0) + fat;
-    }
-
-    return dailyMealsRef.update(updatedMacros);
-  } else {
-    const newMacros: DailyMeals = {
-      currentCalories: calories || 0,
-      currentProt: proteins || 0,
-      currentCarbs: carbs || 0,
-      currentFat: fat || 0,
-    };
-
-    return dailyMealsRef.set(newMacros, {merge: true});
+  } catch (err) {
+    console.log('updateUserDailyMacros():', err);
   }
 }
 
@@ -115,13 +123,17 @@ export async function fetchUserDailyMeals(userId: string, date: string) {
   if (userId.trim().length === 0 || date.trim().length === 0) {
     return undefined;
   }
-  const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
-  const docSnapshot = await dailyMealsRef.get();
+  try {
+    const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
+    const docSnapshot = await dailyMealsRef.get();
 
-  if (docSnapshot.exists) {
-    return docSnapshot.data();
+    if (docSnapshot.exists) {
+      return docSnapshot.data();
+    }
+    return undefined;
+  } catch (err) {
+    console.log('fetchUserDailyMeals(): ', err);
   }
-  return undefined;
 }
 
 export async function deleteUserMeal(userId: string, date: string, mealType: MealType, mealId: number) {
@@ -163,23 +175,31 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
 }
 
 export async function setUserBMR(userId: string, bmr: number) {
-  const userDataRef = firestore().doc(`users/${userId}`);
-  const snapshot = await userDataRef.get();
+  try {
+    const userDataRef = firestore().doc(`users/${userId}`);
+    const snapshot = await userDataRef.get();
 
-  if (snapshot.exists) {
-    return userDataRef.set({bmr});
-  } else {
-    return userDataRef.set({bmr}, {merge: true});
+    if (snapshot.exists) {
+      return userDataRef.set({bmr});
+    } else {
+      return userDataRef.set({bmr}, {merge: true});
+    }
+  } catch (err) {
+    console.log('setUserBMR(): ', err);
   }
 }
 
 export async function setUserTDEE(userId: string, tdee: number) {
-  const userDataRef = firestore().doc(`users/${userId}`);
-  const snapshot = await userDataRef.get();
+  try {
+    const userDataRef = firestore().doc(`users/${userId}`);
+    const snapshot = await userDataRef.get();
 
-  if (snapshot.exists) {
-    return userDataRef.set({tdee});
-  } else {
-    return userDataRef.set({tdee}, {merge: true});
+    if (snapshot.exists) {
+      return userDataRef.set({tdee});
+    } else {
+      return userDataRef.set({tdee}, {merge: true});
+    }
+  } catch (err) {
+    console.log('setUserTDEE(): ', err);
   }
 }

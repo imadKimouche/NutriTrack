@@ -5,10 +5,6 @@ import {useAuth} from './auth';
 
 export const useUserFitnessData = () => {
   const {user} = useAuth();
-  // const user = {
-  //   email: 'imad.kim@gmail.com',
-  //   uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  // };
   const {data, isLoading, error, isError, isSuccess} = useQuery(['userFitnessData', user?.uid!], () =>
     getFitnessData(user?.uid!),
   );

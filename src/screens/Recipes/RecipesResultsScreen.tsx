@@ -21,6 +21,50 @@ export type Recipe = {
   image: string;
   quantity: number;
   time: string;
+  isFavorite: boolean;
+};
+
+export type RecipeListItemProps = {
+  onRecipePress: () => void;
+  recipe: Recipe;
+};
+
+export const RecipeListItem: React.FC<RecipeListItemProps> = ({recipe, onRecipePress}) => {
+  const {spacing, borderRadii} = useTheme<Theme>();
+  return (
+    <Pressable onPressIn={onRecipePress} m={'m'} borderRadius={'xs'} bg={'$background1'} width={150} height={150}>
+      <ImageBackground
+        source={{uri: recipe.image}}
+        defaultSource={require('../../assets/recipe_placeholder.png')}
+        style={{flex: 1, borderRadius: borderRadii.xs}}
+        imageStyle={{borderRadius: borderRadii.xs}}>
+        <LinearGradient
+          colors={['transparent', 'transparent', 'black']}
+          style={{
+            display: 'flex',
+            flex: 1,
+            justifyContent: 'flex-end',
+            padding: spacing.s,
+            borderRadius: borderRadii.xs,
+          }}>
+          <Text variant={'subtitle1'} color={'white'} numberOfLines={1}>
+            {recipe.name}
+          </Text>
+          <Box flexDirection={'row'} alignItems={'center'}>
+            <Icon name="clock" color={'white'} />
+            <Text ml={'xs'} variant={'caption'} color={'white'}>
+              {recipe.time}
+            </Text>
+            <Text color={'white'}> - </Text>
+            <Icon name="users" color={'white'} />
+            <Text ml={'xs'} variant={'caption'} color={'white'}>
+              {recipe.quantity}
+            </Text>
+          </Box>
+        </LinearGradient>
+      </ImageBackground>
+    </Pressable>
+  );
 };
 
 export type SearchRecipe = Recipe & {matching_ingredients_count: number; missing_ingredients: string};
@@ -30,7 +74,6 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
     addedIngredients: state.addedIngredients,
   }));
   const {data, isLoading, fetchNextPage, isFetchingNextPage} = useSearchRecipe(addedIngredients);
-  const {spacing, borderRadii} = useTheme<Theme>();
   const insets = useSafeAreaInsets();
   const bottomTabBarHeight = useBottomTabBarHeight();
 
@@ -47,48 +90,9 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
             onEndReached={() => fetchNextPage()}
             onEndReachedThreshold={0.2}
             ListFooterComponent={isFetchingNextPage ? <Loader color="$primary" /> : undefined}
-            renderItem={({item}) => {
-              return (
-                <Pressable
-                  m={'m'}
-                  borderRadius={'xs'}
-                  bg={'$background1'}
-                  width={150}
-                  height={150}
-                  onPress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})}>
-                  <ImageBackground
-                    source={{uri: item.image}}
-                    defaultSource={require('../../assets/recipe_placeholder.png')}
-                    style={{flex: 1, borderRadius: borderRadii.xs}}
-                    imageStyle={{borderRadius: borderRadii.xs}}>
-                    <LinearGradient
-                      colors={['transparent', 'transparent', 'black']}
-                      style={{
-                        display: 'flex',
-                        flex: 1,
-                        justifyContent: 'flex-end',
-                        padding: spacing.s,
-                        borderRadius: borderRadii.xs,
-                      }}>
-                      <Text variant={'subtitle1'} color={'white'} numberOfLines={1}>
-                        {item.name}
-                      </Text>
-                      <Box flexDirection={'row'} alignItems={'center'}>
-                        <Icon name="clock" color={'white'} />
-                        <Text ml={'xs'} variant={'caption'} color={'white'}>
-                          {item.time}
-                        </Text>
-                        <Text color={'white'}> - </Text>
-                        <Icon name="users" color={'white'} />
-                        <Text ml={'xs'} variant={'caption'} color={'white'}>
-                          {item.quantity}
-                        </Text>
-                      </Box>
-                    </LinearGradient>
-                  </ImageBackground>
-                </Pressable>
-              );
-            }}
+            renderItem={({item}) => (
+              <RecipeListItem recipe={item} onRecipePress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})} />
+            )}
             keyExtractor={item => `${item.id}-${item.name}`}
           />
         </Box>

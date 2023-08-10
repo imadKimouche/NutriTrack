@@ -14,7 +14,7 @@ const userFitnessDataConverter = {
   },
   fromFirestore: (snapshot: FirebaseFirestoreTypes.DocumentSnapshot) => {
     const data = snapshot.data();
-    if (data !== undefined) {
+    if (data !== undefined && Object.keys(data).length !== 0) {
       return {
         fitnessGoal: data.fitnessGoal,
         activityLevel: data.activityLevel,
@@ -26,25 +26,25 @@ const userFitnessDataConverter = {
         tdee: data.tdee,
       } as UserFitnessData;
     }
-    return {
-      fitnessGoal: 'maintain',
-      activityLevel: 'minimal',
-      gender: 'male',
-      age: 13,
-      height: 150,
-      weight: 50,
-    } as UserFitnessData;
+    return undefined;
   },
 };
 
 export async function getFitnessData(userId: string) {
-  const result = await firestore().collection('users').doc(userId).get();
-
-  if (result.exists) {
-    return userFitnessDataConverter.fromFirestore(result);
+  try {
+    const result = await firestore().collection('users').doc(userId).get();
+    if (result.exists) {
+      return userFitnessDataConverter.fromFirestore(result);
+    }
+  } catch (err) {
+    console.log('getFitnessData(): ', err);
   }
 }
 
 export async function setFitnessData(userId: string, data: UserFitnessData) {
-  return firestore().collection('users').doc(userId).set(userFitnessDataConverter.toFirestore(data));
+  try {
+    return firestore().collection('users').doc(userId).set(userFitnessDataConverter.toFirestore(data));
+  } catch (err) {
+    console.log('setFitnessData(): ', err);
+  }
 }

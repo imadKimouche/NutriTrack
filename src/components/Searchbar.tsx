@@ -39,6 +39,7 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
         <Pressable
           onPress={() => {
             onSubmitEditing && onSubmitEditing('');
+            onUpdateValue && onUpdateValue('');
             setSearchValue('');
           }}>
           <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />

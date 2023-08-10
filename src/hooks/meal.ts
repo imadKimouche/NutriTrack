@@ -2,9 +2,10 @@ import {useEffect, useState} from 'react';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
-import {getRecipe, searchIngredient, searchRecipe} from '../database/handler';
+import {getFavoriteRecipes, getRecipe, searchIngredient, searchRecipe, toggleRecipeFavoriteStatus} from '../database/handler';
 import {Recipe, SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
 import {useDashboardStore} from '../store/dashboard';
+import {useAuth} from './auth';
 
 export type Meal = {
   id: number;
@@ -200,20 +201,15 @@ export function useSearchOFFMealBC(barcode: string) {
 export function usePostMeal(meal: Meal) {
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
-
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
 
   const queryClient = useQueryClient();
   const {isLoading, error, mutate, mutateAsync} = useMutation(
     ({portion, unit}: {portion: number; unit: string}) =>
-      pushUserMeal(user.uid, currentSelectedDate, currentMealType, meal, portion, unit),
+      pushUserMeal(user?.uid ?? '', currentSelectedDate, currentMealType, meal, portion, unit),
     {
       onSuccess: async () => {
-        await updateUserDailyMacros(user.uid, currentSelectedDate, meal.calories, meal.proteins, meal.carbs, meal.fat);
+        await updateUserDailyMacros(user?.uid ?? '', currentSelectedDate, meal.calories, meal.proteins, meal.carbs, meal.fat);
         queryClient.invalidateQueries('userDailyMeals');
       },
     },
@@ -227,29 +223,21 @@ export function usePostMeal(meal: Meal) {
 }
 
 export function useUserDailyMeals(date: string) {
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
-
-  const {data, isLoading, error, isError} = useQuery(['userDailyMeals', user, date], () => fetchUserDailyMeals(user.uid, date));
+  const {user} = useAuth();
+  const {data, isLoading, error, isError} = useQuery(['userDailyMeals', user, date], () =>
+    fetchUserDailyMeals(user?.uid ?? '', date),
+  );
   return {data, isLoading, error, isError};
 }
 
 export function useDeleteDailyMeal() {
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
-
-  // const {user} = useAuth();
-  const user = {
-    email: 'imad.kim@gmail.com',
-    uid: 'Wt08dVT3rUPePPkc38lc7QqGAJF2',
-  };
+  const {user} = useAuth();
 
   const queryClient = useQueryClient();
   const {isLoading, isError, error, mutate} = useMutation(
-    (mealId: number) => deleteUserMeal(user.uid, currentSelectedDate, currentMealType, mealId),
+    (mealId: number) => deleteUserMeal(user?.uid ?? '', currentSelectedDate, currentMealType, mealId),
     {
       onSuccess: async () => {
         queryClient.invalidateQueries('userDailyMeals');
@@ -318,6 +306,7 @@ function parseRawRecipes(raw: InfiniteData<ResultSet | []> | undefined): SearchR
         time: row.time,
         matching_ingredients_count: row.matching_ingredients_count,
         missing_ingredients: row.missing_ingredients,
+        isFavorite: row.is_favorite === 1,
       });
     }
   });
@@ -358,12 +347,22 @@ function parseRawRecipe(raw: ResultSet | undefined) {
     return undefined;
   }
 
-  let completeRecipe: CompleteRecipe = {id: 0, name: '', image: '', quantity: 0, time: '', ingredients: [], steps: []};
+  let completeRecipe: CompleteRecipe = {
+    id: 0,
+    name: '',
+    image: '',
+    quantity: 0,
+    time: '',
+    ingredients: [],
+    steps: [],
+    isFavorite: false,
+  };
   if (raw.rows.length) {
     completeRecipe.id = raw.rows.item(0).recipe_id;
     completeRecipe.name = raw.rows.item(0).recipe_name;
     completeRecipe.image = raw.rows.item(0).recipe_image;
     completeRecipe.quantity = raw.rows.item(0).recipe_quantity;
+    completeRecipe.isFavorite = raw.rows.item(0).recipe_is_favorite;
     completeRecipe.time = raw.rows.item(0).recipe_time;
     completeRecipe.steps = raw.rows
       .item(0)
@@ -389,4 +388,25 @@ export function useRecipe(id: number) {
   const {data, isLoading, isError} = useQuery(['recipe', id], () => getRecipe(id));
 
   return {data: parseRawRecipe(data), isError, isLoading};
+}
+
+export function useFavoriteRecipes() {
+  const {data, isLoading, isError} = useQuery(['fav-recipes'], () => getFavoriteRecipes());
+
+  return {data, isError, isLoading};
+}
+
+export function useToggleFavoriteRecipe() {
+  const queryClient = useQueryClient();
+  const {isLoading, error, mutate} = useMutation((id: number) => toggleRecipeFavoriteStatus(id), {
+    onSuccess: async (_, id) => {
+      queryClient.invalidateQueries(['recipe', id]);
+      queryClient.invalidateQueries(['fav-recipes']);
+    },
+  });
+  return {
+    toggleFavoriteRecipe: mutate,
+    isLoading,
+    error,
+  };
 }

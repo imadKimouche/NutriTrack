@@ -1,5 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import {Ingredient} from '../hooks/meal';
+import {Recipe} from '../screens/Recipes/RecipesResultsScreen';
 
 function onDatabaseOpenSuccess() {
   console.log('database open');
@@ -104,6 +105,7 @@ export function getRecipe(id: number): Promise<SQLite.ResultSet> {
 				r.image AS recipe_image,
 				r.quantity AS recipe_quantity,
 				r.time AS recipe_time,
+				r.is_favorite AS recipe_is_favorite,
 				r.instructions AS recipe_instructions,
 				i.id AS ingredient_id,
 				i.name AS ingredient_name,
@@ -128,6 +130,79 @@ export function getRecipe(id: number): Promise<SQLite.ResultSet> {
         (_, err) => {
           if (err) {
             reject('getRecipe' + err.message);
+          }
+        },
+      );
+    });
+  });
+}
+
+export async function getFavoriteRecipes() {
+  const query = 'SELECT * FROM Recipe AS r WHERE r.is_favorite = 1;';
+  const result: SQLite.ResultSet = await new Promise((resolve, reject) => {
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        query,
+        [],
+        (_, results) => resolve(results),
+        (_, err) => {
+          if (err) {
+            reject('getRecipe' + err.message);
+          }
+        },
+      );
+    });
+  });
+
+  const recipes: Recipe[] = [];
+  if (result && result.rows.length) {
+    for (let i = 0; i < result.rows.length; i++) {
+      const row = result.rows.item(i);
+      recipes.push({
+        id: row.id,
+        name: row.name,
+        image: row.image,
+        quantity: row.quantity,
+        time: row.time,
+        isFavorite: row.is_favorite === 1,
+      });
+    }
+  }
+  return recipes;
+}
+
+export async function toggleRecipeFavoriteStatus(id: number): Promise<boolean> {
+  const selectQuery = 'SELECT is_favorite FROM Recipe WHERE id = ?';
+  const updateQuery = 'UPDATE Recipe SET is_favorite = ? WHERE id = ?;';
+
+  return await new Promise(resolve => {
+    db.transaction((tx: SQLite.Transaction) => {
+      tx.executeSql(
+        selectQuery,
+        [id],
+        (tx1, selectResult) => {
+          if (selectResult && selectResult.rows.length) {
+            console.log('getRecipe', selectResult.rows.raw());
+            const isFavoriteValue = selectResult.rows.item(0).is_favorite;
+            tx1.executeSql(
+              updateQuery,
+              [isFavoriteValue === 0 ? 1 : 0, id],
+              (_, __) => {
+                resolve(true);
+              },
+              (_, err) => {
+                if (err) {
+                  resolve(false);
+                }
+              },
+            );
+          } else {
+            resolve(false);
+          }
+        },
+        (_, err) => {
+          if (err) {
+            resolve(false);
           }
         },
       );

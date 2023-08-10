@@ -204,10 +204,12 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   const {spacing} = useTheme<Theme>();
   const {user} = useAuth();
-  const currentSelectedDate = useDashboardStore(state => state.selectedDate);
-  const setCurrentSelectedDate = useDashboardStore(state => state.setSelectedDate);
-  const currentMealType = useDashboardStore(state => state.selectedMealType);
-  const setCurrentMealType = useDashboardStore(state => state.setSelectedMealType);
+  const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useDashboardStore(state => ({
+    currentSelectedDate: state.selectedDate,
+    setCurrentSelectedDate: state.setSelectedDate,
+    currentMealType: state.selectedMealType,
+    setCurrentMealType: state.setSelectedMealType,
+  }));
   const {data} = useUserDailyMeals(currentSelectedDate);
   const {deleteDailyMeal} = useDeleteDailyMeal();
   const {userFitnessData} = useUserFitnessData();

@@ -3,11 +3,13 @@ import React from 'react';
 import {Image, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
+import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Collapsible from '../../components/Collapsible';
 import BaseHeader, {GoBackButton} from '../../components/Header';
+import HeartIcon from '../../components/Heart';
 import Icon from '../../components/Icon';
-import {Ingredient, useRecipe} from '../../hooks/meal';
+import {Ingredient, useRecipe, useToggleFavoriteRecipe} from '../../hooks/meal';
 import {RecipesStackNavigationProps, RecipesStackRouteProps} from '../../navigation/RecipesStackNavigator';
 import {Theme} from '../../style/theme';
 
@@ -48,10 +50,19 @@ const RecipeDetailsScreen: React.FC<{
   const {data: recipe} = useRecipe(recipe_id);
   const {borderRadii, spacing} = useTheme<Theme>();
   const insets = useSafeAreaInsets();
+  const {toggleFavoriteRecipe} = useToggleFavoriteRecipe();
 
   return (
     <Box flex={1} style={{paddingBottom: insets.bottom}}>
-      <BaseHeader title={recipe?.name ?? 'Détails'} leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+      <BaseHeader
+        title={recipe?.name ?? 'Détails'}
+        leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
+        rightComponent={
+          <Pressable onPress={() => recipe && toggleFavoriteRecipe(recipe.id)}>
+            <HeartIcon size={24} color={'$primary'} fillColor={recipe?.isFavorite ? '$primary' : 'transparent'} />
+          </Pressable>
+        }
+      />
       {recipe && (
         <ScrollView style={{padding: spacing.s}}>
           <Box my={'s'} mb={'xl'}>
@@ -92,14 +103,14 @@ const RecipeDetailsScreen: React.FC<{
           <Box px={'s'} py={'xs'}>
             <Collapsible title={`ingrédients (${recipe.ingredients.length})`} open={true}>
               {recipe.ingredients.map(ing => (
-                <IngredientListItem ingredient={ing} />
+                <IngredientListItem key={ing.id} ingredient={ing} />
               ))}
             </Collapsible>
           </Box>
           <Box px={'s'} py={'xs'}>
             <Collapsible title={`Étapes (${recipe.time})`}>
               {recipe.steps.map((step, index) => (
-                <StepListItem step={step} index={index} />
+                <StepListItem key={index} step={step} index={index} />
               ))}
             </Collapsible>
           </Box>

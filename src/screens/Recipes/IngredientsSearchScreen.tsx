@@ -8,12 +8,13 @@ import Button from '../../components/Button';
 import BaseHeader from '../../components/Header';
 import Icon from '../../components/Icon';
 import Searchbar from '../../components/Searchbar';
-import {Ingredient, useSearchIngredient} from '../../hooks/meal';
+import {Ingredient, useFavoriteRecipes, useSearchIngredient} from '../../hooks/meal';
 import {useDebounce} from '../../hooks/utility';
 import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
 import {useSearchMealStore} from '../../store/ingredients';
 import {Theme} from '../../style/theme';
 import {SearchError, SearchLoader} from '../SearchMealScreen';
+import {RecipeListItem} from './RecipesResultsScreen';
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -112,6 +113,7 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
     addedIngredients: state.addedIngredients,
     removeIngredient: state.removeIngredient,
   }));
+  const {data: favoriteRecipes} = useFavoriteRecipes();
 
   return (
     <Box bg={'$background'} flex={1} alignItems={'center'}>
@@ -121,15 +123,36 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
       </Box>
       <SearchList searchValue={debouncedSearchIngredient} />
       <Box flex={1} my={'m'} px={'s'} alignSelf={'stretch'}>
-        <Text variant={'subtitle1'}>Vos ingrédients</Text>
-        <Box p={'m'} flex={1}>
-          <FlatList
-            numColumns={3}
-            data={addedIngredients}
-            renderItem={({item}) => <AddedIngredientListItem ingredient={item} onCrossPressed={removeIngredient} />}
-            keyExtractor={item => `${item.id}-${item.name}`}
-          />
-        </Box>
+        {addedIngredients.length ? (
+          <>
+            <Text variant={'h6'}>Vos ingrédients</Text>
+            <Box p={'m'} flex={1}>
+              <FlatList
+                numColumns={3}
+                data={addedIngredients}
+                renderItem={({item}) => <AddedIngredientListItem ingredient={item} onCrossPressed={removeIngredient} />}
+                keyExtractor={item => `${item.id}-${item.name}`}
+              />
+            </Box>
+          </>
+        ) : (
+          <>
+            <Text variant={'h6'}>Vos recettes favorites</Text>
+            <Box p={'xs'} flex={1}>
+              <FlatList
+                numColumns={3}
+                data={favoriteRecipes}
+                renderItem={({item}) => (
+                  <RecipeListItem
+                    recipe={item}
+                    onRecipePress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})}
+                  />
+                )}
+                keyExtractor={item => `${item.id}-${item.name}`}
+              />
+            </Box>
+          </>
+        )}
       </Box>
       <Button
         label="J'ai faim 🍜"

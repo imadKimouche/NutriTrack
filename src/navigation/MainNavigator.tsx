@@ -47,13 +47,6 @@ const ResetPassword = () => {
 
 const Landing = () => {
   const {userFitnessData, isLoading, isError} = useUserFitnessData();
-  const {updateStore} = useOnBoardingStore(state => state);
-
-  useEffect(() => {
-    if (userFitnessData) {
-      updateStore(userFitnessData);
-    }
-  }, [updateStore, userFitnessData]);
 
   if (isLoading) {
     return (

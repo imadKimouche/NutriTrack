@@ -127,6 +127,7 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     storeUserBMR(bmr);
     storeUserTDEE(tdee);
     storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies});
+    console.log({fitnessGoal, activityLevel, gender, age, height, weight, allergies, bmr, tdee});
   }
 
   return (

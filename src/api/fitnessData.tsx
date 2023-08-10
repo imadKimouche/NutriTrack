@@ -32,9 +32,11 @@ const userFitnessDataConverter = {
 
 export async function getFitnessData(userId: string) {
   try {
-    const result = await firestore().collection('users').doc(userId).get();
-    if (result.exists) {
-      return userFitnessDataConverter.fromFirestore(result);
+    const userDataRef = firestore().doc(`users/${userId}`);
+    const snapshot = await userDataRef.get();
+
+    if (snapshot.exists) {
+      return userFitnessDataConverter.fromFirestore(snapshot);
     }
   } catch (err) {
     console.log('getFitnessData(): ', err);
@@ -43,7 +45,14 @@ export async function getFitnessData(userId: string) {
 
 export async function setFitnessData(userId: string, data: UserFitnessData) {
   try {
-    return firestore().collection('users').doc(userId).set(userFitnessDataConverter.toFirestore(data));
+    const userDataRef = firestore().doc(`users/${userId}`);
+    const snapshot = await userDataRef.get();
+
+    if (snapshot.exists) {
+      return userDataRef.set({fitnessData: userFitnessDataConverter.toFirestore(data)});
+    } else {
+      return userDataRef.set({fitnessData: userFitnessDataConverter.toFirestore(data)}, {merge: true});
+    }
   } catch (err) {
     console.log('setFitnessData(): ', err);
   }

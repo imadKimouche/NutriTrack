@@ -75,7 +75,20 @@ export const useOnBoardingStore = create<OnBoardingState>()(
         }),
       setAllergies: (allergies: FoodAllergy[]) => set(state => ({...state, allergies})),
       clearAllergies: () => set(state => ({...state, allergies: []})),
-      updateStore: (data: UserFitnessData) => set(state => ({...state, ...data})),
+      updateStore: (data: UserFitnessData) =>
+        set(state => {
+          const updatedState: OnBoardingState = {
+            ...state,
+            fitnessGoal: data.fitnessGoal !== undefined ? data.fitnessGoal : state.fitnessGoal,
+            activityLevel: data.activityLevel !== undefined ? data.activityLevel : state.activityLevel,
+            gender: data.gender !== undefined ? data.gender : state.gender,
+            age: data.age !== undefined ? data.age : state.age,
+            height: data.height !== undefined ? data.height : state.height,
+            weight: data.weight !== undefined ? data.weight : state.weight,
+            allergies: data.allergies !== undefined ? data.allergies : state.allergies,
+          };
+          return updatedState;
+        }),
     }),
     {
       name: 'onboarding-store',

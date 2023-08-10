@@ -25,14 +25,19 @@ export const FITNESS_GOALS: FitnessGoalItem[] = [
   {id: 'recomposition', label: 'Recomposition', icon: 'refresh-cw', indication: 'Éliminer gras et ganger en muscle'},
 ];
 
-export const FitnessGoalListItem: React.FC<
-  FitnessGoalItem & {selectedItem: FitnessGoal; setSelectedItem: (item: FitnessGoal) => void}
-> = ({id, label, icon, indication, selectedItem, setSelectedItem}) => {
+export const FitnessGoalListItem: React.FC<FitnessGoalItem & {selectedItem: FitnessGoal; onPress: () => void}> = ({
+  id,
+  label,
+  icon,
+  indication,
+  selectedItem,
+  onPress,
+}) => {
   const isSelected = id === selectedItem;
 
   return (
     <Pressable
-      onPress={() => setSelectedItem(id)}
+      onPress={onPress}
       flexDirection={'row'}
       alignItems={'center'}
       height={56}
@@ -56,6 +61,7 @@ export type GoalTabProps = {navigation: TabNavigationProp};
 
 const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
   const fitnessGoal = useOnBoardingStore(state => state.fitnessGoal);
+
   const setFitnessGoal = useOnBoardingStore(state => state.setFitnessGoal);
 
   return (
@@ -68,7 +74,9 @@ const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
         <FlatList
           scrollEnabled={false}
           data={FITNESS_GOALS}
-          renderItem={({item}) => <FitnessGoalListItem {...item} selectedItem={fitnessGoal} setSelectedItem={setFitnessGoal} />}
+          renderItem={({item}) => (
+            <FitnessGoalListItem {...item} selectedItem={fitnessGoal} onPress={() => setFitnessGoal(item.id)} />
+          )}
           keyExtractor={item => item.id}
         />
       </Box>

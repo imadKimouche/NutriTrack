@@ -20,7 +20,7 @@ const LoadingModal: React.FC<{label?: string}> = ({label}) => {
       zIndex={5}
       borderWidth={1}
       borderColor={'$primary'}
-      bg={'$modalShadowDrop'}>
+      bg={'$modalBackground'}>
       <Loader color={'$primary'} />
       {label !== undefined && (
         <Text py={'s'} variant={'subtitle2'}>

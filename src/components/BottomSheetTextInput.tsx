@@ -40,7 +40,7 @@ const BottomSheetTextInput = (props: PropsBase) => {
       alignItems={'center'}
       flexDirection={'row'}
       borderWidth={1}
-      borderColor={'$textInputBorderColor'}
+      borderColor={'$inputBorder'}
       borderRadius={'sm'}
       {...props}
     />

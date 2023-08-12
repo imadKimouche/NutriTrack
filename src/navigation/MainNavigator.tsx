@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -8,9 +8,8 @@ import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {OnboardingNavigator} from './OnboardingNavigator';
 import {SignUpScreen} from '../screens/SignUpScreen';
 import {SignInScreen} from '../screens/SignInScreen';
-import {signOut, useAuth} from '../hooks/auth';
+import {useAuth} from '../hooks/auth';
 import {useUserFitnessData} from '../hooks/userFitnessData';
-import {useOnBoardingStore} from '../store/onboarding';
 
 export type RootStackParamList = {
   Landing: undefined;
@@ -50,14 +49,14 @@ const Landing = () => {
 
   if (isLoading) {
     return (
-      <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+      <Box flex={1} bg={'$screenBackground'} alignItems={'center'} justifyContent={'center'}>
         <Text variant={'body1'}>Je prépare ton programme...</Text>
       </Box>
     );
   }
 
   if (isError) {
-    <Box flex={1} bg={'$background'} alignItems={'center'} justifyContent={'center'}>
+    <Box flex={1} bg={'$screenBackground'} alignItems={'center'} justifyContent={'center'}>
       <Text variant={'body1'}>Une erreur s'est produite</Text>
     </Box>;
   }

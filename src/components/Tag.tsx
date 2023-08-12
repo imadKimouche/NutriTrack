@@ -27,27 +27,21 @@ const Tag: React.FC<TagProps> = ({
       onPress={onPress}
       borderRadius={'sm'}
       borderWidth={type === 'normal' ? undefined : 1}
-      borderColor={'$tagBorderOutline'}
       p={'s'}
       m={'xs'}
       flexDirection={'row'}
-      alignItems={'center'}
-      bg={type === 'normal' ? '$tagBackgroundNormal' : '$tagBackgroundOutlined'}>
+      alignItems={'center'}>
       {leftIcon && (
         <Pressable onPress={onLeftIconPress} mr={'s'}>
-          <Icon name={leftIcon} color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'} size={16} />
+          <Icon name={leftIcon} size={16} />
         </Pressable>
       )}
-      <Text
-        variant={'body2'}
-        color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'}
-        ellipsizeMode={'tail'}
-        numberOfLines={1}>
+      <Text variant={'body2'} ellipsizeMode={'tail'} numberOfLines={1}>
         {label}
       </Text>
       {rightIcon && (
         <Pressable onPress={onRightIconPress} ml={'s'}>
-          <Icon name={rightIcon} color={type === 'normal' ? '$tagTextNormal' : '$tagTextOutlined'} size={16} />
+          <Icon name={rightIcon} size={16} />
         </Pressable>
       )}
     </Pressable>

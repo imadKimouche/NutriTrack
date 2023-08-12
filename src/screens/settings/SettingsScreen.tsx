@@ -31,23 +31,23 @@ const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress, bg, c}
 type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Settings'>;
 const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({navigation}) => {
   return (
-    <Box flex={1} bg={'$background'}>
+    <Box flex={1} bg={'$screenBackground'}>
       <BaseHeader title="Paramètres" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <SettingsItem
         label="Profil"
-        bg={'$searchbarBackground'}
+        bg={'$cardBackground'}
         c={'$primary'}
         icon="user"
         onPress={() => navigation.navigate('ProfileSettings')}
       />
       <SettingsItem
         label="Fitness"
-        bg={'$searchbarBackground'}
+        bg={'$cardBackground'}
         c={'$primary'}
         icon="chevrons-up"
         onPress={() => navigation.navigate('FitnessSettings')}
       />
-      <SettingsItem label="Se déconnecter" bg={'$logoutIconBackground'} c={'$logoutIcon'} icon="log-out" onPress={signOut} />
+      <SettingsItem label="Se déconnecter" bg={'$cardBackground'} c={'$error'} icon="log-out" onPress={signOut} />
     </Box>
   );
 };

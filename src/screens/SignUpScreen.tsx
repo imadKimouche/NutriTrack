@@ -30,7 +30,7 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
   };
 
   return (
-    <Box bg={'$background'} flex={1}>
+    <Box bg={'$screenBackground'} flex={1}>
       <StatusBar />
       <Box justifyContent={'center'} alignItems={'center'}>
         <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />

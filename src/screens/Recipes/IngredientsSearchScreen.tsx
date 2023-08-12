@@ -27,8 +27,8 @@ const IngredientListItem: React.FC<IngredientListItemProps> = ({ingredient, onIt
       onPress={() => onItemPressed(ingredient)}
       alignSelf={'stretch'}
       p={'xs'}
-      borderBottomColor={'$listItemDivider'}
-      bg={'$searchbarBackground'}
+      borderBottomColor={'$divider'}
+      bg={'$cardBackground'}
       borderBottomWidth={1}
       flexDirection={'row'}
       alignItems={'center'}>
@@ -83,8 +83,8 @@ const AddedIngredientListItem: React.FC<AddedIngredientListItemProps> = ({ingred
       p={'s'}
       m={'s'}
       borderRadius={'sm'}
-      borderBottomColor={'$listItemDivider'}
-      bg={'$searchbarBackground'}
+      borderBottomColor={'$divider'}
+      bg={'$cardBackground'}
       borderBottomWidth={1}
       alignItems={'center'}>
       <Image source={{uri: ingredient.image}} style={{width: 80, height: 70, borderRadius: borderRadii.sm}} />
@@ -93,14 +93,14 @@ const AddedIngredientListItem: React.FC<AddedIngredientListItemProps> = ({ingred
       </Text>
       <Pressable
         onPressIn={() => onCrossPressed(ingredient)}
-        bg={'white'}
+        bg={'$cardBackground'}
         borderRadius={'lg'}
         borderWidth={1}
         borderColor={'$primary'}
         position={'absolute'}
         top={-8}
         right={-8}>
-        <Icon name="x" color={'$primary'} size={18} />
+        <Icon name="x" color={'$iconActive'} size={18} />
       </Pressable>
     </Pressable>
   );
@@ -116,9 +116,9 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
   const {data: favoriteRecipes} = useFavoriteRecipes();
 
   return (
-    <Box bg={'$background'} flex={1} alignItems={'center'}>
+    <Box bg={'$screenBackground'} flex={1} alignItems={'center'}>
       <BaseHeader title="Recettes" />
-      <Box px={'s'}>
+      <Box px={'s'} alignSelf={'stretch'}>
         <Searchbar onUpdateValue={text => setIngredient(text)} placeholder="Miel, Poulet, Citron..." />
       </Box>
       <SearchList searchValue={debouncedSearchIngredient} />

@@ -28,7 +28,7 @@ const BarCodeScannerScreen: React.FC<{navigation: BarCodeScrannerScreenNavigatio
   }, [data, navigation]);
 
   return (
-    <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
+    <Box flex={1} bg={'$screenBackground'} style={{paddingBottom: insets.bottom}}>
       <BaseHeader title="Scannez un produit" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <Box flex={1} p={'m'}>
         {isLoading && <LoadingModal label="Un instant..." />}

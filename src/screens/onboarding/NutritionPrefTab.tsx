@@ -75,11 +75,11 @@ export const AllergyListItem: React.FC<
       alignItems={'center'}
       height={56}
       borderBottomWidth={1}
-      borderBottomColor={'$listItemDivider'}
+      borderBottomColor={'$divider'}
       borderStyle={'solid'}>
-      <Image height={32} width={32} fill={isSelected ? colors.$primary : colors.black} />
+      <Image height={32} width={32} fill={isSelected ? colors.$iconActive : colors.$iconRegular} />
       <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$primary' : '$labelOff'}>
+        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
           {label}
         </Text>
       </Box>

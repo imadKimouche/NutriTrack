@@ -1,11 +1,11 @@
 import {Picker} from '@react-native-picker/picker';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
@@ -14,14 +14,6 @@ import {OnboardingListItem} from './GoalTab';
 
 export const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
 export const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
-
-const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
-      <Icon name="arrow-left" color={'$labelOff'} size={24} />
-    </Pressable>
-  );
-};
 
 export type GenderItem = Omit<OnboardingListItem<Gender>, 'indication'>;
 
@@ -46,11 +38,11 @@ export const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSel
       alignItems={'center'}
       height={56}
       borderBottomWidth={1}
-      borderBottomColor={'$listItemDivider'}
+      borderBottomColor={'$divider'}
       borderStyle={'solid'}>
-      <Icon name={icon} size={26} color={isSelected ? '$primary' : '$labelOff'} />
+      <Icon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
       <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$primary' : 'black'}>
+        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
           {label}
         </Text>
       </Box>
@@ -99,7 +91,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
             marginVertical={'s'}
             keyboardType="numeric"
             borderWidth={1}
-            borderColor={'$textInputBorderColor'}
+            borderColor={'$inputBorder'}
             borderRadius={'xs'}
           />
         </Box>

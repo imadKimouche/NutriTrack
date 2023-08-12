@@ -16,13 +16,13 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
   const {colors} = useTheme<Theme>();
 
   return (
-    <Box width={'100%'} height={50} bg={'$searchbarBackground'} flexDirection={'row'} alignItems={'center'} borderRadius={'sm'}>
-      <Box p={'s'}>
-        <Icon name="search" size={18} color={'$searchbarIcon'} />
+    <Box height={50} bg={'$inputBg'} flexDirection={'row'} alignItems={'center'} borderRadius={'sm'}>
+      <Box pl={'m'} p={'s'}>
+        <Icon name="search" size={20} color={'$iconRegular'} />
       </Box>
       <Box flex={1} mx={'s'}>
         <Input
-          placeholderTextColor={colors.$searchbarPlaceholder}
+          placeholderTextColor={colors.$inputPlaceholder}
           value={searchValue}
           onChangeText={value => {
             setSearchValue(value);
@@ -41,8 +41,10 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
             onSubmitEditing && onSubmitEditing('');
             onUpdateValue && onUpdateValue('');
             setSearchValue('');
-          }}>
-          <Icon name="x-circle" size={18} color={'$searchbarIcon'} marginRight={'s'} />
+          }}
+          pr={'m'}
+          p={'s'}>
+          <Icon name="x-circle" size={18} color={'$iconRegular'} marginRight={'s'} />
         </Pressable>
       )}
     </Box>

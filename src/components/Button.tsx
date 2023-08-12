@@ -1,4 +1,4 @@
-import {createRestyleComponent, createVariant, useTheme, VariantProps} from '@shopify/restyle';
+import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import Box from '../atoms/Box';
@@ -39,11 +39,11 @@ const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & B
         <Box alignItems={'center'}>{SvgIcon !== undefined && <SvgIcon height={28} width={28} />}</Box>
         <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
           {loading ? (
-            <Loader color={variant === 'primary' ? 'white' : '$primary'} />
+            <Loader color={variant === 'primary' ? '$buttonTextPrimary' : '$primary'} />
           ) : (
             <ButtonTextBase variant={variant}>{label}</ButtonTextBase>
           )}
-          {icon !== undefined && <Icon name={icon} color={'white'} size={18} marginLeft={'s'} />}
+          {icon !== undefined && <Icon name={icon} color={'$buttonTextPrimary'} size={18} marginLeft={'s'} />}
         </Box>
       </Box>
     </ButtonBase>

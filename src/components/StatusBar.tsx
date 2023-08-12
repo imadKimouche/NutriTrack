@@ -5,7 +5,7 @@ import {Theme} from '../style/theme';
 import {StatusBar as NativeStatusBar} from 'react-native';
 
 const StatusBar: React.FC<{backgroundColor?: keyof Theme['colors']; style?: 'light' | 'dark'}> = ({
-  backgroundColor = '$background',
+  backgroundColor = '$navbarBg',
   style = 'dark',
 }) => {
   const insets = useSafeAreaInsets();

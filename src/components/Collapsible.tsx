@@ -30,7 +30,7 @@ const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}
         <Text variant={'h6'} textTransform={'capitalize'}>
           {title}
         </Text>
-        <Box bg={'$buttonDisabledBackground'} borderRadius={'lg'} p={'xs'}>
+        <Box bg={'$buttonBgPrimaryDisabled'} borderRadius={'lg'} p={'xs'}>
           <Icon name={isCollapsed ? 'chevron-down' : 'chevron-left'} size={20} color={'$primary'} />
         </Box>
       </Pressable>

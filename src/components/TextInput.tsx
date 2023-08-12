@@ -33,7 +33,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
   return (
     <Box marginBottom={'s'}>
       <Box
-        bg={'$textInputBackground'}
+        bg={'$inputBg'}
         flexDirection={'row'}
         justifyContent={'flex-start'}
         alignItems={'center'}
@@ -41,15 +41,15 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
         borderStyle={'solid'}
         borderWidth={1}
         borderRadius={'sm'}
-        borderColor={'$textInputBorderColor'}>
-        <Icon name={icon} size={26} color={value?.length ? '$foreground' : '$textInputColor'} />
+        borderColor={'$inputBorder'}>
+        <Icon name={icon} size={26} color={value?.length ? '$iconActive' : '$iconRegular'} />
         <Input
           {...rest}
           {...presetProps}
           value={value}
-          bg={'$textInputBackground'}
-          borderColor={'transparent'}
-          placeholderTextColor={colors.$textInputPlaceholderColor}
+          bg={'$inputBg'}
+          borderColor={'$inputBorder'}
+          placeholderTextColor={colors.$inputPlaceholder}
           paddingHorizontal={'s'}
           paddingVertical={'m'}
           borderRadius={'sm'}
@@ -59,7 +59,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
           style={{padding: 0}}
         />
       </Box>
-      {error && <Text color={'$textError'}>{error}</Text>}
+      {error && <Text color={'$error'}>{error}</Text>}
     </Box>
   );
 };

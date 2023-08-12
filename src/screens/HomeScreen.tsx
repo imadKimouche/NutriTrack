@@ -31,11 +31,11 @@ const ProfileSettingsIcon: React.FC<{email?: string | null; onPress: () => void}
       borderRadius={'lg'}
       alignItems={'center'}
       justifyContent={'center'}
-      borderColor={'$headerButtonBorder'}
+      borderColor={'$buttonBorderOutline'}
       borderStyle={'solid'}
       borderWidth={1}
-      bg={'$headerButtonBackground'}>
-      <Text variant={'h6'} color={'$buttonTextPrimary'}>
+      bg={'$buttonBgOutline'}>
+      <Text variant={'h6'} color={'$buttonTextOutline'}>
         {initials}
       </Text>
     </Pressable>
@@ -46,7 +46,7 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
   const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
 
   return (
-    <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} py={'m'}>
+    <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} p={'m'}>
       {dates.map(date => {
         const selected = currentDate === date;
         const dateSplit = date.split('-');
@@ -61,14 +61,12 @@ const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void
             height={78}
             alignItems={'center'}
             justifyContent={'space-evenly'}
-            bg={selected ? '$primary' : '$background'}
-            borderRadius={'sm'}
-            borderColor={selected ? undefined : '$textInputBorderColor'}
-            borderWidth={selected ? 0 : 1}>
-            <Text color={selected ? 'white' : 'black'} variant={'body2'}>
+            bg={selected ? '$buttonBgPrimary' : '$buttonBgOutline'}
+            borderRadius={'sm'}>
+            <Text color={selected ? '$buttonTextPrimary' : '$textBody'} variant={'body2'}>
               {dayInWeek}
             </Text>
-            <Text color={selected ? 'white' : 'black'} variant={'subtitle1'}>
+            <Text color={selected ? '$buttonTextPrimary' : '$textLabel'} variant={'subtitle1'}>
               {day}
             </Text>
           </Pressable>
@@ -88,16 +86,16 @@ const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
       onLongPress={() => {
         onLongPress(meal.id);
       }}
-      bg={'$background'}
+      bg={'$cardBackground'}
       py={'m'}
       mb={'xs'}
       borderBottomWidth={1}
-      borderColor={'$textInputBorderColor'}>
+      borderColor={'$buttonBorderPrimary'}>
       <Box flex={1} flexDirection={'row'} alignItems={'center'}>
         <Image />
         <Box>
           <Text variant={'subtitle1'}>{meal.name}</Text>
-          <Text variant={'body2'} color={'$labelOff'}>
+          <Text variant={'body2'} color={'$textLabel'}>
             {meal.calories} kcal
           </Text>
         </Box>
@@ -115,8 +113,10 @@ const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => 
       justifyContent={'center'}
       style={{borderRadius: 12}}
       m={'xs'}
-      bg={selected ? '$background1' : undefined}>
-      <Text variant={selected ? 'subtitle2' : 'body2'}>{label}</Text>
+      bg={selected ? '$buttonBgPrimary' : undefined}>
+      <Text variant={selected ? 'subtitle2' : 'body2'} color={selected ? '$buttonTextPrimary' : '$textBody'}>
+        {label}
+      </Text>
     </Pressable>
   );
 };
@@ -129,11 +129,11 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
     <Box
       flexDirection={'row'}
       alignItems={'stretch'}
-      bg={'$dateSelectorBackground'}
+      bg={'$cardBackground'}
       borderRadius={'sm'}
-      width={'80%'}
       height={32}
       justifyContent={'space-between'}
+      mx={'m'}
       my={'s'}>
       <MealTypeItem label="Petit déj" selected={currentMealType === 'breakfast'} onPress={() => onMealTypePress('breakfast')} />
       <MealTypeItem label="Déjeuner" selected={currentMealType === 'lunch'} onPress={() => onMealTypePress('lunch')} />
@@ -150,9 +150,9 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
   return (
     <Box alignSelf={'stretch'} py={'m'} px={'l'}>
       <Text variant={'subtitle1'}>Progression du jour</Text>
-      <Box bg={'$dateSelectorBackground'} my={'s'} borderRadius={'sm'} height={8} width={'100%'}>
+      <Box bg={'$cardBackground'} my={'s'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box
-          bg={'$primary'}
+          bg={'$info'}
           borderTopLeftRadius={'sm'}
           borderBottomLeftRadius={'sm'}
           borderTopRightRadius={progressRatio >= 1 ? 'sm' : undefined}
@@ -174,7 +174,7 @@ const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => 
   return (
     <Pressable
       onPress={onPress}
-      bg={'$primary'}
+      bg={'$buttonBgPrimary'}
       width={48}
       height={48}
       zIndex={2}
@@ -190,10 +190,10 @@ const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => 
         borderStyle={'solid'}
         borderRadius={'lg'}
         borderWidth={1}
+        borderColor={'$buttonTextPrimary'}
         width={26}
-        height={26}
-        borderColor={'white'}>
-        <Icon name={icon} color={'white'} size={20} />
+        height={26}>
+        <Icon name={icon} color={'$buttonTextPrimary'} size={20} />
       </Box>
     </Pressable>
   );
@@ -222,12 +222,12 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   };
 
   return (
-    <Box bg={'$background'} flex={1}>
+    <Box bg={'$screenBackground'} flex={1}>
       <BaseHeader
         title="Suivi journalier"
         rightComponent={<ProfileSettingsIcon email={user?.email} onPress={() => navigation.navigate('Settings')} />}
       />
-      <Box bg={'$background'} flex={1} alignItems={'center'}>
+      <Box bg={'$screenBackground'} flex={1} alignItems={'center'}>
         <DatePicker
           currentDate={currentSelectedDate}
           onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}

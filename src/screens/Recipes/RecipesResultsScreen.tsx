@@ -32,7 +32,7 @@ export type RecipeListItemProps = {
 export const RecipeListItem: React.FC<RecipeListItemProps> = ({recipe, onRecipePress}) => {
   const {spacing, borderRadii} = useTheme<Theme>();
   return (
-    <Pressable onPressIn={onRecipePress} m={'m'} borderRadius={'xs'} bg={'$background1'} width={150} height={150}>
+    <Pressable onPressIn={onRecipePress} m={'m'} borderRadius={'xs'} bg={'$screenBackground'} width={150} height={150}>
       <ImageBackground
         source={{uri: recipe.image}}
         defaultSource={require('../../assets/recipe_placeholder.png')}
@@ -47,17 +47,17 @@ export const RecipeListItem: React.FC<RecipeListItemProps> = ({recipe, onRecipeP
             padding: spacing.s,
             borderRadius: borderRadii.xs,
           }}>
-          <Text variant={'subtitle1'} color={'white'} numberOfLines={1}>
+          <Text variant={'subtitle1'} color={'$buttonTextPrimary'} numberOfLines={1}>
             {recipe.name}
           </Text>
           <Box flexDirection={'row'} alignItems={'center'}>
-            <Icon name="clock" color={'white'} />
-            <Text ml={'xs'} variant={'caption'} color={'white'}>
+            <Icon name="clock" color={'$buttonTextPrimary'} />
+            <Text ml={'xs'} variant={'caption'} color={'$buttonTextPrimary'}>
               {recipe.time}
             </Text>
-            <Text color={'white'}> - </Text>
-            <Icon name="users" color={'white'} />
-            <Text ml={'xs'} variant={'caption'} color={'white'}>
+            <Text color={'$buttonTextPrimary'}> - </Text>
+            <Icon name="users" color={'$buttonTextPrimary'} />
+            <Text ml={'xs'} variant={'caption'} color={'$buttonTextPrimary'}>
               {recipe.quantity}
             </Text>
           </Box>

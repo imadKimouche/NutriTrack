@@ -29,13 +29,13 @@ const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
       alignSelf={'stretch'}
       p={'m'}
       borderRadius={'sm'}
-      borderBottomColor={'$listItemDivider'}
+      borderBottomColor={'$divider'}
       borderBottomWidth={1}
       flexDirection={'row'}
       alignItems={'center'}>
-      <Image source={{uri: meal.images.thumbUrl}} style={{width: 30, height: 30}} />
+      <Image source={{uri: meal.images.thumbUrl}} style={{width: 60, height: 60}} />
       <Box alignItems={'flex-start'} px={'s'} flex={1}>
-        <Text variant={'caption'} ellipsizeMode={'tail'}>
+        <Text variant={'body1'} ellipsizeMode={'tail'}>
           {meal.name}
         </Text>
       </Box>
@@ -66,8 +66,8 @@ const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: (
     } else {
       return (
         <Pressable alignSelf={'center'} py={'s'} onPress={onPress}>
-          <Text variant={'caption'} color={'$primary'}>
-            Plus
+          <Text variant={'subtitle1'} color={'$primary'}>
+            Charger plus
           </Text>
         </Pressable>
       );
@@ -95,7 +95,7 @@ const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNav
 
   if (data !== undefined && data.length > 0) {
     return (
-      <Box flex={1} bg={'$background'} alignSelf={'stretch'} mx={'m'} borderRadius={'xs'}>
+      <Box flex={3} bg={'$cardBackground'} alignSelf={'stretch'} mx={'m'} borderRadius={'xs'}>
         <FlatList
           data={data}
           renderItem={item => <MealListItem meal={item.item} onItemPressed={onMealPressed} />}
@@ -117,23 +117,21 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
 
   return (
-    <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
+    <Box flex={1} bg={'$screenBackground'} style={{paddingBottom: insets.bottom}}>
       <BaseHeader
         title="Trouver un aliment"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<BarCodeButton onPress={() => navigation.navigate('BarCodeScanner')} />}
       />
-      <Box flex={1} bg={'$background'} style={{paddingBottom: insets.bottom}}>
+      <Box flex={1} bg={'$screenBackground'} style={{paddingBottom: insets.bottom}}>
         <Box p={'s'}>
           <Searchbar onSubmitEditing={setSearchMeal} placeholder={'Riz, lentilles ...'} />
         </Box>
         <SearchList searchValue={searchMeal} navigation={navigation} />
-        <Box flex={1} m={'s'}>
-          <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-            <Text variant={'body1'} color={'$primary'}>
-              Historique
-            </Text>
-            <Text onPress={clearMealSearchHistory} variant={'caption'}>
+        <Box flex={1} mx={'s'} my={'m'}>
+          <Box flexDirection={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
+            <Text variant={'h6'}>Historique</Text>
+            <Text onPress={clearMealSearchHistory} variant={'subtitle1'} color={'$link'}>
               Tout effacer
             </Text>
           </Box>
@@ -145,7 +143,7 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
                 alignSelf={'stretch'}
                 p={'m'}
                 borderBottomWidth={1}
-                borderColor={'$listItemDivider'}>
+                borderColor={'$divider'}>
                 <Text variant={'body2'}>{meal.name}</Text>
               </Pressable>
             );

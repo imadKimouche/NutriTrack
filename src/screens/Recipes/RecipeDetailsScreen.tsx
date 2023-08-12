@@ -15,7 +15,7 @@ import {Theme} from '../../style/theme';
 
 const StepListItem: React.FC<{step: string; index: number}> = ({step, index}) => {
   return (
-    <Box flexDirection={'row'} bg={'$slideTabBackground'} borderRadius={'xs'} p={'s'} m={'s'}>
+    <Box flexDirection={'row'} bg={'$cardBackground'} borderRadius={'xs'} p={'s'} m={'s'}>
       <Text mr={'s'} variant={'subtitle2'}>
         {index + 1}
       </Text>
@@ -28,13 +28,13 @@ const IngredientListItem: React.FC<{ingredient: Ingredient}> = ({ingredient}) =>
   const {borderRadii} = useTheme<Theme>();
 
   return (
-    <Box bg={'$slideTabBackground'} borderRadius={'sm'} p={'s'} my={'xs'} flexDirection={'row'} alignItems={'center'}>
+    <Box bg={'$cardBackground'} borderRadius={'sm'} p={'s'} my={'xs'} flexDirection={'row'} alignItems={'center'}>
       <Image source={{uri: ingredient.image}} style={{width: 50, height: 50, borderRadius: borderRadii.sm}} />
       <Text flex={1} ml={'m'} variant={'subtitle1'} textTransform={'capitalize'}>
         {ingredient.name}
       </Text>
       <Box flexDirection={'row'}>
-        <Text variant={'subtitle2'} color={'$labelOff'}>
+        <Text variant={'subtitle2'} color={'$textLabel'}>
           {`${ingredient.quantity} ${ingredient.unit !== 'N/A' ? ingredient.unit : ''}`}
         </Text>
       </Box>
@@ -59,7 +59,7 @@ const RecipeDetailsScreen: React.FC<{
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={
           <Pressable onPress={() => recipe && toggleFavoriteRecipe(recipe.id)}>
-            <HeartIcon size={24} color={'$primary'} fillColor={recipe?.isFavorite ? '$primary' : 'transparent'} />
+            <HeartIcon size={24} color={'$primary'} fillColor={recipe?.isFavorite ? '$primary' : '$iconRegular'} />
           </Pressable>
         }
       />
@@ -79,7 +79,7 @@ const RecipeDetailsScreen: React.FC<{
               position={'absolute'}
               bottom={-25}
               alignSelf={'center'}
-              bg={'white'}
+              bg={'$cardBackground'}
               flexDirection={'row'}
               p={'m'}
               borderRadius={'md'}

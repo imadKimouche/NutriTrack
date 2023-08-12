@@ -18,7 +18,7 @@ type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList,
 const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} px={'s'}>
-      <Text variant={'button'} color={'$primary'}>
+      <Text variant={'button'} color={'$textLabel'}>
         Enregistrer
       </Text>
     </Pressable>
@@ -27,8 +27,8 @@ const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
 
 const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, value}) => {
   return (
-    <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$slideTabBackground'} justifyContent={'space-between'}>
-      <Text variant={'subtitle1'}>{label}</Text>
+    <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$cardBackground'} justifyContent={'space-between'}>
+      <Text variant={'body1'}>{label}</Text>
       <Text variant={'subtitle2'}>{value.toString()}</Text>
     </Box>
   );
@@ -59,22 +59,22 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
 
   return (
-    <Box flex={1} bg={'$background'}>
+    <Box flex={1} bg={'$screenBackground'}>
       <BaseHeader
         title="Aliment"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveMealButton onPress={saveMealPortion} />}
       />
       {saveMealIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
-      <Box flex={0.5} alignItems={'center'} px={'s'}>
-        <Text variant={'subtitle1'} py={'xs'}>
+      <Box flex={0.7} alignItems={'center'} px={'s'}>
+        <Text variant={'h5'} py={'s'}>
           {meal.name}
         </Text>
-        <Image source={{uri: meal.images.url}} style={{width: 150, height: 150}} />
+        <Image source={{uri: meal.images.url}} style={{width: 200, height: 200}} />
       </Box>
-      <Box flex={0.2} px={'s'}>
+      <Box flex={0.2} px={'m'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'subtitle1'}>Portion</Text>
+          <Text variant={'h6'}>Portion</Text>
           <Input
             value={portion.toString()}
             onChangeText={text => {
@@ -87,11 +87,11 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
                 }
               }
             }}
-            bg={'$background'}
             height={50}
             width={140}
             marginLeft={'s'}
             borderRadius={'xs'}
+            borderColor={'$inputBorder'}
             keyboardType={'numeric'}
             paddingHorizontal={'s'}
           />
@@ -105,14 +105,16 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
           </Picker>
         </Box>
       </Box>
-      <Box flex={1} p={'s'}>
-        <Text py={'s'} variant={'subtitle1'}>
+      <Box flex={1} p={'m'}>
+        <Text py={'s'} variant={'h6'}>
           Macro-nutriments (100g)
         </Text>
-        <NutrimentValueItem label="Calories" value={meal.calories} />
-        <NutrimentValueItem label="Protéines" value={meal.proteins} />
-        <NutrimentValueItem label="Glucides" value={meal.carbs} />
-        <NutrimentValueItem label="Gras" value={meal.fat} />
+        <Box bg={'$cardBackground'} borderRadius={'sm'} p={'s'}>
+          <NutrimentValueItem label="Calories" value={meal.calories} />
+          <NutrimentValueItem label="Protéines" value={meal.proteins} />
+          <NutrimentValueItem label="Glucides" value={meal.carbs} />
+          <NutrimentValueItem label="Lipides" value={meal.fat} />
+        </Box>
       </Box>
     </Box>
   );

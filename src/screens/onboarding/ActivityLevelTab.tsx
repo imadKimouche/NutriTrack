@@ -4,19 +4,11 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {ActivityLevel, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
-
-const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable onPress={onPress} alignItems={'center'} justifyContent={'center'}>
-      <Icon name="arrow-left" color={'$labelOff'} size={24} />
-    </Pressable>
-  );
-};
 
 type ActivityLevelItem = OnboardingListItem<ActivityLevel>;
 
@@ -40,14 +32,14 @@ export const ActivityLevelListItem: React.FC<
       alignItems={'center'}
       height={56}
       borderBottomWidth={1}
-      borderBottomColor={'$listItemDivider'}
+      borderBottomColor={'$divider'}
       borderStyle={'solid'}>
-      <Icon name={icon} size={26} color={isSelected ? '$primary' : '$labelOff'} />
+      <Icon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
       <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$primary' : 'black'}>
+        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
           {label}
         </Text>
-        <Text variant={'body2'} color={isSelected ? '$primary' : '$labelOff'}>
+        <Text variant={'body2'} color={isSelected ? '$link' : '$textBody'}>
           {indication}
         </Text>
       </Box>

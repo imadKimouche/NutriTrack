@@ -21,7 +21,7 @@ import RecipesSearchResultsScreen from './Recipes/RecipesResultsScreen';
 import RecipesStackNavigator from '../navigation/RecipesStackNavigator';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
-  return <Icon name={name} size={size} color={focused ? '$primary' : '$tabBarInactiveTint'} />;
+  return <Icon name={name} size={size} color={focused ? '$iconActive' : '$iconRegular'} />;
 };
 
 export type HomeStackParamList = {
@@ -81,8 +81,8 @@ const HomeTabNavigator = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarActiveTintColor: colors.$primary,
-          tabBarInactiveTintColor: colors.$tabBarInactiveTint,
+          tabBarActiveTintColor: colors.$iconActive,
+          tabBarInactiveTintColor: colors.$iconRegular,
           tabBarIcon: props => <BottomTabIcon name="calendar" {...props} />,
         }}
       />
@@ -90,8 +90,8 @@ const HomeTabNavigator = () => {
         name="Recipes"
         component={RecipesStackNavigator}
         options={{
-          tabBarActiveTintColor: colors.$primary,
-          tabBarInactiveTintColor: colors.$tabBarInactiveTint,
+          tabBarActiveTintColor: colors.$iconActive,
+          tabBarInactiveTintColor: colors.$iconRegular,
           tabBarIcon: props => <BottomTabIcon name="book" {...props} />,
         }}
       />

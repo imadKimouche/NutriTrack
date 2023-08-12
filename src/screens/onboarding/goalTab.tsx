@@ -42,14 +42,14 @@ export const FitnessGoalListItem: React.FC<FitnessGoalItem & {selectedItem: Fitn
       alignItems={'center'}
       height={56}
       borderBottomWidth={1}
-      borderBottomColor={'$listItemDivider'}
+      borderBottomColor={'$divider'}
       borderStyle={'solid'}>
-      <Icon name={icon} size={26} color={isSelected ? '$primary' : '$labelOff'} />
+      <Icon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
       <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$primary' : 'black'}>
+        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
           {label}
         </Text>
-        <Text variant={'body2'} color={isSelected ? '$primary' : '$labelOff'}>
+        <Text variant={'body2'} color={isSelected ? '$link' : '$textBody'}>
           {indication}
         </Text>
       </Box>

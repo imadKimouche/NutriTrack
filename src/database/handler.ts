@@ -182,7 +182,6 @@ export async function toggleRecipeFavoriteStatus(id: number): Promise<boolean> {
         [id],
         (tx1, selectResult) => {
           if (selectResult && selectResult.rows.length) {
-            console.log('getRecipe', selectResult.rows.raw());
             const isFavoriteValue = selectResult.rows.item(0).is_favorite;
             tx1.executeSql(
               updateQuery,

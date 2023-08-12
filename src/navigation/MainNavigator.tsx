@@ -45,6 +45,7 @@ const ResetPassword = () => {
 };
 
 const Landing = () => {
+  // TODO investigate userFitnessData refresh multiple times
   const {userFitnessData, isLoading, isError} = useUserFitnessData();
 
   if (isLoading) {

@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import StatusBar from '../components/StatusBar';
-import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
+import {Dimensions, Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
@@ -40,9 +40,7 @@ export const SignInScreen = () => {
         <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
       </Box>
       <Box flex={1.2} alignItems={'center'} justifyContent={'space-between'}>
-        <Text variant={'h1'} textAlign={'center'}>
-          LeftoverFit
-        </Text>
+        <Image source={require('../assets/logo-180x180.png')} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.xl}}>

@@ -4,15 +4,15 @@ import {MealType} from '../store/dashboard';
 
 export async function pushUserMeal(userId: string, date: string, mealType: MealType, meal: Meal, portion: number, unit: string) {
   try {
-    const dailyMealsRef = firestore().doc(`users/${userId}/dailyMeals/${date}`);
-    const docSnapshot = await dailyMealsRef.get();
+    const dailyMealsDoc = firestore().collection('users').doc(userId).collection('dailyMeals').doc(date);
+    const docSnapshot = await dailyMealsDoc.get();
 
     if (docSnapshot.exists) {
-      return dailyMealsRef.update({
+      await dailyMealsDoc.update({
         [mealType]: firestore.FieldValue.arrayUnion({...meal, portion, unit}),
       });
     } else {
-      return dailyMealsRef.set(
+      await dailyMealsDoc.set(
         {
           [mealType]: [{...meal, portion, unit}],
         },
@@ -171,35 +171,5 @@ export async function deleteUserMeal(userId: string, date: string, mealType: Mea
         });
       }
     }
-  }
-}
-
-export async function setUserBMR(userId: string, bmr: number) {
-  try {
-    const userDataRef = firestore().doc(`users/${userId}`);
-    const snapshot = await userDataRef.get();
-
-    if (snapshot.exists) {
-      return userDataRef.set({bmr});
-    } else {
-      return userDataRef.set({bmr}, {merge: true});
-    }
-  } catch (err) {
-    console.log('setUserBMR(): ', err);
-  }
-}
-
-export async function setUserTDEE(userId: string, tdee: number) {
-  try {
-    const userDataRef = firestore().doc(`users/${userId}`);
-    const snapshot = await userDataRef.get();
-
-    if (snapshot.exists) {
-      return userDataRef.set({tdee});
-    } else {
-      return userDataRef.set({tdee}, {merge: true});
-    }
-  } catch (err) {
-    console.log('setUserTDEE(): ', err);
   }
 }

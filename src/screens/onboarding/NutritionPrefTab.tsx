@@ -19,7 +19,6 @@ import {useTheme} from '@shopify/restyle';
 import {Theme} from '../../style/theme';
 import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
-import {useUserBMR, useUserTDEE} from '../../hooks/userDietData';
 
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 
@@ -117,17 +116,12 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     height: state.height,
     weight: state.weight,
   }));
-  const {storeUserFitnessData} = useUserFitnessData();
-  const {storeUserBMR} = useUserBMR();
-  const {storeUserTDEE} = useUserTDEE();
+  const {storeUserFitnessData, storeUFDIsLoading} = useUserFitnessData();
 
   function setUserData() {
     const bmr = calculateBMR(gender, age, height, weight);
     const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
-    storeUserBMR(bmr);
-    storeUserTDEE(tdee);
-    storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies});
-    console.log({fitnessGoal, activityLevel, gender, age, height, weight, allergies, bmr, tdee});
+    storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies, tdee});
   }
 
   return (
@@ -144,7 +138,14 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
         </Box>
       </Box>
       <Box flex={0.5} justifyContent={'center'} alignItems={'center'}>
-        <Button width={'53%'} label="Accéder à mon suivi" onPress={setUserData} variant="primary" icon="chevron-right" />
+        <Button
+          width={'53%'}
+          label="Accéder à mon suivi"
+          loading={storeUFDIsLoading}
+          onPress={setUserData}
+          variant="primary"
+          icon="chevron-right"
+        />
       </Box>
     </Box>
   );

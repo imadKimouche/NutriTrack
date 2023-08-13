@@ -11,6 +11,7 @@ import Input from '../atoms/Input';
 import {usePostMeal} from '../hooks/meal';
 import BaseHeader, {GoBackButton} from '../components/Header';
 import LoadingModal from '../components/LoadingModal';
+import ListItem from '../components/ListItem';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
@@ -22,15 +23,6 @@ const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
         Enregistrer
       </Text>
     </Pressable>
-  );
-};
-
-const NutrimentValueItem: React.FC<{label: string; value: number}> = ({label, value}) => {
-  return (
-    <Box flexDirection={'row'} p={'s'} alignSelf={'stretch'} bg={'$cardBackground'} justifyContent={'space-between'}>
-      <Text variant={'body1'}>{label}</Text>
-      <Text variant={'subtitle2'}>{value.toString()}</Text>
-    </Box>
   );
 };
 
@@ -57,6 +49,13 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   }
 
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
+
+  const nutrimentItems = [
+    {id: 'calories', label: 'calories', value: `${meal.calories} kcal`},
+    {id: 'proteins', label: 'protéines', value: `${meal.proteins} g`},
+    {id: 'carbs', label: 'glucides', value: `${meal.carbs} g`},
+    {id: 'fat', label: 'lipides', value: `${meal.fat} g`},
+  ];
 
   return (
     <Box flex={1} bg={'$screenBackground'}>
@@ -109,11 +108,18 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
         <Text py={'s'} variant={'h6'}>
           Macro-nutriments (100g)
         </Text>
-        <Box bg={'$cardBackground'} borderRadius={'sm'} p={'s'}>
-          <NutrimentValueItem label="Calories" value={meal.calories} />
-          <NutrimentValueItem label="Protéines" value={meal.proteins} />
-          <NutrimentValueItem label="Glucides" value={meal.carbs} />
-          <NutrimentValueItem label="Lipides" value={meal.fat} />
+        <Box bg={'$cardBackground'} borderRadius={'sm'} p={'xs'}>
+          {nutrimentItems.map(item => (
+            <ListItem
+              key={item.id}
+              title={item.label}
+              rightComponent={
+                <Text variant={'subtitle2'} color={'$textLabel'}>
+                  {item.value}
+                </Text>
+              }
+            />
+          ))}
         </Box>
       </Box>
     </Box>

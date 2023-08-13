@@ -9,38 +9,10 @@ import Collapsible from '../../components/Collapsible';
 import BaseHeader, {GoBackButton} from '../../components/Header';
 import HeartIcon from '../../components/Heart';
 import Icon from '../../components/Icon';
-import {Ingredient, useRecipe, useToggleFavoriteRecipe} from '../../hooks/meal';
+import ListItem from '../../components/ListItem';
+import {useRecipe, useToggleFavoriteRecipe} from '../../hooks/meal';
 import {RecipesStackNavigationProps, RecipesStackRouteProps} from '../../navigation/RecipesStackNavigator';
 import {Theme} from '../../style/theme';
-
-const StepListItem: React.FC<{step: string; index: number}> = ({step, index}) => {
-  return (
-    <Box flexDirection={'row'} bg={'$cardBackground'} borderRadius={'xs'} p={'s'} m={'s'}>
-      <Text mr={'s'} variant={'subtitle2'}>
-        {index + 1}
-      </Text>
-      <Text variant={'body1'}>{step}</Text>
-    </Box>
-  );
-};
-
-const IngredientListItem: React.FC<{ingredient: Ingredient}> = ({ingredient}) => {
-  const {borderRadii} = useTheme<Theme>();
-
-  return (
-    <Box bg={'$cardBackground'} borderRadius={'sm'} p={'s'} my={'xs'} flexDirection={'row'} alignItems={'center'}>
-      <Image source={{uri: ingredient.image}} style={{width: 50, height: 50, borderRadius: borderRadii.sm}} />
-      <Text flex={1} ml={'m'} variant={'subtitle1'} textTransform={'capitalize'}>
-        {ingredient.name}
-      </Text>
-      <Box flexDirection={'row'}>
-        <Text variant={'subtitle2'} color={'$textLabel'}>
-          {`${ingredient.quantity} ${ingredient.unit !== 'N/A' ? ingredient.unit : ''}`}
-        </Text>
-      </Box>
-    </Box>
-  );
-};
 
 const RecipeDetailsScreen: React.FC<{
   navigation: RecipesStackNavigationProps<'recipeDetails'>;
@@ -103,14 +75,31 @@ const RecipeDetailsScreen: React.FC<{
           <Box px={'s'} py={'xs'}>
             <Collapsible title={`ingrédients (${recipe.ingredients.length})`} open={true}>
               {recipe.ingredients.map(ing => (
-                <IngredientListItem key={ing.id} ingredient={ing} />
+                <ListItem
+                  key={ing.id}
+                  leftComponent={<Image source={{uri: ing.image}} style={{width: 50, height: 50}} />}
+                  title={ing.name}
+                  rightComponent={
+                    <Text variant={'subtitle2'} color={'$textLabel'}>
+                      {`${ing.quantity} ${ing.unit !== 'N/A' ? ing.unit : ''}`}
+                    </Text>
+                  }
+                />
               ))}
             </Collapsible>
           </Box>
           <Box px={'s'} py={'xs'}>
             <Collapsible title={`Étapes (${recipe.time})`}>
               {recipe.steps.map((step, index) => (
-                <StepListItem key={index} step={step} index={index} />
+                <ListItem
+                  key={index}
+                  leftComponent={
+                    <Text variant={'h6'} color={'$textLabel'}>
+                      {index + 1}
+                    </Text>
+                  }
+                  title={step}
+                />
               ))}
             </Collapsible>
           </Box>

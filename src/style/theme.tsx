@@ -88,6 +88,133 @@ const p = {
 };
 
 const customTextVariants = {
+  defaults: {},
+  'display-huge': {
+    fontSize: 32,
+    lineHeight: 44,
+  },
+  'display-huge-bold': {
+    fontSize: 32,
+    lineHeight: 36,
+    fontWeight: 'bold',
+  },
+  'display-large': {
+    fontSize: 28,
+    lineHeight: 40,
+  },
+  'display-large-bold': {
+    fontSize: 28,
+    lineHeight: 40,
+    fontWeight: 'bold',
+  },
+  'display-medium': {
+    fontSize: 24,
+    lineHeight: 32,
+  },
+  'display-medium-bold': {
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: 'bold',
+  },
+  'display-small': {
+    fontSize: 20,
+    lineHeight: 32,
+  },
+  'display-small-bold': {
+    fontSize: 20,
+    lineHeight: 32,
+    fontWeight: 'bold',
+  },
+  'text-large': {
+    fontSize: 20,
+    lineHeight: 32,
+    letterSpacing: 0.75,
+  },
+  'text-large-tight': {
+    fontSize: 20,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+  },
+  'text-medium': {
+    fontSize: 17,
+    lineHeight: 28,
+    letterSpacing: 0.75,
+  },
+  'text-medium-tight': {
+    fontSize: 17,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+  },
+  'text-small': {
+    fontSize: 14,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+  },
+  'text-small-tight': {
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.75,
+  },
+  'text-x-small': {
+    fontSize: 13,
+    lineHeight: 22,
+    letterSpacing: 0.25,
+    fontWeight: 400,
+  },
+  'text-x-small-tight': {
+    fontSize: 13,
+    lineHeight: 16,
+    letterSpacing: 0.25,
+    fontWeight: 'medium',
+  },
+  'link-large': {
+    fontSize: 20,
+    lineHeight: 32,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-large-tight': {
+    fontSize: 20,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-medium': {
+    fontSize: 17,
+    lineHeight: 26,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-medium-tight': {
+    fontSize: 17,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-small': {
+    fontSize: 14,
+    lineHeight: 26,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-small-tight': {
+    fontSize: 14,
+    lineHeight: 10,
+    letterSpacing: 0.75,
+    fontWeight: 500,
+  },
+  'link-x-small': {
+    fontSize: 13,
+    lineHeight: 22,
+    letterSpacing: 0.25,
+    fontWeight: 500,
+  },
+  'link-x-small-tight': {
+    fontSize: 13,
+    lineHeight: 25,
+    letterSpacing: 0.25,
+    fontWeight: 500,
+  },
   h1: {
     fontWeight: 300,
     fontSize: 47.78,
@@ -140,7 +267,55 @@ const customTextVariants = {
     fontWeight: 400,
     fontSize: 9.2,
   },
+};
+
+const customElevations = {
   defaults: {},
+  'elevation-1': {
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: '$cardShadow',
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
+  'elevation-2': {
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowColor: '$cardShadow',
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+  },
+  'elevation-3': {
+    shadowOffset: {
+      width: 0,
+      height: 15,
+    },
+    shadowColor: '$cardShadow',
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+  },
+  'elevation-4': {
+    shadowOffset: {
+      width: 0,
+      height: 35,
+    },
+    shadowColor: '$cardShadow',
+    shadowOpacity: 0.4,
+    shadowRadius: 40,
+  },
+  'elevation-5': {
+    shadowOffset: {
+      width: 0,
+      height: 50,
+    },
+    shadowColor: '$cardShadow',
+    shadowOpacity: 0.4,
+    shadowRadius: 60,
+  },
 };
 
 const theme = createTheme({
@@ -271,13 +446,24 @@ const theme = createTheme({
     ...customTextVariants,
   },
   cardVariants: {
-    defaults: {},
-    elevated: {
-      shadowColor: '#000',
-      shadowOpacity: 0.2,
-      shadowOffset: {width: 0, height: 5},
-      shadowRadius: 15,
-      elevation: 5,
+    defaults: {
+      backgroundColor: '$cardBackground',
+      shadowColor: '$cardShadow',
+      shadowOffset: {
+        width: 0,
+        height: 24,
+      },
+      shadowOpacity: 1,
+      shadowRadius: 32,
+      elevation: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: 64,
+      minWidth: 64,
+      borderRadius: 'xs',
+    },
+    active: {
+      backgroundColor: '$primary',
     },
   },
   inputVariants: {
@@ -336,6 +522,9 @@ const theme = createTheme({
     active: {
       color: '$textBody',
     },
+  },
+  elevationVariants: {
+    ...customElevations,
   },
 });
 

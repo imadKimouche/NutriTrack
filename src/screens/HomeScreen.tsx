@@ -3,27 +3,24 @@ import {useTheme} from '@shopify/restyle';
 import React, {useMemo} from 'react';
 import {FlatList} from 'react-native';
 import Box from '../atoms/Box';
-import Image from '../atoms/Image';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
+import Avatar from '../components/Avatar';
 import BaseHeader from '../components/Header';
 import Icon from '../components/Icon';
 import ListItem from '../components/ListItem';
+import TrackerCalendar from '../components/TrackerCalendar';
 import {useAuth} from '../hooks/auth';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserFitnessData} from '../hooks/userFitnessData';
 import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
-import {extractInitials, getSurroundingDates} from '../utils';
+import {extractInitials} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
 
 // TODO make dateItem card variants (import from Figma)
 
 const ProfileSettingsIcon: React.FC<{email?: string | null; onPress: () => void}> = ({email, onPress}) => {
-  const initials = useMemo(() => {
-    return extractInitials(email);
-  }, [email]);
-
   return (
     <Pressable
       onPress={onPress}
@@ -40,40 +37,6 @@ const ProfileSettingsIcon: React.FC<{email?: string | null; onPress: () => void}
         {initials}
       </Text>
     </Pressable>
-  );
-};
-
-const DatePicker: React.FC<{currentDate: string; onPress: (date: string) => void}> = ({currentDate, onPress}) => {
-  const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
-
-  return (
-    <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} p={'m'}>
-      {dates.map(date => {
-        const selected = currentDate === date;
-        const dateSplit = date.split('-');
-        const dayInWeek = dateSplit[0];
-        const day = dateSplit[1];
-
-        return (
-          <Pressable
-            key={date}
-            onPress={() => onPress(date)}
-            width={58}
-            height={78}
-            alignItems={'center'}
-            justifyContent={'space-evenly'}
-            bg={selected ? '$buttonBgPrimary' : '$buttonBgOutline'}
-            borderRadius={'sm'}>
-            <Text color={selected ? '$buttonTextPrimary' : '$textBody'} variant={'body2'}>
-              {dayInWeek}
-            </Text>
-            <Text color={selected ? '$buttonTextPrimary' : '$textLabel'} variant={'subtitle1'}>
-              {day}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </Box>
   );
 };
 
@@ -185,6 +148,9 @@ type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'H
 const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
   const {spacing} = useTheme<Theme>();
   const {user} = useAuth();
+  const initials = useMemo(() => {
+    return extractInitials(user?.email ?? '');
+  }, [user?.email]);
   const {currentSelectedDate, setCurrentSelectedDate, currentMealType, setCurrentMealType} = useDashboardStore(state => ({
     currentSelectedDate: state.selectedDate,
     setCurrentSelectedDate: state.setSelectedDate,
@@ -206,10 +172,10 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
     <Box bg={'$screenBackground'} flex={1}>
       <BaseHeader
         title="Suivi journalier"
-        rightComponent={<ProfileSettingsIcon email={user?.email} onPress={() => navigation.navigate('Settings')} />}
+        rightComponent={<Avatar label={initials} onPress={() => navigation.navigate('Settings')} />}
       />
       <Box bg={'$screenBackground'} flex={1} alignItems={'center'}>
-        <DatePicker
+        <TrackerCalendar
           currentDate={currentSelectedDate}
           onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
         />

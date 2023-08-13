@@ -12,6 +12,7 @@ import {ProfileSettingsItem, SaveButton} from './ProfileSettingsScreen';
 import {ActivityLevelListItem, ACTIVITY_LEVELS} from '../onboarding/ActivityLevelTab';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import LoadingModal from '../../components/LoadingModal';
+import ListItem from '../../components/ListItem';
 
 type BottomSheetType = 'fitnessGoal' | 'activityLevel' | undefined;
 type FitnessSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
@@ -46,29 +47,34 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
     }
   }
 
+  const fitnessSettings = [
+    {id: 'fitnessGoal', label: 'objectif fitness', value: fitnessGoal},
+    {id: 'activityLevel', label: "niveau d'activité", value: activityLevel},
+  ];
+
   return (
-    <Box flex={1} bg={'$background'}>
+    <Box flex={1} bg={'$screenBackground'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Fitness"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveButton onPress={saveSettings} />}
       />
-      <ProfileSettingsItem
-        label="Objectif fitness"
-        value={fitnessGoal}
-        onPress={() => {
-          openBottomSheetFor('fitnessGoal');
-        }}
-      />
-      <ProfileSettingsItem
-        label="Niveau d'activité"
-        value={activityLevel}
-        onPress={() => {
-          openBottomSheetFor('activityLevel');
-        }}
-      />
-      <BottomSheet ref={bottomSheetRef} index={-1} snapPoints={snapPointLow} enablePanDownToClose={true}>
+      {fitnessSettings.map(setting => (
+        <ListItem
+          key={setting.id}
+          variant={bottomSheetType === setting.id ? 'active' : undefined}
+          title={setting.label}
+          rightComponent={<Text>{setting.value}</Text>}
+          onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
+        />
+      ))}
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPointLow}
+        onClose={() => setBottomSheetType(undefined)}
+        enablePanDownToClose={true}>
         {bottomSheetType === 'fitnessGoal' && (
           <Box px={'m'}>
             <Text mb={'s'} variant={'subtitle2'}>

@@ -8,6 +8,7 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import BaseHeader from '../components/Header';
 import Icon from '../components/Icon';
+import ListItem from '../components/ListItem';
 import {useAuth} from '../hooks/auth';
 import {Meal, useDeleteDailyMeal, useUserDailyMeals} from '../hooks/meal';
 import {useUserFitnessData} from '../hooks/userFitnessData';
@@ -80,28 +81,8 @@ interface MealItemProps extends Meal {
   onLongPress: (id: number) => void;
 }
 
-const MealItem: React.FC<MealItemProps> = ({onLongPress, ...meal}) => {
-  return (
-    <Pressable
-      onLongPress={() => {
-        onLongPress(meal.id);
-      }}
-      bg={'$cardBackground'}
-      py={'m'}
-      mb={'xs'}
-      borderBottomWidth={1}
-      borderColor={'$buttonBorderPrimary'}>
-      <Box flex={1} flexDirection={'row'} alignItems={'center'}>
-        <Image />
-        <Box>
-          <Text variant={'subtitle1'}>{meal.name}</Text>
-          <Text variant={'body2'} color={'$textLabel'}>
-            {meal.calories} kcal
-          </Text>
-        </Box>
-      </Box>
-    </Pressable>
-  );
+const MealItem: React.FC<MealItemProps> = ({...meal}) => {
+  return <ListItem title={meal.name} subtitle={`${meal.calories} kcal`} />;
 };
 
 const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => void}> = ({label, selected = false, onPress}) => {

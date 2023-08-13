@@ -87,6 +87,62 @@ const p = {
   transparent: 'transparent',
 };
 
+const customTextVariants = {
+  h1: {
+    fontWeight: 300,
+    fontSize: 47.78,
+  },
+  h2: {
+    fontWeight: 300,
+    fontSize: 39.81,
+  },
+  h3: {
+    fontWeight: 400,
+    fontSize: 33.18,
+  },
+  h4: {
+    fontWeight: 400,
+    fontSize: 27.65,
+  },
+  h5: {
+    fontWeight: 400,
+    fontSize: 23.04,
+  },
+  h6: {
+    fontWeight: 500,
+    fontSize: 19.2,
+  },
+  subtitle1: {
+    fontWeight: 400,
+    fontSize: 16,
+  },
+  subtitle2: {
+    fontWeight: 500,
+    fontSize: 13.33,
+  },
+  body1: {
+    fontWeight: 400,
+    fontSize: 16,
+  },
+  body2: {
+    fontWeight: 400,
+    fontSize: 13.33,
+  },
+  button: {
+    fontWeight: 500,
+    fontSize: 13.33,
+  },
+  caption: {
+    fontWeight: 400,
+    fontSize: 11.11,
+  },
+  overline: {
+    fontWeight: 400,
+    fontSize: 9.2,
+  },
+  defaults: {},
+};
+
 const theme = createTheme({
   colors: {
     $primary: p.orange,
@@ -212,59 +268,7 @@ const theme = createTheme({
     },
   },
   textVariants: {
-    h1: {
-      fontWeight: 300,
-      fontSize: 47.78,
-    },
-    h2: {
-      fontWeight: 300,
-      fontSize: 39.81,
-    },
-    h3: {
-      fontWeight: 400,
-      fontSize: 33.18,
-    },
-    h4: {
-      fontWeight: 400,
-      fontSize: 27.65,
-    },
-    h5: {
-      fontWeight: 400,
-      fontSize: 23.04,
-    },
-    h6: {
-      fontWeight: 500,
-      fontSize: 19.2,
-    },
-    subtitle1: {
-      fontWeight: 400,
-      fontSize: 16,
-    },
-    subtitle2: {
-      fontWeight: 500,
-      fontSize: 13.33,
-    },
-    body1: {
-      fontWeight: 400,
-      fontSize: 16,
-    },
-    body2: {
-      fontWeight: 400,
-      fontSize: 13.33,
-    },
-    button: {
-      fontWeight: 500,
-      fontSize: 13.33,
-    },
-    caption: {
-      fontWeight: 400,
-      fontSize: 11.11,
-    },
-    overline: {
-      fontWeight: 400,
-      fontSize: 9.2,
-    },
-    defaults: {},
+    ...customTextVariants,
   },
   cardVariants: {
     defaults: {},
@@ -296,6 +300,41 @@ const theme = createTheme({
     },
     input: {
       color: '$iconActive',
+    },
+  },
+  listItemVariants: {
+    defaults: {
+      backgroundColor: '$cardBackground',
+      padding: {phone: 's'},
+      borderBottomWidth: 1,
+      borderBottomColor: '$divider',
+      borderRadius: 'xs',
+    },
+    active: {
+      borderBottomColor: '$primary',
+    },
+  },
+  listItemTitleVariants: {
+    defaults: {
+      backgroundColor: '$cardBackground',
+      color: '$textBody',
+      padding: {phone: 'xs'},
+      textTransform: 'capitalize',
+      ...customTextVariants.subtitle1,
+    },
+    active: {
+      color: '$primary',
+    },
+  },
+  listItemSubtitleVariants: {
+    defaults: {
+      backgroundColor: '$cardBackground',
+      paddingLeft: {phone: 's'},
+      color: '$textPlaceholder',
+      ...customTextVariants.subtitle2,
+    },
+    active: {
+      color: '$textBody',
     },
   },
 });

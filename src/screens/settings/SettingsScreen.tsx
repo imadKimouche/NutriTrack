@@ -2,10 +2,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ResponsiveValue} from '@shopify/restyle';
 import React from 'react';
 import Box from '../../atoms/Box';
-import Pressable from '../../atoms/Pressable';
-import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
 import Icon from '../../components/Icon';
+import ListItem from '../../components/ListItem';
 import {signOut} from '../../hooks/auth';
 import {Theme} from '../../style/theme';
 import {HomeStackParamList} from '../HomeStackNavigator';
@@ -18,14 +17,7 @@ type SettingsItemProps = {
   c: keyof Theme['colors'];
 };
 const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress, bg, c}) => {
-  return (
-    <Pressable flexDirection={'row'} alignItems={'center'} onPress={onPress} p={'s'} px={'m'}>
-      <Box width={42} height={42} marginRight={'m'} borderRadius={'md'} bg={bg} alignItems={'center'} justifyContent={'center'}>
-        <Icon name={icon} size={18} color={c} />
-      </Box>
-      <Text variant={'subtitle1'}>{label}</Text>
-    </Pressable>
-  );
+  return <ListItem onPress={onPress} title={label} leftComponent={<Icon name={icon} size={18} color={c} />} />;
 };
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Settings'>;

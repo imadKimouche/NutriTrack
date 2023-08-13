@@ -16,6 +16,7 @@ import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboar
 import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
 import BottomSheetTextInput from '../../components/BottomSheetTextInput';
 import {FlatList} from 'react-native';
+import ListItem from '../../components/ListItem';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -34,8 +35,8 @@ export const ProfileSettingsItem: React.FC<{label: string; value: string; onPres
       justifyContent={'space-between'}
       p={'m'}
       borderBottomWidth={1}
-      borderColor={'$listItemDivider'}
-      bg={'$background'}>
+      borderColor={'$divider'}
+      bg={'$cardBackground'}>
       <Text variant={'body1'}>{label}</Text>
       <Text variant={'body2'}>{value}</Text>
     </Pressable>
@@ -109,24 +110,37 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
     }
   }
 
+  const profileSettings = [
+    {id: 'height', label: 'taille', value: `${height} cm`},
+    {id: 'weight', label: 'poids', value: `${weight} kg`},
+    {id: 'age', label: 'age', value: `${age} ans`},
+    {id: 'gender', label: 'genre', value: gender},
+    {id: 'allergies', label: 'allérgies', value: ''},
+  ];
+
   return (
-    <Box flex={1} bg={'$background'}>
+    <Box flex={1} bg={'$screenBackground'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Profile"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveButton onPress={saveSettings} />}
       />
-      <ProfileSettingsItem label="Taille" value={`${height} cm`} onPress={() => openBottomSheetFor('height')} />
-      <ProfileSettingsItem label="Poids" value={`${weight} kg`} onPress={() => openBottomSheetFor('weight')} />
-      <ProfileSettingsItem label="Age" value={`${age} ans`} onPress={() => openBottomSheetFor('age')} />
-      <ProfileSettingsItem label="Genre" value={gender} onPress={() => openBottomSheetFor('gender')} />
-      <ProfileSettingsItem label="Allérgies" value={''} onPress={() => openBottomSheetFor('allergies')} />
+      {profileSettings.map(setting => (
+        <ListItem
+          variant={bottomSheetType === setting.id ? 'active' : undefined}
+          key={setting.id}
+          title={setting.label}
+          rightComponent={<Text>{setting.value}</Text>}
+          onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
+        />
+      ))}
       <BottomSheet
         keyboardBehavior="interactive"
         ref={bottomSheetRef}
         index={-1}
         enablePanDownToClose={true}
+        onClose={() => setBottomSheetType(undefined)}
         snapPoints={snapPoint}
         bottomInset={insets.bottom}>
         {bottomSheetType === 'age' && (

@@ -143,7 +143,7 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           label="Accéder à mon suivi"
           loading={storeUFDIsLoading}
           onPress={setUserData}
-          variant="primary-medium-right"
+          variant="primary-right"
           icon="chevron-right"
         />
       </Box>

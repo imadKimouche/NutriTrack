@@ -87,7 +87,7 @@ const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
           onPress={() => {
             navigation.navigate('activityLevel');
           }}
-          variant="primary-medium-right"
+          variant="primary-right"
           icon="chevron-right"
         />
       </Box>

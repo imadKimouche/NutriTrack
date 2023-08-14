@@ -4,27 +4,20 @@ export const buttonVariants = {
   defaults: {
     backgroundColor: '$primary',
     borderRadius: 'sm',
-    paddingHorizontal: 's',
-    paddingVertical: 'm',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
+    paddingHorizontal: 'xs',
+    paddingVertical: 's',
+    minHeight: 50,
   },
   // -- PRIMARY --
-  primary: {
-    paddingHorizontal: 'xs',
-    paddingVertical: 's',
-  },
+  primary: {},
   'primary-disabled': {
-    paddingHorizontal: 'xs',
-    paddingVertical: 's',
     opacity: 0.5,
   },
-  'primary-left': {
-    paddingHorizontal: 'xs',
-    paddingVertical: 's',
-  },
+  'primary-left': {},
   'primary-left-disabled': {
     opacity: 0.5,
   },
@@ -99,8 +92,9 @@ export const buttonVariants = {
 
 export const buttonTextVariants = {
   defaults: {
-    color: '$bg',
+    ...textVariants.defaults,
     ...textVariants['link-medium'],
+    color: '$bg',
     textAlign: 'center',
     textTransform: 'uppercase',
   },

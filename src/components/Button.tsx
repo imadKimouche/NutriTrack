@@ -1,12 +1,13 @@
-import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
+import {createRestyleComponent, createVariant, useTheme, VariantProps} from '@shopify/restyle';
 import React from 'react';
 import Pressable, {PressableProps} from '../atoms/Pressable';
 import Text, {TextProps as TextPropsBase} from '../atoms/Text';
 import {FIconProps as IconPropsBase} from '../components/FIcon';
-import {Theme} from '../style/theme';
+import theme, {Theme} from '../style/theme';
 import FIcon from './FIcon';
 import BrandIcon from './BrandIcon';
 import Loader from './Loader';
+import {buttonTextVariants} from '../style/button';
 
 type PropsBase = PressableProps & VariantProps<Theme, 'buttonVariants'>;
 const ButtonBase = createRestyleComponent<PropsBase, Theme>([createVariant({themeKey: 'buttonVariants'})], Pressable);
@@ -39,10 +40,20 @@ const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProp
     )
   ) : undefined;
 
+  let loaderColor = '$bg';
+
+  if (variant?.toString().startsWith('primary')) {
+    loaderColor = '$bg';
+  } else if (variant?.toString().startsWith('outline')) {
+    loaderColor = '$primary';
+  } else if (variant?.toString().startsWith('ghost')) {
+    loaderColor = '$primary';
+  }
+
   return (
     <ButtonBase variant={variant} disabled={loading} {...rest}>
       {loading ? (
-        <Loader />
+        <Loader color={loaderColor as keyof Theme['colors']} />
       ) : (
         <>
           {Icon}

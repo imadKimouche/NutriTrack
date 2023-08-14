@@ -154,14 +154,15 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
           </>
         )}
       </Box>
-      <Button
-        label="Rechercher"
-        variant={addedIngredients.length ? 'primary-medium-left' : 'primary-medium-left-disabled'}
-        icon="search"
-        disabled={addedIngredients.length === 0}
-        my={'m'}
-        onPress={() => navigation.navigate('recipesSearchResult')}
-      />
+      <Box alignSelf={'stretch'} px={'xl'} my={'m'}>
+        <Button
+          label="Rechercher"
+          variant={addedIngredients.length ? 'primary-left' : 'primary-left-disabled'}
+          icon="search"
+          disabled={addedIngredients.length === 0}
+          onPress={() => navigation.navigate('recipesSearchResult')}
+        />
+      </Box>
     </Box>
   );
 };

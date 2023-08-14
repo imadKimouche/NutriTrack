@@ -18,6 +18,7 @@ import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import Pressable from '../atoms/Pressable';
+import Divider from '../components/Divider';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
 type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -57,12 +58,13 @@ export const SignInScreen = () => {
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'email'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
                 icon={'mail'}
                 placeholder="Email"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={error?.message}
               />
             )}
             name="email"
@@ -84,13 +86,13 @@ export const SignInScreen = () => {
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'newPassword'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
                 icon={'lock'}
                 placeholder="Mot de passe"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={error?.message}
-                returnKeyType={'next'}
                 onSubmitEditing={onSubmit}
               />
             )}
@@ -118,6 +120,7 @@ export const SignInScreen = () => {
           disabled={signInGoogleLoading}
           mb={'s'}
         />
+        <Divider />
         <Button
           variant={'outline-left'}
           icon="b-google"
@@ -125,7 +128,7 @@ export const SignInScreen = () => {
           onPress={() => signInWithGoogle()}
           loading={signInGoogleLoading}
           disabled={submitMutation.isLoading}
-          mb={'s'}
+          my={'s'}
         />
         <Button variant={'outline-left'} icon="b-apple" label="se connecter avec apple" onPress={onSubmit} />
       </Box>

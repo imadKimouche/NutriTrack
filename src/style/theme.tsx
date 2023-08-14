@@ -2,6 +2,7 @@ import {createTheme} from '@shopify/restyle';
 import {buttonIconVariants, buttonTextVariants, buttonVariants} from './button';
 import {elevationVariants} from './elevation';
 import {textVariants} from './text';
+import {tiContainerVariants, tiHintVariants, tiIconVariants, tiInputVariants} from './textInput';
 
 const p = {
   orange: '#F68F25',
@@ -200,6 +201,10 @@ const theme = createTheme({
   textVariants: {
     ...textVariants,
   },
+  tiContainerVariants: tiContainerVariants,
+  tiIconVariants: tiIconVariants,
+  tiInputVariants: tiInputVariants,
+  tiHintVariants: tiHintVariants,
   cardVariants: {
     defaults: {
       backgroundColor: '$cardBackground',
@@ -219,20 +224,6 @@ const theme = createTheme({
     },
     active: {
       backgroundColor: '$primary',
-    },
-  },
-  inputVariants: {
-    defaults: {
-      color: '$inputText',
-    },
-    focused: {
-      color: '$inputText',
-    },
-    error: {
-      color: '$error',
-    },
-    success: {
-      color: '$success',
     },
   },
   iconVariants: {

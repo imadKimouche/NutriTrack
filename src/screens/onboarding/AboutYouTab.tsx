@@ -119,7 +119,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           onPress={() => {
             navigation.navigate('nutritionPreferences');
           }}
-          variant="primary-medium-right"
+          variant="primary-right"
           icon="chevron-right"
         />
       </Box>

@@ -75,7 +75,7 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
           onPress={() => {
             navigation.navigate('aboutYou');
           }}
-          variant="primary-medium-right"
+          variant="primary-right"
           icon="chevron-right"
         />
       </Box>

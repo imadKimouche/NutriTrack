@@ -6,7 +6,7 @@ type DividerProps = {
 };
 
 const Divider: React.FC<DividerProps> = ({type = 'solid'}) => {
-  return <Box width={'100%'} borderWidth={1} height={1} borderStyle={type} borderColor={'$divider'} />;
+  return <Box width={'100%'} borderWidth={1} height={1} borderStyle={type} borderColor={'$line'} />;
 };
 
 export default Divider;

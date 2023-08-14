@@ -1,65 +1,85 @@
 import React from 'react';
 import Input, {InputProps} from '../atoms/Input';
-import {NativeSyntheticEvent, Platform, TextInputFocusEventData, TextInputProps} from 'react-native';
-import Box from '../atoms/Box';
-import FIcon from '../components/FIcon';
-import Text from '../atoms/Text';
-import {useTheme} from '@shopify/restyle';
-import {Theme} from '../style/theme';
+import {NativeSyntheticEvent, Platform, TextInputFocusEventData} from 'react-native';
+import Box, {BoxProps} from '../atoms/Box';
+import FIcon, {FIconProps} from '../components/FIcon';
+import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
+import theme, {Theme} from '../style/theme';
+import {TextProps} from '../atoms/Text';
 
-type Props = TextInputProps &
-  InputProps & {
-    icon?: string;
-    inputPropPresets?: keyof typeof defaultInputProps;
-    error?: string;
-  };
+type TIContainerProps = BoxProps & VariantProps<Theme, 'tiContainerVariants'>;
+const TIContainer = createRestyleComponent<TIContainerProps, Theme>([createVariant({themeKey: 'tiContainerVariants'})], Box);
 
-const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...rest}) => {
+type TIIconProps = Omit<FIconProps, 'variant'> & VariantProps<Theme, 'tiIconVariants'>;
+const TIIcon = createRestyleComponent<TIIconProps, Theme>([createVariant({themeKey: 'tiIconVariants'})], FIcon);
+
+type TIHintProps = Omit<TextProps, 'variant'> & VariantProps<Theme, 'tiHintVariants'>;
+const TIHint = createRestyleComponent<TIHintProps, Theme>([createVariant({themeKey: 'tiHintVariants'})], FIcon);
+
+type TextInputProps = TIContainerProps & {
+  placeholder?: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
+  onBlur?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  icon?: string;
+  hint?: string;
+  inputPropPresets?: keyof typeof defaultInputProps;
+};
+
+const TextInput: React.FC<TextInputProps> = ({
+  variant,
+  icon,
+  inputPropPresets,
+  value,
+  placeholder,
+  onChangeText,
+  onBlur,
+  onFocus,
+  onSubmitEditing,
+  hint,
+  ...rest
+}) => {
+  const [isFocused, setIsFocused] = React.useState(false);
+
   const presetProps = inputPropPresets ? defaultInputProps[inputPropPresets] : {};
-  const {colors} = useTheme<Theme>();
 
   const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    if (rest.onBlur) {
-      rest.onBlur(event);
+    setIsFocused(false);
+    if (onBlur) {
+      onBlur(event);
     }
   };
 
   const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    if (rest.onFocus) {
-      rest.onFocus(event);
+    setIsFocused(true);
+    if (onFocus) {
+      onFocus(event);
     }
   };
 
   return (
-    <Box marginBottom={'s'}>
-      <Box
-        bg={'$inputBg'}
-        flexDirection={'row'}
-        justifyContent={'flex-start'}
-        alignItems={'center'}
-        px={'s'}
-        borderStyle={'solid'}
-        borderWidth={1}
-        borderRadius={'sm'}
-        borderColor={'$inputBorder'}>
-        <FIcon name={icon} size={26} color={value?.length ? '$iconActive' : '$iconRegular'} />
+    <Box my={'xs'}>
+      <TIContainer variant={isFocused ? 'selected' : variant} {...rest}>
+        {icon && <TIIcon name={icon} variant={isFocused ? 'selected' : variant} />}
         <Input
-          {...rest}
-          {...presetProps}
+          variant={isFocused ? 'selected' : variant}
+          placeholder={placeholder}
+          placeholderTextColor={theme.colors.$placehold}
+          clearButtonMode="while-editing"
           value={value}
-          bg={'$inputBg'}
-          borderColor={'$inputBorder'}
-          placeholderTextColor={colors.$inputPlaceholder}
-          paddingHorizontal={'s'}
-          paddingVertical={'m'}
-          borderRadius={'sm'}
-          flex={1}
+          onChangeText={onChangeText}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          style={{padding: 0}}
+          onSubmitEditing={onSubmitEditing}
+          editable={variant !== 'disabled'}
+          {...presetProps}
         />
-      </Box>
-      {error && <Text color={'$error'}>{error}</Text>}
+      </TIContainer>
+      {(variant === 'caption' || variant === 'success' || variant === 'error') && hint && (
+        <TIHint variant={variant}>{hint}</TIHint>
+      )}
     </Box>
   );
 };

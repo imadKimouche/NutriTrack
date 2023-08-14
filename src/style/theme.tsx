@@ -88,7 +88,9 @@ const p = {
 };
 
 const customTextVariants = {
-  defaults: {},
+  defaults: {
+    fontFamily: 'Poppins-Regular',
+  },
   'display-huge': {
     fontSize: 32,
     lineHeight: 44,
@@ -318,9 +320,91 @@ const customElevations = {
   },
 };
 
+const customButtonVariants = {
+  defaults: {
+    backgroundColor: '$primary',
+    borderRadius: 'sm',
+    paddingHorizontal: 's',
+    paddingVertical: 'm',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 129,
+    height: 72,
+    justifyContent: 'center',
+  },
+  'primary-huge': {},
+  'primary-huge-disabled': {
+    opacity: 0.5,
+  },
+  'primary-huge-left': {},
+  'primary-huge-left-disabled': {
+    opacity: 0.5,
+  },
+  'primary-huge-right': {},
+  'primary-huge-right-disabled': {
+    opacity: 0.5,
+  },
+  'primary-huge-no-icon': {},
+  'primary-huge-no-icon-disabled': {
+    opacity: 0.5,
+  },
+};
+
+const customButtonTextVariants = {
+  defaults: {
+    color: '$buttonTextPrimary',
+    ...customTextVariants['link-medium'],
+    textAlign: 'center',
+    textTransform: 'capitalize',
+  },
+  'primary-huge': {},
+  'primary-huge-disabled': {
+    opacity: 0.5,
+  },
+  'primary-huge-left': {},
+  'primary-huge-left-disabled': {},
+  'primary-huge-right': {},
+  'primary-huge-right-disabled': {},
+  'primary-huge-no-icon': {},
+  'primary-huge-no-icon-disabled': {},
+};
+
 const theme = createTheme({
   colors: {
     $primary: p.orange,
+    $primaryWeak: p.orange300,
+    $primaryBg: p.orange100,
+    $primaryBgStrong: p.orange200,
+
+    $bg: p.white,
+    $bgWeak: p.grey100,
+    $input: p.grey200,
+    $line: p.grey300,
+    $placehold: p.grey400,
+    $label: p.grey500,
+    $body: p.grey600,
+    $header: p.grey700,
+
+    $secondary: p.blue,
+    $secondaryWeak: p.blue300,
+    $secondaryBg: p.blue100,
+    $secondaryBgStrong: p.blue200,
+
+    $success: p.green,
+    $successWeak: p.green300,
+    $successBg: p.green100,
+    $successBgStrong: p.green200,
+
+    $warning: p.yellow,
+    $warningWeak: p.yellow300,
+    $warningBg: p.yellow100,
+    $warningBgStrong: p.yellow200,
+
+    $danger: p.red,
+    $dangerWeak: p.red300,
+    $dangerBg: p.red100,
+    $dangerBgStrong: p.red200,
+
     //----Background
     $screenBackground: p.grey100,
     $modalBackground: p.orange100,
@@ -390,46 +474,16 @@ const theme = createTheme({
     xl: 40,
   },
   buttonVariants: {
-    defaults: {
-      backgroundColor: '$primary',
-      borderRadius: 'md',
-      shadowColor: '$buttonShadow',
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 1,
-      shadowRadius: 8,
-    },
-    primary: {
-      backgroundColor: '$primary',
-    },
-    outlined: {
-      backgroundColor: '$buttonBgOutline',
-      borderColor: '$buttonBorderOutline',
-      borderStyle: 'solid',
-      borderWidth: 1,
-    },
-    disabled: {
-      backgroundColor: '$buttonBgPrimaryDisabled',
-    },
+    ...customButtonVariants,
+    primary: {},
+    outlined: {},
+    disabled: {},
   },
-  textButtonVariants: {
-    defaults: {
-      color: '$buttonTextPrimary',
-      fontWeight: 500,
-      fontSize: 16,
-    },
-    primary: {
-      color: '$buttonTextPrimary',
-    },
-    outlined: {
-      backgroundColor: '$buttonBgOutline',
-      color: '$buttonTextOutline',
-    },
-    disabled: {
-      color: '$buttonTextPrimaryDisabled',
-    },
+  buttonTextVariants: {
+    ...customButtonTextVariants,
+    primary: {},
+    outlined: {},
+    disabled: {},
   },
   loaderButtonVariants: {
     defaults: {

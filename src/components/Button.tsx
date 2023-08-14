@@ -1,6 +1,5 @@
 import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
 import React from 'react';
-import {SvgProps} from 'react-native-svg';
 import Box from '../atoms/Box';
 import Pressable, {PressableProps} from '../atoms/Pressable';
 import Text, {TextProps as TextPropsBase} from '../atoms/Text';
@@ -9,21 +8,18 @@ import Icon from './Icon';
 import Loader from './Loader';
 
 type PropsBase = PressableProps & VariantProps<Theme, 'buttonVariants'>;
-
 const ButtonBase = createRestyleComponent<PropsBase, Theme>([createVariant({themeKey: 'buttonVariants'})], Pressable);
 
 type TextProps = Omit<TextPropsBase, 'variant'>;
-
-const ButtonTextBase = createRestyleComponent<TextProps & VariantProps<Theme, 'textButtonVariants'>, Theme>(
-  [createVariant({themeKey: 'textButtonVariants'})],
+const ButtonTextBase = createRestyleComponent<TextProps & VariantProps<Theme, 'buttonTextVariants'>, Theme>(
+  [createVariant({themeKey: 'buttonTextVariants'})],
   Text,
 );
 
-type ButtonProps = {label: string; icon?: string; svgIcon?: React.FC<SvgProps>; loading?: boolean};
+// svgIcon?: React.FC<SvgProps>;
+type ButtonProps = {label: string; icon?: string; loading?: boolean};
 
-const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & ButtonProps) => {
-  const SvgIcon = svgIcon;
-
+const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProps) => {
   return (
     <ButtonBase
       variant={variant}
@@ -36,7 +32,6 @@ const Button = ({label, variant, icon, svgIcon, loading, ...rest}: PropsBase & B
       disabled={loading}
       {...rest}>
       <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-        <Box alignItems={'center'}>{SvgIcon !== undefined && <SvgIcon height={28} width={28} />}</Box>
         <Box flex={1} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
           {loading ? (
             <Loader color={variant === 'primary' ? '$buttonTextPrimary' : '$primary'} />

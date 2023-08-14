@@ -8,7 +8,7 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import Loader from '../../components/Loader';
 import {useSearchRecipe} from '../../hooks/meal';
 import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
@@ -51,12 +51,12 @@ export const RecipeListItem: React.FC<RecipeListItemProps> = ({recipe, onRecipeP
             {recipe.name}
           </Text>
           <Box flexDirection={'row'} alignItems={'center'}>
-            <Icon name="clock" color={'$buttonTextPrimary'} />
+            <FIcon name="clock" color={'$buttonTextPrimary'} />
             <Text ml={'xs'} variant={'caption'} color={'$buttonTextPrimary'}>
               {recipe.time}
             </Text>
             <Text color={'$buttonTextPrimary'}> - </Text>
-            <Icon name="users" color={'$buttonTextPrimary'} />
+            <FIcon name="users" color={'$buttonTextPrimary'} />
             <Text ml={'xs'} variant={'caption'} color={'$buttonTextPrimary'}>
               {recipe.quantity}
             </Text>

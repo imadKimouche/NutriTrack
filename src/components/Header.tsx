@@ -2,13 +2,13 @@ import React from 'react';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import Icon from './Icon';
+import FIcon from './FIcon';
 import StatusBar from './StatusBar';
 
 export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} alignItems={'flex-start'} ml={'m'} justifyContent={'center'}>
-      <Icon name="arrow-left" color={'$iconRegular'} size={24} />
+      <FIcon name="arrow-left" color={'$iconRegular'} size={24} />
     </Pressable>
   );
 };

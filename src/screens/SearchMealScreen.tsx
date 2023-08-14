@@ -5,7 +5,7 @@ import {FlatList, Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import Icon from '../components/Icon';
+import FIcon from '../components/FIcon';
 import Searchbar from '../components/Searchbar';
 import Loader from '../components/Loader';
 import {Meal, useSearchOFFMeal} from '../hooks/meal';
@@ -16,7 +16,7 @@ import BaseHeader, {GoBackButton} from '../components/Header';
 const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} justifyContent={'flex-end'} flexDirection={'row'} alignSelf={'stretch'} mr={'m'}>
-      <Icon name="maximize" color={'$primary'} size={24} />
+      <FIcon name="maximize" color={'$primary'} size={24} />
     </Pressable>
   );
 };

@@ -8,7 +8,7 @@ import Text from '../atoms/Text';
 import Avatar from '../components/Avatar';
 import Button from '../components/Button';
 import BaseHeader from '../components/Header';
-import Icon from '../components/Icon';
+import FIcon from '../components/FIcon';
 import ListItem from '../components/ListItem';
 import TrackerCalendar from '../components/TrackerCalendar';
 import {useAuth} from '../hooks/auth';
@@ -138,7 +138,7 @@ const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => 
         borderColor={'$buttonTextPrimary'}
         width={26}
         height={26}>
-        <Icon name={icon} color={'$buttonTextPrimary'} size={20} />
+        <FIcon name={icon} color={'$buttonTextPrimary'} size={20} />
       </Box>
     </Pressable>
   );
@@ -183,7 +183,6 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
         <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
         <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
         <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
-        <Button label="Button" variant={'primary-huge-disabled'} />
         <Box flex={1} alignSelf={'stretch'}>
           {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
             <FlatList

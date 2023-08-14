@@ -14,6 +14,7 @@ import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import StatusBar from '../components/StatusBar';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
+import Pressable from '../atoms/Pressable';
 
 // type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -114,11 +115,11 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             name="confirmPassword"
           />
 
-          <TouchableOpacity p={'xs'} alignSelf={'flex-end'} onPress={goToSigninSceen}>
-            <Text variant={'body2'} textAlign={'right'} paddingVertical={'s'}>
+          <Pressable p={'xs'} alignSelf={'flex-end'} onPress={goToSigninSceen}>
+            <Text variant={'link-small'} textAlign={'right'} color={'$header'}>
               J'ai déjà un compte
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </KeyboardAvoidingView>
         {submitMutation.error && (
           <Box>
@@ -126,8 +127,8 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
           </Box>
         )}
       </Box>
-      <Box flex={0.5} alignItems={'center'} justifyContent={'center'} pb={'l'}>
-        <Button label="Créer un compte" onPress={onSubmit} variant={'primary'} loading={submitMutation.isLoading} />
+      <Box flex={0.5} alignItems={'center'} justifyContent={'center'} p={'l'}>
+        <Button label="Créer mon compte" onPress={onSubmit} variant={'primary'} loading={submitMutation.isLoading} />
       </Box>
     </Box>
   );

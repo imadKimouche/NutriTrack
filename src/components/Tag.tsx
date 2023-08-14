@@ -1,7 +1,7 @@
 import React from 'react';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import Icon from './Icon';
+import FIcon from './FIcon';
 
 type TagProps = {
   label: string;
@@ -33,7 +33,7 @@ const Tag: React.FC<TagProps> = ({
       alignItems={'center'}>
       {leftIcon && (
         <Pressable onPress={onLeftIconPress} mr={'s'}>
-          <Icon name={leftIcon} size={16} />
+          <FIcon name={leftIcon} size={16} />
         </Pressable>
       )}
       <Text variant={'body2'} ellipsizeMode={'tail'} numberOfLines={1}>
@@ -41,7 +41,7 @@ const Tag: React.FC<TagProps> = ({
       </Text>
       {rightIcon && (
         <Pressable onPress={onRightIconPress} ml={'s'}>
-          <Icon name={rightIcon} size={16} />
+          <FIcon name={rightIcon} size={16} />
         </Pressable>
       )}
     </Pressable>

@@ -2,7 +2,7 @@
 //https://github.com/react-navigation/react-navigation/issues/11371
 import React from 'react';
 import {BottomTabNavigationProp, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from '../components/Icon';
+import FIcon from '../components/FIcon';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import HomeScreen from './HomeScreen';
@@ -21,7 +21,7 @@ import RecipesSearchResultsScreen from './Recipes/RecipesResultsScreen';
 import RecipesStackNavigator from '../navigation/RecipesStackNavigator';
 
 const BottomTabIcon = ({name, focused, size}: {name: string; focused: boolean; size: number}) => {
-  return <Icon name={name} size={size} color={focused ? '$iconActive' : '$iconRegular'} />;
+  return <FIcon name={name} size={size} color={focused ? '$iconActive' : '$iconRegular'} />;
 };
 
 export type HomeStackParamList = {

@@ -6,7 +6,7 @@ import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
 import {generateHeightOptions, generateWeightOptions} from '../../utils';
@@ -40,7 +40,7 @@ export const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSel
       borderBottomWidth={1}
       borderBottomColor={'$divider'}
       borderStyle={'solid'}>
-      <Icon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
+      <FIcon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
       <Box flex={1} px={'l'}>
         <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
           {label}
@@ -119,7 +119,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           onPress={() => {
             navigation.navigate('nutritionPreferences');
           }}
-          variant="primary"
+          variant="primary-medium-right"
           icon="chevron-right"
         />
       </Box>

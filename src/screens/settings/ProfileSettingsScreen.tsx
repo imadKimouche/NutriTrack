@@ -7,7 +7,7 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import LoadingModal from '../../components/LoadingModal';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useOnBoardingStore} from '../../store/onboarding';
@@ -21,7 +21,7 @@ import ListItem from '../../components/ListItem';
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable alignSelf={'stretch'} onPress={onPress} alignItems={'flex-end'} mr={'m'}>
-      <Icon name="check" size={24} color={'$primary'} />
+      <FIcon name="check" size={24} color={'$primary'} />
     </Pressable>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import Input, {InputProps} from '../atoms/Input';
 import {NativeSyntheticEvent, Platform, TextInputFocusEventData, TextInputProps} from 'react-native';
 import Box from '../atoms/Box';
-import Icon from '../components/Icon';
+import FIcon from '../components/FIcon';
 import Text from '../atoms/Text';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
@@ -42,7 +42,7 @@ const TextInput: React.FC<Props> = ({icon, inputPropPresets, error, value, ...re
         borderWidth={1}
         borderRadius={'sm'}
         borderColor={'$inputBorder'}>
-        <Icon name={icon} size={26} color={value?.length ? '$iconActive' : '$iconRegular'} />
+        <FIcon name={icon} size={26} color={value?.length ? '$iconActive' : '$iconRegular'} />
         <Input
           {...rest}
           {...presetProps}

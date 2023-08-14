@@ -8,7 +8,7 @@ import Text from '../../atoms/Text';
 import Collapsible from '../../components/Collapsible';
 import BaseHeader, {GoBackButton} from '../../components/Header';
 import HeartIcon from '../../components/Heart';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import ListItem from '../../components/ListItem';
 import {useRecipe, useToggleFavoriteRecipe} from '../../hooks/meal';
 import {RecipesStackNavigationProps, RecipesStackRouteProps} from '../../navigation/RecipesStackNavigator';
@@ -58,13 +58,13 @@ const RecipeDetailsScreen: React.FC<{
               alignItems={'center'}
               justifyContent={'space-around'}>
               <Box flexDirection={'row'} alignItems={'center'} mr={'l'}>
-                <Icon name="users" size={20} color={'$primary'} />
+                <FIcon name="users" size={20} color={'$primary'} />
                 <Text ml={'s'} variant={'h6'}>
                   {recipe.quantity}
                 </Text>
               </Box>
               <Box flexDirection={'row'} alignItems={'center'}>
-                <Icon name="clock" size={20} color={'$primary'} />
+                <FIcon name="clock" size={20} color={'$primary'} />
                 <Text ml={'s'} variant={'h6'}>
                   {recipe.time}
                 </Text>

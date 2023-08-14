@@ -3,7 +3,7 @@ import {ResponsiveValue} from '@shopify/restyle';
 import React from 'react';
 import Box from '../../atoms/Box';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import ListItem from '../../components/ListItem';
 import {signOut} from '../../hooks/auth';
 import {Theme} from '../../style/theme';
@@ -17,7 +17,7 @@ type SettingsItemProps = {
   c: keyof Theme['colors'];
 };
 const SettingsItem: React.FC<SettingsItemProps> = ({label, icon, onPress, bg, c}) => {
-  return <ListItem onPress={onPress} title={label} leftComponent={<Icon name={icon} size={18} color={c} />} />;
+  return <ListItem onPress={onPress} title={label} leftComponent={<FIcon name={icon} size={18} color={c} />} />;
 };
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'Settings'>;

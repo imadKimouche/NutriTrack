@@ -17,6 +17,7 @@ import {Dimensions, Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
+import Pressable from '../atoms/Pressable';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
 type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
@@ -96,11 +97,11 @@ export const SignInScreen = () => {
             name="password"
           />
 
-          <TouchableOpacity p={'xs'} alignSelf={'flex-end'} onPress={goToSignupSceen}>
-            <Text variant={'body2'} textAlign={'right'} paddingVertical={'s'}>
+          <Pressable p={'xs'} alignSelf={'flex-end'} onPress={goToSignupSceen}>
+            <Text variant={'link-small'} color={'$header'} textAlign={'right'}>
               Créer un compte
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </KeyboardAvoidingView>
         {submitMutation.error && (
           <Box>
@@ -108,25 +109,25 @@ export const SignInScreen = () => {
           </Box>
         )}
       </Box>
-      <Box flex={1} alignItems={'center'} justifyContent={'center'} pb={'l'}>
+      <Box flex={1} alignItems={'center'} justifyContent={'center'} px={'xl'} p={'l'}>
         <Button
           variant={'primary'}
           label="Se connecter"
           onPress={onSubmit}
           loading={submitMutation.isLoading}
           disabled={signInGoogleLoading}
+          mb={'s'}
         />
-        <Box mt={'s'}>
-          <Button
-            variant={'outlined'}
-            svgIcon={GoogleIcon}
-            label="Se connecter avec Google"
-            onPress={() => signInWithGoogle()}
-            loading={signInGoogleLoading}
-            disabled={submitMutation.isLoading}
-          />
-          <Button my={'s'} variant={'outlined'} svgIcon={AppleIcon} label="Se connecter avec Apple" onPress={onSubmit} />
-        </Box>
+        <Button
+          variant={'outline-left'}
+          icon="b-google"
+          label="se connecter avec google"
+          onPress={() => signInWithGoogle()}
+          loading={signInGoogleLoading}
+          disabled={submitMutation.isLoading}
+          mb={'s'}
+        />
+        <Button variant={'outline-left'} icon="b-apple" label="se connecter avec apple" onPress={onSubmit} />
       </Box>
     </Box>
   );

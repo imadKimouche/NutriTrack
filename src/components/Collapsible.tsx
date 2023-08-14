@@ -3,7 +3,7 @@ import {Animated, Dimensions} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
-import Icon from './Icon';
+import FIcon from './FIcon';
 
 const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}> = ({title, open = false, children}) => {
   const [isCollapsed, setIsCollapsed] = useState(!open);
@@ -31,7 +31,7 @@ const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}
           {title}
         </Text>
         <Box bg={'$buttonBgPrimaryDisabled'} borderRadius={'lg'} p={'xs'}>
-          <Icon name={isCollapsed ? 'chevron-down' : 'chevron-left'} size={20} color={'$primary'} />
+          <FIcon name={isCollapsed ? 'chevron-down' : 'chevron-left'} size={20} color={'$primary'} />
         </Box>
       </Pressable>
       <Animated.View style={{height: interpolatedHeight, overflow: 'hidden'}}>{children}</Animated.View>

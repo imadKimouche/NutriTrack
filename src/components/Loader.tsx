@@ -3,7 +3,7 @@ import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import {ActivityIndicator, ActivityIndicatorProps} from 'react-native';
 
-type LoaderProps = {
+export type LoaderProps = {
   color?: keyof Theme['colors'];
 } & ActivityIndicatorProps;
 

@@ -4,7 +4,7 @@ import Box from '../atoms/Box';
 import Input, {InputProps} from '../atoms/Input';
 import Pressable from '../atoms/Pressable';
 import {Theme} from '../style/theme';
-import Icon from './Icon';
+import FIcon from './FIcon';
 
 type Props = {
   onSubmitEditing?: (value: string) => void;
@@ -18,7 +18,7 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
   return (
     <Box height={50} bg={'$inputBg'} flexDirection={'row'} alignItems={'center'} borderRadius={'sm'}>
       <Box pl={'m'} p={'s'}>
-        <Icon name="search" size={20} color={'$iconRegular'} />
+        <FIcon name="search" size={20} color={'$iconRegular'} />
       </Box>
       <Box flex={1} mx={'s'}>
         <Input
@@ -44,7 +44,7 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
           }}
           pr={'m'}
           p={'s'}>
-          <Icon name="x-circle" size={18} color={'$iconRegular'} marginRight={'s'} />
+          <FIcon name="x-circle" size={18} color={'$iconRegular'} marginRight={'s'} />
         </Pressable>
       )}
     </Box>

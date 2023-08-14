@@ -6,7 +6,7 @@ import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader from '../../components/Header';
-import Icon from '../../components/Icon';
+import FIcon from '../../components/FIcon';
 import Searchbar from '../../components/Searchbar';
 import {Ingredient, useFavoriteRecipes, useSearchIngredient} from '../../hooks/meal';
 import {useDebounce} from '../../hooks/utility';
@@ -100,7 +100,7 @@ const AddedIngredientListItem: React.FC<AddedIngredientListItemProps> = ({ingred
         position={'absolute'}
         top={-8}
         right={-8}>
-        <Icon name="x" color={'$iconActive'} size={18} />
+        <FIcon name="x" color={'$iconActive'} size={18} />
       </Pressable>
     </Pressable>
   );
@@ -155,8 +155,9 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
         )}
       </Box>
       <Button
-        label="J'ai faim 🍜"
-        variant={addedIngredients.length ? 'primary' : 'disabled'}
+        label="Rechercher"
+        variant={addedIngredients.length ? 'primary-medium-left' : 'primary-medium-left-disabled'}
+        icon="search"
         disabled={addedIngredients.length === 0}
         my={'m'}
         onPress={() => navigation.navigate('recipesSearchResult')}

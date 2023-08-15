@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Box from '../../atoms/Box';
-import Input from '../../atoms/Input';
-import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import FIcon from '../../components/FIcon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
 import {generateHeightOptions, generateWeightOptions} from '../../utils';
@@ -13,8 +10,7 @@ import {OnboardingListItem} from './GoalTab';
 import Picker from '../../components/Picker';
 import TextInput from '../../components/TextInput';
 import {KeyboardAvoidingView, Platform} from 'react-native';
-import {Theme} from '../../style/theme';
-import {useTheme} from '@shopify/restyle';
+import ListItem from '../../components/ListItem';
 
 export const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
 export const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
@@ -26,36 +22,7 @@ export const GENDERS: GenderItem[] = [
   {id: 'female', label: 'Femme', icon: 'user'},
 ];
 
-export const GenderListItem: React.FC<GenderItem & {selectedItem: Gender; setSelectedItem: (item: Gender) => void}> = ({
-  id,
-  label,
-  icon,
-  selectedItem,
-  setSelectedItem,
-}) => {
-  const isSelected = id === selectedItem;
-
-  return (
-    <Pressable
-      onPress={() => setSelectedItem(id)}
-      flexDirection={'row'}
-      alignItems={'center'}
-      height={56}
-      borderBottomWidth={1}
-      borderBottomColor={'$divider'}
-      borderStyle={'solid'}>
-      <FIcon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
-      <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
-          {label}
-        </Text>
-      </Box>
-    </Pressable>
-  );
-};
-
 export type AboutYouTabProps = {navigation: TabNavigationProp};
-
 const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   const {gender, setGender, setAge, age, height, setHeight, weight, setWeight} = useOnBoardingStore(state => ({
     gender: state.gender,
@@ -68,6 +35,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     setWeight: state.setWeight,
   }));
   const [ageStr, setAgeStr] = useState('');
+  const canAdvance = gender !== undefined && age !== undefined;
 
   useEffect(() => {
     const numValue = parseInt(ageStr, 10);
@@ -77,17 +45,29 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
   }, [ageStr, setAge]);
 
   return (
-    <Box flex={1}>
-      <BaseHeader title="A propos de toi" leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />} />
+    <Box flex={1} bg={'$bgWeak'}>
+      <BaseHeader
+        title="À propos de vous"
+        leftComponent={<GoBackButton onPress={() => navigation.navigate('activityLevel')} />}
+      />
       <Box flex={1} p={'m'}>
-        <Box>
-          <Text variant={'subtitle2'}>Sexe</Text>
+        <Box mb={'m'}>
+          <Text variant={'text-small'} color={'$header'}>
+            Quel est votre sexe ?
+          </Text>
           {GENDERS.map(item => (
-            <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
+            <ListItem
+              key={item.id}
+              onPress={() => setGender(item.id)}
+              variant={item.id === gender ? 'active' : undefined}
+              title={item.label}
+            />
           ))}
         </Box>
-        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'text-small'}>Age</Text>
+        <Box mb={'m'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'} color={'$header'}>
+            Age
+          </Text>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{
@@ -97,15 +77,17 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
             }}>
             <TextInput
               alignSelf={'stretch'}
-              placeholder="Ton age"
+              placeholder="Entrez votre age"
               value={ageStr}
               onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
               inputPropPresets={'positiveNumber'}
             />
           </KeyboardAvoidingView>
         </Box>
-        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'text-small'}>Taille</Text>
+        <Box mb={'m'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'} color={'$header'}>
+            Taille
+          </Text>
           <Picker
             containerStyle={{flex: 0.6}}
             selectedValue={height}
@@ -115,8 +97,10 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
             })}
           </Picker>
         </Box>
-        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-          <Text variant={'text-small'}>Poids</Text>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'} color={'$header'}>
+            Poids
+          </Text>
           <Picker
             containerStyle={{flex: 0.6}}
             selectedValue={weight}
@@ -129,11 +113,10 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
       </Box>
       <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
+          onPress={() => navigation.navigate('nutritionPreferences')}
+          alignSelf={'stretch'}
           label="Suivant"
-          onPress={() => {
-            navigation.navigate('nutritionPreferences');
-          }}
-          variant="primary-right"
+          variant={canAdvance ? 'primary-right' : 'primary-right-disabled'}
           icon="chevron-right"
         />
       </Box>

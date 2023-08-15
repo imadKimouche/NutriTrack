@@ -1,7 +1,6 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import Box from '../../atoms/Box';
-import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
@@ -9,6 +8,7 @@ import FIcon from '../../components/FIcon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {ActivityLevel, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
+import ListItem from '../../components/ListItem';
 
 type ActivityLevelItem = OnboardingListItem<ActivityLevel>;
 
@@ -21,29 +21,18 @@ export const ACTIVITY_LEVELS: ActivityLevelItem[] = [
 ];
 
 export const ActivityLevelListItem: React.FC<
-  ActivityLevelItem & {selectedItem: ActivityLevel; setSelectedItem: (item: ActivityLevel) => void}
+  ActivityLevelItem & {selectedItem?: ActivityLevel; setSelectedItem: (item: ActivityLevel) => void}
 > = ({id, label, icon, indication, selectedItem, setSelectedItem}) => {
-  const isSelected = id === selectedItem;
+  const selected = id === selectedItem;
 
   return (
-    <Pressable
+    <ListItem
       onPress={() => setSelectedItem(id)}
-      flexDirection={'row'}
-      alignItems={'center'}
-      height={56}
-      borderBottomWidth={1}
-      borderBottomColor={'$divider'}
-      borderStyle={'solid'}>
-      <FIcon name={icon} size={26} color={isSelected ? '$iconActive' : '$iconRegular'} />
-      <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
-          {label}
-        </Text>
-        <Text variant={'body2'} color={isSelected ? '$link' : '$textBody'}>
-          {indication}
-        </Text>
-      </Box>
-    </Pressable>
+      variant={selected ? 'active' : undefined}
+      title={label}
+      subtitle={indication}
+      leftComponent={<FIcon name={icon} size={24} color={selected ? '$primary' : undefined} />}
+    />
   );
 };
 
@@ -54,11 +43,11 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
   const setActivityLevel = useOnBoardingStore(state => state.setActivityLevel);
 
   return (
-    <Box flex={1}>
+    <Box flex={1} bg={'$bgWeak'}>
       <BaseHeader title="Niveau d'activité" leftComponent={<GoBackButton onPress={navigation.goBack} />} />
       <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'subtitle1'}>
-          Quel est ton niveau d'activité ?
+        <Text py={'l'} variant={'text-medium'}>
+          Quel est votre niveau d'activité ?
         </Text>
         <FlatList
           data={ACTIVITY_LEVELS}
@@ -70,11 +59,10 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
       </Box>
       <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
+          onPress={() => navigation.navigate('aboutYou')}
+          alignSelf={'stretch'}
           label="Suivant"
-          onPress={() => {
-            navigation.navigate('aboutYou');
-          }}
-          variant="primary-right"
+          variant={activityLevel === undefined ? 'primary-right-disabled' : 'primary-right'}
           icon="chevron-right"
         />
       </Box>

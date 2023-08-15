@@ -7,7 +7,6 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import Avatar from '../components/Avatar';
 import BaseHeader from '../components/Header';
-import FIcon from '../components/FIcon';
 import ListItem from '../components/ListItem';
 import TrackerCalendar from '../components/TrackerCalendar';
 import {useAuth} from '../hooks/auth';
@@ -121,12 +120,12 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
   };
 
   return (
-    <Box bg={'$bg'} flex={1}>
+    <Box bg={'$bgWeak'} flex={1}>
       <BaseHeader
         title="Suivi journalier"
         rightComponent={<Avatar label={initials} onPress={() => navigation.navigate('Settings')} />}
       />
-      <Box bg={'$bg'} flex={1} alignItems={'center'} py={'m'}>
+      <Box flex={1} alignItems={'center'} py={'m'}>
         <TrackerCalendar
           currentDate={currentSelectedDate}
           onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}

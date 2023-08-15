@@ -236,11 +236,10 @@ const theme = createTheme({
   },
   listItemVariants: {
     defaults: {
-      backgroundColor: '$cardBackground',
-      padding: {phone: 's'},
+      backgroundColor: '$bgWeak',
+      paddingVertical: 's',
       borderBottomWidth: 1,
-      borderBottomColor: '$divider',
-      borderRadius: 'xs',
+      borderBottomColor: '$line',
     },
     active: {
       borderBottomColor: '$primary',
@@ -248,9 +247,9 @@ const theme = createTheme({
   },
   listItemTitleVariants: {
     defaults: {
-      backgroundColor: '$cardBackground',
-      color: '$textBody',
-      padding: {phone: 'xs'},
+      backgroundColor: '$bgWeak',
+      color: '$header',
+      paddingVertical: 'xs',
       textTransform: 'capitalize',
       ...textVariants.subtitle1,
     },
@@ -260,13 +259,12 @@ const theme = createTheme({
   },
   listItemSubtitleVariants: {
     defaults: {
-      backgroundColor: '$cardBackground',
-      paddingLeft: {phone: 's'},
-      color: '$textPlaceholder',
+      backgroundColor: '$bgWeak',
+      color: '$body',
       ...textVariants.subtitle2,
     },
     active: {
-      color: '$textBody',
+      color: '$primary',
     },
   },
   elevationVariants: {

@@ -7,10 +7,10 @@ export type Gender = 'male' | 'female';
 export type FoodAllergy = 'gluten' | 'diary' | 'nut' | 'shellfish' | 'soy' | 'grain' | 'eggs';
 
 type OnBoardingState = {
-  fitnessGoal: FitnessGoal;
-  activityLevel: ActivityLevel;
-  gender: Gender;
-  age: number;
+  fitnessGoal?: FitnessGoal;
+  activityLevel?: ActivityLevel;
+  gender?: Gender;
+  age?: number;
   height: number;
   weight: number;
   allergies: FoodAllergy[];
@@ -36,13 +36,13 @@ export type UserFitnessData = Pick<
 export const useOnBoardingStore = create<OnBoardingState>()(
   devtools(
     set => ({
-      fitnessGoal: 'gain',
+      fitnessGoal: undefined,
       setFitnessGoal: (goal: FitnessGoal) => set(state => ({...state, fitnessGoal: goal})),
-      activityLevel: 'minimal',
+      activityLevel: undefined,
       setActivityLevel: (level: ActivityLevel) => set(state => ({...state, activityLevel: level})),
-      gender: 'male',
+      gender: undefined,
       setGender: (gender: Gender) => set(state => ({...state, gender: gender})),
-      age: 13,
+      age: undefined,
       setAge: (age: number) => set(state => ({...state, age})),
       height: 150,
       setHeight: (height: number) => set(state => ({...state, height})),

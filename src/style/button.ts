@@ -99,15 +99,12 @@ export const buttonTextVariants = {
   },
   // -- PRIMARY --
   primary: {},
-  'primary-disabled': {
-    opacity: 0.5,
-  },
+  'primary-disabled': {},
   'primary-left': {
     ...textVariants['link-small'],
   },
   'primary-left-disabled': {
     ...textVariants['link-small'],
-    opacity: 0.5,
   },
   'primary-right': {
     ...textVariants['link-small'],
@@ -116,7 +113,6 @@ export const buttonTextVariants = {
   'primary-right-disabled': {
     ...textVariants['link-small'],
     flexDirection: 'row-reverse',
-    opacity: 0.5,
   },
   // -- OUTLINE --
   outline: {
@@ -124,7 +120,6 @@ export const buttonTextVariants = {
   },
   'outline-disabled': {
     color: '$primary',
-    opacity: 0.5,
   },
   'outline-left': {
     color: '$primary',
@@ -133,7 +128,6 @@ export const buttonTextVariants = {
   'outline-left-disabled': {
     color: '$primary',
     ...textVariants['link-small'],
-    opacity: 0.5,
   },
   'outline-right': {
     color: '$primary',
@@ -144,7 +138,6 @@ export const buttonTextVariants = {
     color: '$primary',
     ...textVariants['link-small'],
     flexDirection: 'row-reverse',
-    opacity: 0.5,
   },
   // -- GHOST --
   ghost: {
@@ -152,7 +145,6 @@ export const buttonTextVariants = {
   },
   'ghost-disabled': {
     color: '$primary',
-    opacity: 0.5,
   },
   'ghost-left': {
     color: '$primary',
@@ -161,7 +153,6 @@ export const buttonTextVariants = {
   'ghost-left-disabled': {
     color: '$primary',
     ...textVariants['link-small'],
-    opacity: 0.5,
   },
   'ghost-right': {
     color: '$primary',
@@ -172,7 +163,6 @@ export const buttonTextVariants = {
     color: '$primary',
     ...textVariants['link-small'],
     flexDirection: 'row-reverse',
-    opacity: 0.5,
   },
 };
 
@@ -183,22 +173,18 @@ export const buttonIconVariants = {
   },
   // -- PRIMARY --
   primary: {},
-  'primary-disabled': {
-    opacity: 0.5,
-  },
+  'primary-disabled': {},
   'primary-left': {
     marginRight: 'm',
   },
   'primary-left-disabled': {
     marginRight: 'm',
-    opacity: 0.5,
   },
   'primary-right': {
     marginLeft: 'm',
   },
   'primary-right-disabled': {
     marginLeft: 'm',
-    opacity: 0.5,
   },
   // -- OUTLINE --
   outline: {
@@ -206,7 +192,6 @@ export const buttonIconVariants = {
   },
   'outline-disabled': {
     color: '$primary',
-    opacity: 0.5,
   },
   'outline-left': {
     color: '$primary',
@@ -215,7 +200,6 @@ export const buttonIconVariants = {
   'outline-left-disabled': {
     color: '$primary',
     marginRight: 'm',
-    opacity: 0.5,
   },
   'outline-right': {
     color: '$primary',
@@ -224,7 +208,6 @@ export const buttonIconVariants = {
   'outline-right-disabled': {
     color: '$primary',
     marginLeft: 'm',
-    opacity: 0.5,
   },
   // -- GHOST --
   ghost: {
@@ -232,7 +215,6 @@ export const buttonIconVariants = {
   },
   'ghost-disabled': {
     color: '$primary',
-    opacity: 0.5,
   },
   'ghost-left': {
     color: '$primary',
@@ -242,7 +224,6 @@ export const buttonIconVariants = {
   'ghost-left-disabled': {
     color: '$primary',
     marginRight: 'm',
-    opacity: 0.5,
   },
   'ghost-right': {
     color: '$primary',
@@ -251,6 +232,5 @@ export const buttonIconVariants = {
   'ghost-right-disabled': {
     color: '$primary',
     marginLeft: 'm',
-    opacity: 0.5,
   },
 };

@@ -21,6 +21,7 @@ export type RootStackParamList = {
   signIn: undefined;
   resetPassword: undefined;
   onboarding: undefined;
+  home: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -84,7 +85,9 @@ export const MainNavigator = () => {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {user ? (
-            <Box />
+            <>
+              <Stack.Screen name="home" component={HomeStackNavigator} />
+            </>
           ) : (
             <>
               <Stack.Screen name="landing" component={Landing} />

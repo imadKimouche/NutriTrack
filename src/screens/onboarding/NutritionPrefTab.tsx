@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '../../atoms/Box';
-import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
@@ -15,10 +14,9 @@ import NoSoyImage from '../../assets/soja.svg';
 import NoEggsImage from '../../assets/des-oeufs.svg';
 import NoGrainImage from '../../assets/farine.svg';
 import {SvgProps} from 'react-native-svg';
-import {useTheme} from '@shopify/restyle';
-import {Theme} from '../../style/theme';
 import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
+import ListItem from '../../components/ListItem';
 
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 
@@ -60,32 +58,6 @@ export const ALLERGIES: FoodAllergyItem[] = [
   },
 ];
 
-export const AllergyListItem: React.FC<
-  FoodAllergyItem & {selectedItems: FoodAllergy[]; onPress: (item: FoodAllergy) => void}
-> = ({id, label, icon, selectedItems, onPress}) => {
-  const Image = icon;
-  const isSelected = selectedItems.includes(id);
-  const {colors} = useTheme<Theme>();
-
-  return (
-    <Pressable
-      onPress={() => onPress(id)}
-      flexDirection={'row'}
-      alignItems={'center'}
-      height={56}
-      borderBottomWidth={1}
-      borderBottomColor={'$divider'}
-      borderStyle={'solid'}>
-      <Image height={32} width={32} fill={isSelected ? colors.$iconActive : colors.$iconRegular} />
-      <Box flex={1} px={'l'}>
-        <Text variant={'body1'} color={isSelected ? '$link' : '$textBody'}>
-          {label}
-        </Text>
-      </Box>
-    </Pressable>
-  );
-};
-
 const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
   minimal: 1.2,
   light: 1.375,
@@ -108,41 +80,51 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     allergies: state.allergies,
     toggleAllergy: state.toggleAllergy,
   }));
-  const {fitnessGoal, activityLevel, age, gender, height, weight} = useOnBoardingStore(state => ({
-    fitnessGoal: state.fitnessGoal,
-    activityLevel: state.activityLevel,
-    age: state.age,
-    gender: state.gender,
-    height: state.height,
-    weight: state.weight,
-  }));
-  const {storeUserFitnessData, storeUFDIsLoading} = useUserFitnessData();
+  // const {fitnessGoal, activityLevel, age, gender, height, weight} = useOnBoardingStore(state => ({
+  //   fitnessGoal: state.fitnessGoal,
+  //   activityLevel: state.activityLevel,
+  //   age: state.age,
+  //   gender: state.gender,
+  //   height: state.height,
+  //   weight: state.weight,
+  // }));
+  // const {storeUserFitnessData, storeUFDIsLoading} = useUserFitnessData();
 
   function setUserData() {
-    const bmr = calculateBMR(gender, age, height, weight);
-    const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
-    storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies, tdee});
+    // const bmr = calculateBMR(gender, age, height, weight);
+    // const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
+    // storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies, tdee});
+    navigation.navigate('signup');
   }
 
   return (
-    <Box flex={1}>
+    <Box flex={1} bg={'$bgWeak'}>
       <BaseHeader title="Nutrition" leftComponent={<GoBackButton onPress={() => navigation.navigate('aboutYou')} />} />
       <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'subtitle1'}>
-          As-tu des allérgies ?
+        <Text py={'l'} variant={'text-medium'}>
+          Avez-vous des allérgies ?
         </Text>
         <Box>
-          {ALLERGIES.map(item => (
-            <AllergyListItem key={item.id} {...item} selectedItems={allergies} onPress={toggleAllergy} />
-          ))}
+          {ALLERGIES.map(item => {
+            const added = allergies.includes(item.id);
+            return (
+              <ListItem
+                key={item.id}
+                onPress={() => toggleAllergy(item.id)}
+                title={item.label}
+                variant={added ? 'active' : undefined}
+                leftComponent={<item.icon width={30} height={30} />}
+              />
+            );
+          })}
         </Box>
       </Box>
       <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
-          label="Accéder à mon suivi"
-          loading={storeUFDIsLoading}
           onPress={setUserData}
-          variant="primary-right"
+          alignSelf={'stretch'}
+          label="Accéder à mon suivi"
+          variant={'primary-right'}
           icon="chevron-right"
         />
       </Box>

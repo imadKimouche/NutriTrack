@@ -35,7 +35,7 @@ const ListItem = ({onPress, leftComponent, rightComponent, title, subtitle, ...r
   return (
     <ListItemContainer flexDirection={'row'} minHeight={55} variant={rest.variant} onPress={onPress}>
       {leftComponent && (
-        <Box flex={0.2} justifyContent={'center'} alignItems={'center'}>
+        <Box flex={0.15} justifyContent={'center'} alignItems={'center'}>
           {leftComponent}
         </Box>
       )}
@@ -44,7 +44,7 @@ const ListItem = ({onPress, leftComponent, rightComponent, title, subtitle, ...r
         {subtitle && <ListItemSubtitle variant={rest.variant}>{subtitle}</ListItemSubtitle>}
       </Box>
       {rightComponent && (
-        <Box flex={0.2} justifyContent={'center'} alignItems={'center'}>
+        <Box flex={0.15} justifyContent={'center'} alignItems={'center'}>
           {rightComponent}
         </Box>
       )}

@@ -78,7 +78,7 @@ export const textVariants = {
     fontSize: 13,
     lineHeight: 16,
     letterSpacing: 0.25,
-    fontWeight: 'medium',
+    fontWeight: 300,
   },
   'link-large': {
     fontSize: 20,

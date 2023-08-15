@@ -4,7 +4,7 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
-import BaseHeader from '../../components/Header';
+import BaseHeader, {GoBackButton} from '../../components/Header';
 import FIcon from '../../components/FIcon';
 import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {FitnessGoal, useOnBoardingStore} from '../../store/onboarding';
@@ -66,7 +66,7 @@ const GoalTab: React.FC<GoalTabProps> = ({navigation}) => {
 
   return (
     <Box flex={1}>
-      <BaseHeader title="Objectif" />
+      <BaseHeader title="Objectif" leftComponent={<GoBackButton onPress={navigation.goBack} />} />
       <Box flex={1} px={'m'}>
         <Text py={'l'} variant={'subtitle1'}>
           Quel est ton objectif ?

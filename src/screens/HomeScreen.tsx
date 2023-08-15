@@ -135,13 +135,13 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
         <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
         <Button
           onPress={() => navigation.navigate('SearchMeal')}
-          variant={'primary'}
           icon={'plus'}
           width={55}
           height={55}
           position="absolute"
           bottom={15}
           right={15}
+          zIndex={1}
         />
         <Box flex={1} alignSelf={'stretch'}>
           {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (

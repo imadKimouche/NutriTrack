@@ -7,7 +7,6 @@ export const buttonVariants = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'stretch',
     paddingHorizontal: 'xs',
     paddingVertical: 's',
     minHeight: 50,

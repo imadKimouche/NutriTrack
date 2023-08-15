@@ -1,46 +1,32 @@
 import React from 'react';
-import DishImage from '../assets/dish-illustration.svg';
-import GoogleIcon from '../assets/icons8-google.svg';
-import AppleIcon from '../assets/icons8-apple.svg';
 import Box from '../atoms/Box';
 import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
 import {useSignin, useSignInWithGoogle} from '../hooks/auth';
 import Button from '../components/Button';
-import {TouchableOpacity} from '../atoms/Touchable';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainNavigator';
-import StatusBar from '../components/StatusBar';
-import {Dimensions, Image, KeyboardAvoidingView, Platform} from 'react-native';
-import {useKeyboardIsVisible} from '../hooks/keyboard';
+import {Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
-import Pressable from '../atoms/Pressable';
 import Divider from '../components/Divider';
+import BaseHeader, {GoBackButton} from '../components/Header';
 
 // type SignInScreenRouteProp = RouteProp<RootStackParamList, 'SignIn'>;
-type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
+type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signIn'>;
 
 export const SignInScreen = () => {
   const {form, onSubmit, mutation: submitMutation} = useSignin();
   const navigation = useNavigation<SignInScreenNavigationProp>();
   const {control} = form;
   const {spacing} = useTheme<Theme>();
-  const {keyboardVisible} = useKeyboardIsVisible();
   const {signInWithGoogle, isLoading: signInGoogleLoading} = useSignInWithGoogle();
 
-  const goToSignupSceen = () => {
-    navigation.navigate('SignUp');
-  };
-
   return (
-    <Box bg={'$screenBackground'} flex={1}>
-      <StatusBar />
-      <Box justifyContent={'center'} alignItems={'center'}>
-        <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
-      </Box>
+    <Box bg={'$bgWeak'} flex={1}>
+      <BaseHeader title="Se connecter" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <Box flex={1.2} alignItems={'center'} justifyContent={'space-between'}>
         <Image source={require('../assets/logo-180x180.png')} />
         <KeyboardAvoidingView
@@ -57,6 +43,7 @@ export const SignInScreen = () => {
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
+                mb={'s'}
                 inputPropPresets={'email'}
                 hint={error?.message}
                 variant={error ? 'error' : undefined}
@@ -98,12 +85,6 @@ export const SignInScreen = () => {
             )}
             name="password"
           />
-
-          <Pressable p={'xs'} alignSelf={'flex-end'} onPress={goToSignupSceen}>
-            <Text variant={'link-small'} color={'$header'} textAlign={'right'}>
-              Créer un compte
-            </Text>
-          </Pressable>
         </KeyboardAvoidingView>
         {submitMutation.error && (
           <Box>
@@ -114,6 +95,7 @@ export const SignInScreen = () => {
       <Box flex={1} alignItems={'center'} justifyContent={'center'} px={'xl'} p={'l'}>
         <Button
           variant={'primary'}
+          alignSelf={'stretch'}
           label="Se connecter"
           onPress={onSubmit}
           loading={submitMutation.isLoading}
@@ -123,6 +105,7 @@ export const SignInScreen = () => {
         <Divider />
         <Button
           variant={'outline-left'}
+          alignSelf={'stretch'}
           icon="b-google"
           label="se connecter avec google"
           onPress={() => signInWithGoogle()}
@@ -130,7 +113,13 @@ export const SignInScreen = () => {
           disabled={submitMutation.isLoading}
           my={'s'}
         />
-        <Button variant={'outline-left'} icon="b-apple" label="se connecter avec apple" onPress={onSubmit} />
+        <Button
+          variant={'outline-left'}
+          alignSelf={'stretch'}
+          icon="b-apple"
+          label="se connecter avec apple"
+          onPress={onSubmit}
+        />
       </Box>
     </Box>
   );

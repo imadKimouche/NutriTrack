@@ -1,4 +1,3 @@
-import {Picker} from '@react-native-picker/picker';
 import React, {useEffect, useState} from 'react';
 import Box from '../../atoms/Box';
 import Input from '../../atoms/Input';
@@ -11,6 +10,11 @@ import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {Gender, useOnBoardingStore} from '../../store/onboarding';
 import {generateHeightOptions, generateWeightOptions} from '../../utils';
 import {OnboardingListItem} from './GoalTab';
+import Picker from '../../components/Picker';
+import TextInput from '../../components/TextInput';
+import {KeyboardAvoidingView, Platform} from 'react-native';
+import {Theme} from '../../style/theme';
+import {useTheme} from '@shopify/restyle';
 
 export const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
 export const WEIGHT_OPTIONS = generateWeightOptions(30, 180, 1);
@@ -63,7 +67,7 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     weight: state.weight,
     setWeight: state.setWeight,
   }));
-  const [ageStr, setAgeStr] = useState(age?.toString() ?? '');
+  const [ageStr, setAgeStr] = useState('');
 
   useEffect(() => {
     const numValue = parseInt(ageStr, 10);
@@ -82,39 +86,49 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
             <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
           ))}
         </Box>
-        <Box mt={'s'}>
-          <Text variant={'subtitle2'}>Age</Text>
-          <Input
-            value={ageStr}
-            onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
-            padding={'m'}
-            marginVertical={'s'}
-            keyboardType="numeric"
-            borderWidth={1}
-            borderColor={'$inputBorder'}
-            borderRadius={'xs'}
-          />
+        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'}>Age</Text>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{
+              flex: 0.55,
+              alignSelf: 'stretch',
+              justifyContent: 'center',
+            }}>
+            <TextInput
+              alignSelf={'stretch'}
+              placeholder="Ton age"
+              value={ageStr}
+              onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
+              inputPropPresets={'positiveNumber'}
+            />
+          </KeyboardAvoidingView>
         </Box>
-        <Box mt={'s'}>
-          <Text variant={'subtitle2'}>Taille</Text>
-          <Picker itemStyle={{height: 110}} selectedValue={height} onValueChange={itemValue => setHeight(itemValue)}>
+        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'}>Taille</Text>
+          <Picker
+            containerStyle={{flex: 0.6}}
+            selectedValue={height}
+            onValueChange={itemValue => setHeight(itemValue as typeof height)}>
             {HEIGHT_OPTIONS.map(option => {
               return <Picker.Item key={option.label} label={option.label} value={option.value} />;
             })}
           </Picker>
         </Box>
-        <Box mt={'s'}>
-          <Text variant={'subtitle2'}>Poids</Text>
-          <Picker itemStyle={{height: 110}} selectedValue={weight} onValueChange={itemValue => setWeight(itemValue)}>
+        <Box mt={'s'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+          <Text variant={'text-small'}>Poids</Text>
+          <Picker
+            containerStyle={{flex: 0.6}}
+            selectedValue={weight}
+            onValueChange={itemValue => setWeight(itemValue as typeof weight)}>
             {WEIGHT_OPTIONS.map(option => {
               return <Picker.Item key={option.label} label={option.label} value={option.value} />;
             })}
           </Picker>
         </Box>
       </Box>
-      <Box flex={0.5} justifyContent={'center'} alignItems={'center'}>
+      <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
-          width={'32%'}
           label="Suivant"
           onPress={() => {
             navigation.navigate('nutritionPreferences');

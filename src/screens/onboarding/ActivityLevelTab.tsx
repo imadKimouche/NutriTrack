@@ -68,9 +68,8 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
           keyExtractor={item => item.id}
         />
       </Box>
-      <Box flex={0.5} justifyContent={'center'} alignItems={'center'}>
+      <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
-          width={'32%'}
           label="Suivant"
           onPress={() => {
             navigation.navigate('aboutYou');

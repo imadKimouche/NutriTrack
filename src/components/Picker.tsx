@@ -1,17 +1,11 @@
 import {
   createRestyleComponent,
   backgroundColor,
-  BackgroundColorProps,
   backgroundColorShorthand,
-  BackgroundColorShorthandProps,
   border,
-  BorderProps,
-  color,
-  ColorProps,
   spacing,
-  SpacingProps,
-  LayoutProps,
   layout,
+  useTheme,
 } from '@shopify/restyle';
 import React from 'react';
 import {Theme} from '../style/theme';
@@ -20,33 +14,47 @@ import {
   PickerItemProps as NativePickerItemProps,
   PickerProps as NativePickerProps,
 } from '@react-native-picker/picker';
+import Box, {BoxProps} from '../atoms/Box';
+import Text, {TextProps} from '../atoms/Text';
+import {hex2rgba} from '../utils';
 
-type PropsBase = NativePickerProps &
-  LayoutProps<Theme> &
-  BackgroundColorProps<Theme> &
-  BackgroundColorShorthandProps<Theme> &
-  BorderProps<Theme> &
-  ColorProps<Theme> &
-  SpacingProps<Theme>;
+type PropsBase = NativePickerProps & BoxProps;
 
 const PickerBase = createRestyleComponent<PropsBase, Theme>(
-  [layout, backgroundColor, backgroundColorShorthand, border, color, spacing],
+  [layout, backgroundColor, backgroundColorShorthand, border, spacing],
   NativePicker,
 );
 
-const Item = createRestyleComponent<NativePickerItemProps, Theme>([], NativePicker.Item);
+const Item = createRestyleComponent<TextProps & NativePickerItemProps, Theme>([], NativePicker.Item);
 
-const Picker = ({children, ...rest}: PropsBase) => {
+export type PickerProps = PropsBase & {
+  containerStyle?: BoxProps;
+  placeholder?: string;
+};
+
+const Picker = ({placeholder, children, containerStyle, ...rest}: PickerProps) => {
+  const {colors, textVariants} = useTheme<Theme>();
+
   return (
-    <PickerBase {...rest}>
-      {React.Children.map(children, child => {
-        if (React.isValidElement(child) && child.type === NativePicker.Item) {
-          const childProps = child.props;
-          return <Item {...childProps} />;
-        }
-        return child;
-      })}
-    </PickerBase>
+    <Box {...containerStyle}>
+      {placeholder && (
+        <Text variant={'text-x-small'} color={'$label'}>
+          {placeholder}
+        </Text>
+      )}
+      <PickerBase
+        itemStyle={{height: 50, margin: 0, padding: 0, color: colors.$header, ...textVariants['text-small']}}
+        selectionColor={hex2rgba(colors.$input, 0.4)}
+        {...rest}>
+        {React.Children.map(children, child => {
+          if (React.isValidElement(child) && child.type === NativePicker.Item) {
+            const childProps = child.props;
+            return <Item style={{margin: 0, padding: 0}} {...childProps} />;
+          }
+          return child;
+        })}
+      </PickerBase>
+    </Box>
   );
 };
 

@@ -25,14 +25,12 @@ const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}
   });
 
   return (
-    <Box>
+    <Box borderWidth={1} borderColor={'$line'} borderRadius={'sm'}>
       <Pressable flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} onPress={toggleCollapsible}>
-        <Text variant={'h6'} textTransform={'capitalize'}>
+        <Text m={'m'} variant={'text-x-small'} fontWeight={'bold'} textTransform={'capitalize'} color={'$header'}>
           {title}
         </Text>
-        <Box bg={'$buttonBgPrimaryDisabled'} borderRadius={'lg'} p={'xs'}>
-          <FIcon name={isCollapsed ? 'chevron-down' : 'chevron-left'} size={20} color={'$primary'} />
-        </Box>
+        <FIcon mr={'m'} name={'plus'} size={18} color={'$header'} />
       </Pressable>
       <Animated.View style={{height: interpolatedHeight, overflow: 'hidden'}}>{children}</Animated.View>
     </Box>

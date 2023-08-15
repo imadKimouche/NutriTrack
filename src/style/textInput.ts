@@ -55,6 +55,7 @@ export const tiInputVariants = {
     backgroundColor: '$transparent',
     flex: 1,
     marginVertical: 'xs',
+    textTransform: 'capitalize',
   },
   selected: {},
   disabled: {},

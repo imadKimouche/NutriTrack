@@ -11,19 +11,17 @@ const LoadingModal: React.FC<{label?: string}> = ({label}) => {
     <Box
       position={'absolute'}
       left={(width - width * 0.6) / 2}
-      top={(height - height * 0.12) / 2}
+      top={(height - height * 0.3) / 2}
       alignItems={'center'}
       justifyContent={'center'}
-      height={height * 0.12}
+      height={height * 0.15}
       width={width * 0.6}
-      borderRadius={'xs'}
+      borderRadius={'sm'}
       zIndex={5}
-      borderWidth={1}
-      borderColor={'$primary'}
-      bg={'$modalBackground'}>
+      bg={'$bg'}>
       <Loader color={'$primary'} />
       {label !== undefined && (
-        <Text py={'s'} variant={'subtitle2'}>
+        <Text py={'s'} variant={'text-x-small'}>
           {label}
         </Text>
       )}

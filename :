@@ -17,7 +17,6 @@ import {MealType, useDashboardStore} from '../store/dashboard';
 import {Theme} from '../style/theme';
 import {extractInitials} from '../utils';
 import {HomeStackParamList} from './HomeStackNavigator';
-import Button from '../components/Button';
 
 interface MealItemProps extends Meal {
   onLongPress: (id: number) => void;
@@ -36,8 +35,8 @@ const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => 
       justifyContent={'center'}
       style={{borderRadius: 12}}
       m={'xs'}
-      bg={selected ? '$primaryWeak' : undefined}>
-      <Text variant={selected ? 'link-x-small' : 'text-x-small'} color={selected ? '$bg' : '$body'}>
+      bg={selected ? '$buttonBgPrimary' : undefined}>
+      <Text variant={selected ? 'subtitle2' : 'body2'} color={selected ? '$buttonTextPrimary' : '$textBody'}>
         {label}
       </Text>
     </Pressable>
@@ -52,7 +51,7 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
     <Box
       flexDirection={'row'}
       alignItems={'stretch'}
-      bg={'$bgWeak'}
+      bg={'$cardBackground'}
       borderRadius={'sm'}
       height={32}
       justifyContent={'space-between'}
@@ -72,26 +71,53 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
 
   return (
     <Box alignSelf={'stretch'} py={'m'} px={'l'}>
-      <Text variant={'text-medium'} color={'$header'}>
-        Progression du jour
-      </Text>
-      <Box bg={'$secondaryBg'} my={'m'} borderRadius={'sm'} height={8} width={'100%'}>
+      <Text variant={'text-medium'}>Progression du jour</Text>
+      <Box bg={'$secondaryBgStrong'} my={'m'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box
-          bg={'$secondary'}
+          bg={'$info'}
           borderTopLeftRadius={'sm'}
           borderBottomLeftRadius={'sm'}
           borderTopRightRadius={progressRatio >= 1 ? 'sm' : undefined}
           borderBottomRightRadius={progressRatio >= 1 ? 'sm' : undefined}
           height={8}
-          width={`${progressRatio * 100}%`}
+          width={`${0.5 * 100}%`}
         />
       </Box>
       <Box alignItems={'flex-end'}>
-        <Text variant={'text-x-small'} color={'$label'}>
+        <Text variant={'subtitle2'}>
           {currentCalories} kcal / {normalizedMaxCalories} kcal
         </Text>
       </Box>
     </Box>
+  );
+};
+
+const Fab: React.FC<{icon: string; onPress: () => void}> = ({icon, onPress}) => {
+  return (
+    <Pressable
+      onPress={onPress}
+      bg={'$buttonBgPrimary'}
+      width={48}
+      height={48}
+      zIndex={2}
+      borderRadius={'sm'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      position={'absolute'}
+      bottom={16}
+      right={16}>
+      <Box
+        alignItems={'center'}
+        justifyContent={'center'}
+        borderStyle={'solid'}
+        borderRadius={'lg'}
+        borderWidth={1}
+        borderColor={'$buttonTextPrimary'}
+        width={26}
+        height={26}>
+        <FIcon name={icon} color={'$buttonTextPrimary'} size={20} />
+      </Box>
+    </Pressable>
   );
 };
 
@@ -133,16 +159,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
         />
         <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
         <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
-        <Button
-          onPress={() => navigation.navigate('SearchMeal')}
-          variant={'primary'}
-          icon={'plus'}
-          width={55}
-          height={55}
-          position="absolute"
-          bottom={15}
-          right={15}
-        />
+        <Fab icon="plus" onPress={() => navigation.navigate('SearchMeal')} />
         <Box flex={1} alignSelf={'stretch'}>
           {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
             <FlatList

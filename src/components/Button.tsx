@@ -1,13 +1,12 @@
-import {createRestyleComponent, createVariant, useTheme, VariantProps} from '@shopify/restyle';
+import {createRestyleComponent, createVariant, VariantProps} from '@shopify/restyle';
 import React from 'react';
 import Pressable, {PressableProps} from '../atoms/Pressable';
 import Text, {TextProps as TextPropsBase} from '../atoms/Text';
 import {FIconProps as IconPropsBase} from '../components/FIcon';
-import theme, {Theme} from '../style/theme';
+import {Theme} from '../style/theme';
 import FIcon from './FIcon';
 import BrandIcon from './BrandIcon';
 import Loader from './Loader';
-import {buttonTextVariants} from '../style/button';
 
 type PropsBase = PressableProps & VariantProps<Theme, 'buttonVariants'>;
 const ButtonBase = createRestyleComponent<PropsBase, Theme>([createVariant({themeKey: 'buttonVariants'})], Pressable);
@@ -29,7 +28,7 @@ const ButtonFaIconBase = createRestyleComponent<IconProps & VariantProps<Theme, 
 );
 
 // svgIcon?: React.FC<SvgProps>;
-type ButtonProps = {label: string; icon?: string; loading?: boolean};
+type ButtonProps = {label?: string; icon?: string; loading?: boolean};
 
 const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProps) => {
   const Icon = icon ? (
@@ -57,7 +56,7 @@ const Button = ({label, variant, icon, loading, ...rest}: PropsBase & ButtonProp
       ) : (
         <>
           {Icon}
-          <ButtonTextBase variant={variant}>{label}</ButtonTextBase>
+          {label && <ButtonTextBase variant={variant}>{label}</ButtonTextBase>}
         </>
       )}
     </ButtonBase>

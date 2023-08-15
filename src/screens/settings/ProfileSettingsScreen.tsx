@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import {Picker} from '@react-native-picker/picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Box from '../../atoms/Box';
@@ -17,6 +16,7 @@ import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
 import BottomSheetTextInput from '../../components/BottomSheetTextInput';
 import {FlatList} from 'react-native';
 import ListItem from '../../components/ListItem';
+import Picker from '../../components/Picker';
 
 export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -77,7 +77,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const snapPoint = useMemo(() => ['30%'], []);
+  const snapPoint = useMemo(() => ['50%'], []);
   const [ageStr, setAgeStr] = useState(age?.toString() ?? '');
 
   useEffect(() => {
@@ -165,8 +165,11 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         )}
         {bottomSheetType === 'height' && (
           <Box p={'m'}>
-            <Text variant={'subtitle2'}>Taille</Text>
-            <Picker itemStyle={{height: 110}} selectedValue={height} onValueChange={itemValue => setHeight(itemValue)}>
+            <Text variant={'subtitle2'}>Renseignez votre taille</Text>
+            <Picker
+              placeholder={'Taille'}
+              selectedValue={height}
+              onValueChange={itemValue => setHeight(itemValue as typeof height)}>
               {HEIGHT_OPTIONS.map(option => {
                 return <Picker.Item key={option.label} label={option.label} value={option.value} />;
               })}
@@ -177,7 +180,10 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         {bottomSheetType === 'weight' && (
           <Box p={'m'}>
             <Text variant={'subtitle2'}>Poids</Text>
-            <Picker itemStyle={{height: 110}} selectedValue={weight} onValueChange={itemValue => setWeight(itemValue)}>
+            <Picker
+              itemStyle={{height: 110}}
+              selectedValue={weight}
+              onValueChange={itemValue => setWeight(itemValue as typeof weight)}>
               {WEIGHT_OPTIONS.map(option => {
                 return <Picker.Item key={option.label} label={option.label} value={option.value} />;
               })}

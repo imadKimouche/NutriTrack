@@ -97,3 +97,7 @@ export function calculateMacronutrients(tdee: number, carbPercentage: number, pr
 
   return {carbs, protein, fat};
 }
+export const hex2rgba = (hex: string, alpha: number = 1) => {
+  const [r, g, b] = hex.match(/\w\w/g)!.map(x => parseInt(x, 16));
+  return `rgba(${r},${g},${b},${alpha})`;
+};

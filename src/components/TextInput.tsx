@@ -26,6 +26,7 @@ type TextInputProps = TIContainerProps & {
   icon?: string;
   hint?: string;
   inputPropPresets?: keyof typeof defaultInputProps;
+  containerStyle?: BoxProps;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -39,6 +40,7 @@ const TextInput: React.FC<TextInputProps> = ({
   onFocus,
   onSubmitEditing,
   hint,
+  containerStyle,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -60,7 +62,7 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <Box my={'xs'}>
+    <Box {...containerStyle}>
       <TIContainer variant={isFocused ? 'selected' : variant} {...rest}>
         {icon && <TIIcon name={icon} variant={isFocused ? 'selected' : variant} />}
         <Input

@@ -137,9 +137,8 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           ))}
         </Box>
       </Box>
-      <Box flex={0.5} justifyContent={'center'} alignItems={'center'}>
+      <Box flex={0.5} justifyContent={'center'} alignItems={'center'} px={'xl'}>
         <Button
-          width={'53%'}
           label="Accéder à mon suivi"
           loading={storeUFDIsLoading}
           onPress={setUserData}

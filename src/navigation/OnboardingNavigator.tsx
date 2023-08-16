@@ -1,13 +1,11 @@
 import React from 'react';
-import {createMaterialTopTabNavigator, MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
-import {CompositeScreenProps, RouteProp} from '@react-navigation/native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {RouteProp} from '@react-navigation/native';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import GoalTab from '../screens/onboarding/GoalTab';
 import ActivityLevelTab from '../screens/onboarding/ActivityLevelTab';
 import AboutYouTab from '../screens/onboarding/AboutYouTab';
 import NutritionPrefTab from '../screens/onboarding/NutritionPrefTab';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from './MainNavigator';
 
 export type TopTabParams = {
   goal: undefined;
@@ -15,11 +13,6 @@ export type TopTabParams = {
   aboutYou: undefined;
   nutritionPreferences: undefined;
 };
-
-export type NutritionPrefTabScreenProp = CompositeScreenProps<
-  MaterialTopTabScreenProps<TopTabParams, 'nutritionPreferences'>,
-  NativeStackScreenProps<RootStackParamList>
->;
 
 export type TabNavigationProp = MaterialTopTabNavigationProp<TopTabParams>;
 export type TabRouteProp = RouteProp<TopTabParams, keyof TopTabParams>;

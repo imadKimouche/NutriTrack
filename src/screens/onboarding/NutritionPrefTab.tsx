@@ -3,7 +3,7 @@ import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import {NutritionPrefTabScreenProp, TabNavigationProp} from '../../navigation/OnboardingNavigator';
+import {TopTabParams} from '../../navigation/OnboardingNavigator';
 import {ActivityLevel, FitnessGoal, FoodAllergy, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
 import NoGlutenImage from '../../assets/sans-gluten.svg';
@@ -17,6 +17,10 @@ import {SvgProps} from 'react-native-svg';
 import {calculateBMR} from '../../utils';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import ListItem from '../../components/ListItem';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../navigation/MainNavigator';
 
 type FoodAllergyItem = Omit<OnboardingListItem<FoodAllergy>, 'indication' | 'icon'> & {icon: React.FC<SvgProps>};
 
@@ -58,40 +62,18 @@ export const ALLERGIES: FoodAllergyItem[] = [
   },
 ];
 
-const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
-  minimal: 1.2,
-  light: 1.375,
-  moderate: 1.55,
-  active: 1.725,
-  extreme: 1.9,
-};
+type NutritionPrefTabScreenProps = CompositeScreenProps<
+  MaterialTopTabScreenProps<TopTabParams, 'nutritionPreferences'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
-const CALORIES_MODIFIERS: Record<FitnessGoal, number> = {
-  gain: 200,
-  lose: -200,
-  maintain: 0,
-  recomposition: -100,
-};
-
-const NutritionPrefTab: React.FC<NutritionPrefTabScreenProp> = ({navigation}) => {
+const NutritionPrefTab: React.FC<NutritionPrefTabScreenProps> = ({navigation}) => {
   const {allergies, toggleAllergy} = useOnBoardingStore(state => ({
     allergies: state.allergies,
     toggleAllergy: state.toggleAllergy,
   }));
-  // const {fitnessGoal, activityLevel, age, gender, height, weight} = useOnBoardingStore(state => ({
-  //   fitnessGoal: state.fitnessGoal,
-  //   activityLevel: state.activityLevel,
-  //   age: state.age,
-  //   gender: state.gender,
-  //   height: state.height,
-  //   weight: state.weight,
-  // }));
-  // const {storeUserFitnessData, storeUFDIsLoading} = useUserFitnessData();
 
   function setUserData() {
-    // const bmr = calculateBMR(gender, age, height, weight);
-    // const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
-    // storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies, tdee});
     navigation.navigate('signUp');
   }
 

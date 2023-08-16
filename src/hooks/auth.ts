@@ -4,6 +4,8 @@ import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {storeUser} from '../api/user';
+import {useOnBoardingStore} from '../store/onboarding';
+import {setFitnessData} from '../api/fitnessData';
 
 GoogleSignin.configure({
   webClientId: '1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com',
@@ -28,12 +30,21 @@ export function signOut() {
 
 export function useAuth() {
   const [user, setUser] = useState<FirebaseAuthTypes.User>();
+  const userFitnessData = useOnBoardingStore(state => ({
+    fitnessGoal: state.fitnessGoal,
+    activityLevel: state.activityLevel,
+    age: state.age,
+    gender: state.gender,
+    height: state.height,
+    weight: state.weight,
+    allergies: state.allergies,
+  }));
 
   useEffect(() => {
     const unsubscribeFromAuthStateChanged = auth().onAuthStateChanged(fireUser => {
       if (fireUser) {
         setUser(fireUser);
-        storeUser(fireUser);
+        storeUser(fireUser, userFitnessData);
       } else {
         setUser(undefined);
       }

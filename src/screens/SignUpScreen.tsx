@@ -6,19 +6,15 @@ import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
 import {useSignup} from '../hooks/auth';
 import Button from '../components/Button';
-import {TouchableOpacity} from '../atoms/Touchable';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {Dimensions, KeyboardAvoidingView, Platform} from 'react-native';
+import {Dimensions, Image, KeyboardAvoidingView, Platform} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
-import StatusBar from '../components/StatusBar';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
-import Pressable from '../atoms/Pressable';
+import BaseHeader, {GoBackButton} from '../components/Header';
 
-// type SignUpScreenRouteProp = RouteProp<RootStackParamList, 'SignUp'>;
-type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
-
+type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signUp'>;
 export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationProp}) => {
   const {form, onSubmit, mutation: submitMutation} = useSignup();
   const {control, watch} = form;
@@ -26,20 +22,14 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
   const {spacing} = useTheme<Theme>();
   const {keyboardVisible} = useKeyboardIsVisible();
 
-  const goToSigninSceen = () => {
-    navigation.navigate('SignIn');
-  };
-
   return (
     <Box bg={'$screenBackground'} flex={1}>
-      <StatusBar />
+      <BaseHeader title="Céer un compte" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <Box justifyContent={'center'} alignItems={'center'}>
         <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'space-between'}>
-        <Text variant={'h1'} textAlign={'center'} p={'m'}>
-          LeftoverFit
-        </Text>
+        <Image source={require('../assets/logo-180x180.png')} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.xl}}>
@@ -54,13 +44,15 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
+                mb={'s'}
                 inputPropPresets={'email'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
                 icon={'mail'}
                 placeholder="Email"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={error?.message}
               />
             )}
             name="email"
@@ -81,13 +73,16 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
+                mb={'s'}
                 inputPropPresets={'newPassword'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
                 icon={'lock'}
                 placeholder="Mot de passe"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={error?.message}
+                onSubmitEditing={onSubmit}
               />
             )}
             name="password"
@@ -102,24 +97,18 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
                 inputPropPresets={'newPassword'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
                 icon={'lock'}
-                placeholder="Confirmer mot de passe"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                error={error?.message}
-                returnKeyType={'next'}
                 onSubmitEditing={onSubmit}
+                placeholder="Confirmer mot de passe"
               />
             )}
             name="confirmPassword"
           />
-
-          <Pressable p={'xs'} alignSelf={'flex-end'} onPress={goToSigninSceen}>
-            <Text variant={'link-small'} textAlign={'right'} color={'$header'}>
-              J'ai déjà un compte
-            </Text>
-          </Pressable>
         </KeyboardAvoidingView>
         {submitMutation.error && (
           <Box>
@@ -128,7 +117,13 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
         )}
       </Box>
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'} p={'l'}>
-        <Button label="Créer mon compte" onPress={onSubmit} variant={'primary'} loading={submitMutation.isLoading} />
+        <Button
+          variant={'primary'}
+          alignSelf={'stretch'}
+          label="créer mon compte"
+          onPress={onSubmit}
+          loading={submitMutation.isLoading}
+        />
       </Box>
     </Box>
   );

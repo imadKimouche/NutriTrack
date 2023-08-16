@@ -3,7 +3,7 @@ import Box from '../../atoms/Box';
 import Text from '../../atoms/Text';
 import Button from '../../components/Button';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import {TabNavigationProp} from '../../navigation/OnboardingNavigator';
+import {NutritionPrefTabScreenProp, TabNavigationProp} from '../../navigation/OnboardingNavigator';
 import {ActivityLevel, FitnessGoal, FoodAllergy, useOnBoardingStore} from '../../store/onboarding';
 import {OnboardingListItem} from './GoalTab';
 import NoGlutenImage from '../../assets/sans-gluten.svg';
@@ -73,9 +73,7 @@ const CALORIES_MODIFIERS: Record<FitnessGoal, number> = {
   recomposition: -100,
 };
 
-export type AboutYouTabProps = {navigation: TabNavigationProp};
-
-const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
+const NutritionPrefTab: React.FC<NutritionPrefTabScreenProp> = ({navigation}) => {
   const {allergies, toggleAllergy} = useOnBoardingStore(state => ({
     allergies: state.allergies,
     toggleAllergy: state.toggleAllergy,
@@ -94,7 +92,7 @@ const NutritionPrefTab: React.FC<AboutYouTabProps> = ({navigation}) => {
     // const bmr = calculateBMR(gender, age, height, weight);
     // const tdee = bmr * ACTIVITY_MULTIPLIERS[activityLevel] + CALORIES_MODIFIERS[fitnessGoal];
     // storeUserFitnessData({fitnessGoal, activityLevel, gender, age, height, weight, allergies, tdee});
-    navigation.navigate('signup');
+    navigation.navigate('signUp');
   }
 
   return (

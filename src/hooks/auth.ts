@@ -4,8 +4,9 @@ import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {storeUser} from '../api/user';
-import {useOnBoardingStore} from '../store/onboarding';
+import {ActivityLevel, FitnessGoal, useOnBoardingStore, UserFitnessData} from '../store/onboarding';
 import {setFitnessData} from '../api/fitnessData';
+import {calculateBMR} from '../utils';
 
 GoogleSignin.configure({
   webClientId: '1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com',
@@ -30,21 +31,14 @@ export function signOut() {
 
 export function useAuth() {
   const [user, setUser] = useState<FirebaseAuthTypes.User>();
-  const userFitnessData = useOnBoardingStore(state => ({
-    fitnessGoal: state.fitnessGoal,
-    activityLevel: state.activityLevel,
-    age: state.age,
-    gender: state.gender,
-    height: state.height,
-    weight: state.weight,
-    allergies: state.allergies,
-  }));
 
   useEffect(() => {
-    const unsubscribeFromAuthStateChanged = auth().onAuthStateChanged(fireUser => {
+    const unsubscribeFromAuthStateChanged = auth().onAuthStateChanged(async fireUser => {
       if (fireUser) {
         setUser(fireUser);
-        storeUser(fireUser, userFitnessData);
+        // TODO fix this, rerenders too many times
+        // storing user shouldn't be here
+        await storeUser(fireUser);
       } else {
         setUser(undefined);
       }
@@ -57,23 +51,74 @@ export function useAuth() {
   };
 }
 
+const AUTH_ERR_MSGS = {
+  'auth/email-already-in-use': 'Email is already in use',
+  'auth/invalid-email': 'Invalid email address',
+  'auth/weak-password': 'Password is too weak',
+  // Add more error codes and messages as needed
+};
+
+const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
+  minimal: 1.2,
+  light: 1.375,
+  moderate: 1.55,
+  active: 1.725,
+  extreme: 1.9,
+};
+
+const CALORIES_MODIFIERS: Record<FitnessGoal, number> = {
+  gain: 200,
+  lose: -200,
+  maintain: 0,
+  recomposition: -100,
+};
+
+async function signUpUser(email: string, password: string) {
+  return await auth().createUserWithEmailAndPassword(email, password);
+}
+
 export function useSignup() {
   const form = useForm<SignupFormData>();
+  const userFitnessData: UserFitnessData = useOnBoardingStore(state => ({
+    fitnessGoal: state.fitnessGoal,
+    activityLevel: state.activityLevel,
+    age: state.age,
+    gender: state.gender,
+    height: state.height,
+    weight: state.weight,
+    allergies: state.allergies,
+  }));
+
+  if (
+    userFitnessData &&
+    userFitnessData.gender &&
+    userFitnessData.age &&
+    userFitnessData.fitnessGoal &&
+    userFitnessData.activityLevel
+  ) {
+    const bmr = calculateBMR(userFitnessData.gender, userFitnessData.age, userFitnessData.height, userFitnessData.weight);
+    const tdee = bmr * ACTIVITY_MULTIPLIERS[userFitnessData.activityLevel];
+    userFitnessData.tdee = tdee;
+  }
+
   const mutation = useMutation<FirebaseAuthTypes.UserCredential, FirebaseAuthTypes.NativeFirebaseAuthError, MutationData>(
-    (data: MutationData) => auth().createUserWithEmailAndPassword(data.email, data.password),
+    (data: MutationData) => signUpUser(data.email, data.password),
+    {
+      onSuccess: async userCredential => {
+        const {user} = userCredential;
+        setTimeout(async () => {
+          await setFitnessData(user.uid, userFitnessData);
+        }, 1000);
+      },
+      onError: err => {
+        console.log('signUp():', err);
+      },
+    },
   );
 
-  const queryClient = useQueryClient();
   const onSubmit = form.handleSubmit((data: MutationData) => {
     const {email, password} = data;
-    mutation.mutate(
-      {email, password},
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries('userDailyMeals');
-        },
-      },
-    );
+    mutation.mutate({email, password});
   });
 
   return {form, onSubmit, mutation};

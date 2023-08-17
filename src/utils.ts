@@ -45,6 +45,9 @@ export function getSurroundingDates(dateStr: string, datesBefore: number, datesA
 }
 
 export function calculateBMR(gender: Gender, age: number, height: number, weight: number) {
+  if (!gender || !age || !height || !weight) {
+    return 0;
+  }
   let bmr;
   if (gender === 'male') {
     bmr = 66.473 + 13.7516 * weight + 5.0033 * height - 6.755 * age;

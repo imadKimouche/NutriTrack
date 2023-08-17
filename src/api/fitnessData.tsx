@@ -22,6 +22,9 @@ export async function setFitnessData(userId: string, data: UserFitnessData) {
     if (userDataSnap.exists) {
       await firestore().collection('users').doc(userId).update({fitnessData: data});
     }
+    // else {
+    //   await firestore().collection('users').doc(userId).set({fitnessData: data});
+    // }
   } catch (err) {
     console.log('setFitnessData(): ', err);
   }

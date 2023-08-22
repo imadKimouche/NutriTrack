@@ -19,7 +19,7 @@ type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList,
 const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
     <Pressable onPress={onPress} px={'s'}>
-      <Text variant={'button'} color={'$textLabel'}>
+      <Text variant={'text-small'} color={'$primary'}>
         Enregistrer
       </Text>
     </Pressable>

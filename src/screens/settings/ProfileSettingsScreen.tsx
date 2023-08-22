@@ -6,7 +6,6 @@ import Box from '../../atoms/Box';
 import Pressable from '../../atoms/Pressable';
 import Text from '../../atoms/Text';
 import BaseHeader, {GoBackButton} from '../../components/Header';
-import FIcon from '../../components/FIcon';
 import LoadingModal from '../../components/LoadingModal';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useOnBoardingStore} from '../../store/onboarding';
@@ -17,14 +16,6 @@ import BottomSheetTextInput from '../../components/BottomSheetTextInput';
 import {FlatList} from 'react-native';
 import ListItem from '../../components/ListItem';
 import Picker from '../../components/Picker';
-
-export const SaveButton: React.FC<{onPress: () => void}> = ({onPress}) => {
-  return (
-    <Pressable alignSelf={'stretch'} onPress={onPress} alignItems={'flex-end'} mr={'m'}>
-      <FIcon name="check" size={24} color={'$primary'} />
-    </Pressable>
-  );
-};
 
 type BottomSheetType = 'height' | 'weight' | 'age' | 'gender' | 'allergies' | undefined;
 export const ProfileSettingsItem: React.FC<{label: string; value: string; onPress: () => void}> = ({label, value, onPress}) => {
@@ -119,22 +110,32 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
   ];
 
   return (
-    <Box flex={1} bg={'$screenBackground'}>
+    <Box flex={1} bg={'$bgWeak'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
         title="Profile"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
-        rightComponent={<SaveButton onPress={saveSettings} />}
+        rightComponent={
+          <Text variant={'text-small'} color={'$primary'} onPress={saveSettings}>
+            Enregistrer
+          </Text>
+        }
       />
-      {profileSettings.map(setting => (
-        <ListItem
-          variant={bottomSheetType === setting.id ? 'active' : undefined}
-          key={setting.id}
-          title={setting.label}
-          rightComponent={<Text>{setting.value}</Text>}
-          onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
-        />
-      ))}
+      <Box p={'m'}>
+        {profileSettings.map(setting => (
+          <ListItem
+            variant={bottomSheetType === setting.id ? 'active' : undefined}
+            key={setting.id}
+            title={setting.label}
+            rightComponent={
+              <Text variant={'text-small-tight'} color={'$label'}>
+                {setting.value}
+              </Text>
+            }
+            onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
+          />
+        ))}
+      </Box>
       <BottomSheet
         keyboardBehavior="interactive"
         ref={bottomSheetRef}

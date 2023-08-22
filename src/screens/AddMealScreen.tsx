@@ -64,16 +64,18 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<SaveMealButton onPress={saveMealPortion} />}
       />
-      {saveMealIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
+      {saveMealIsLoading && <LoadingModal label="Enregistrement en cours..." />}
       <Box flex={0.7} alignItems={'center'} px={'s'}>
-        <Text variant={'h5'} py={'s'}>
+        <Text variant={'text-medium'} color={'$header'} py={'s'}>
           {meal.name}
         </Text>
         <Image source={{uri: meal.images.url}} style={{width: 200, height: 200}} />
       </Box>
       <Box flex={0.2} px={'m'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'h6'}>Portion</Text>
+          <Text variant={'text-medium'} color={'$header'}>
+            Portion
+          </Text>
           <Input
             value={portion.toString()}
             onChangeText={text => {
@@ -104,17 +106,17 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
           </Picker>
         </Box>
       </Box>
-      <Box flex={1} p={'m'}>
-        <Text py={'s'} variant={'h6'}>
+      <Box flex={1} p={'m'} bg={'$bgWeak'}>
+        <Text py={'s'} variant={'text-medium'} color={'$header'}>
           Macro-nutriments (100g)
         </Text>
-        <Box bg={'$cardBackground'} borderRadius={'sm'} p={'xs'}>
+        <Box bg={'$bgWeak'} borderRadius={'sm'} p={'xs'}>
           {nutrimentItems.map(item => (
             <ListItem
               key={item.id}
               title={item.label}
               rightComponent={
-                <Text variant={'subtitle2'} color={'$textLabel'}>
+                <Text variant={'text-small-tight'} color={'$textLabel'}>
                   {item.value}
                 </Text>
               }

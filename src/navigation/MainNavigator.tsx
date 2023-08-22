@@ -51,8 +51,6 @@ const ResetPassword = () => {
 };
 
 const Landing: React.FC<{navigation: NativeStackNavigationProp<RootStackParamList, 'landing'>}> = ({navigation}) => {
-  const {updateStore} = useOnBoardingStore();
-  const {mutation} = useSignup();
   return (
     <Box flex={1} bg={'$bgWeak'}>
       <StatusBar />
@@ -60,24 +58,6 @@ const Landing: React.FC<{navigation: NativeStackNavigationProp<RootStackParamLis
         <DishImage width={Dimensions.get('window').width} />
         <Image source={require('../assets/logo-180x180.png')} />
       </Box>
-      <Button
-        label="test"
-        onPress={() => {
-          updateStore({
-            fitnessGoal: 'gain',
-            activityLevel: 'active',
-            gender: 'male',
-            age: 25,
-            height: 180,
-            weight: 80,
-            allergies: ['gluten', 'soy'],
-          });
-
-          setTimeout(() => {
-            mutation.mutate({email: 'E#@a.com', password: 'azeazeaze'});
-          }, 1000);
-        }}
-      />
       <Box flex={0.5} alignItems={'center'} justifyContent={'center'}>
         <Button label="Commencer" width={'90%'} onPress={() => navigation.navigate('onboarding')} />
         <Box flexDirection={'row'}>

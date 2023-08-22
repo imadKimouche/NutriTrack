@@ -86,11 +86,6 @@ export const SignInScreen = () => {
             name="password"
           />
         </KeyboardAvoidingView>
-        {submitMutation.error && (
-          <Box>
-            <Text variant={'body2'}>{submitMutation.error.message}</Text>
-          </Box>
-        )}
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'center'} px={'xl'} p={'l'}>
         <Button

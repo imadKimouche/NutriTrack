@@ -3,10 +3,10 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useMutation, useQueryClient} from 'react-query';
 import {useForm} from 'react-hook-form';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {storeUser} from '../api/user';
 import {ActivityLevel, FitnessGoal, useOnBoardingStore, UserFitnessData} from '../store/onboarding';
 import {setFitnessData} from '../api/fitnessData';
 import {calculateBMR} from '../utils';
+import {storeUser} from '../api/user';
 
 GoogleSignin.configure({
   webClientId: '1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com',
@@ -36,9 +36,6 @@ export function useAuth() {
     const unsubscribeFromAuthStateChanged = auth().onAuthStateChanged(async fireUser => {
       if (fireUser) {
         setUser(fireUser);
-        // TODO fix this, rerenders too many times
-        // storing user shouldn't be here
-        await storeUser(fireUser);
       } else {
         setUser(undefined);
       }
@@ -50,13 +47,6 @@ export function useAuth() {
     user,
   };
 }
-
-const AUTH_ERR_MSGS = {
-  'auth/email-already-in-use': 'Email is already in use',
-  'auth/invalid-email': 'Invalid email address',
-  'auth/weak-password': 'Password is too weak',
-  // Add more error codes and messages as needed
-};
 
 const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
   minimal: 1.2,
@@ -71,6 +61,14 @@ const CALORIES_MODIFIERS: Record<FitnessGoal, number> = {
   lose: -200,
   maintain: 0,
   recomposition: -100,
+};
+
+const AUTH_ERR_MSGS = {
+  'auth/email-already-in-use': 'Email is already in use',
+  'auth/invalid-email': 'Invalid email address',
+  'auth/weak-password': 'Password is too weak',
+  'auth/wrong-password': 'Password is incorrect',
+  'auth/user-not-found': 'User not found',
 };
 
 async function signUpUser(email: string, password: string) {
@@ -97,7 +95,7 @@ export function useSignup() {
     userFitnessData.activityLevel
   ) {
     const bmr = calculateBMR(userFitnessData.gender, userFitnessData.age, userFitnessData.height, userFitnessData.weight);
-    const tdee = bmr * ACTIVITY_MULTIPLIERS[userFitnessData.activityLevel];
+    const tdee = bmr * ACTIVITY_MULTIPLIERS[userFitnessData.activityLevel] + CALORIES_MODIFIERS[userFitnessData.fitnessGoal];
     userFitnessData.tdee = tdee;
   }
 
@@ -106,9 +104,8 @@ export function useSignup() {
     {
       onSuccess: async userCredential => {
         const {user} = userCredential;
-        setTimeout(async () => {
-          await setFitnessData(user.uid, userFitnessData);
-        }, 1000);
+        await storeUser(user);
+        await setFitnessData(user.uid, userFitnessData);
       },
       onError: err => {
         console.log('signUp():', err);
@@ -120,6 +117,8 @@ export function useSignup() {
     const {email, password} = data;
     mutation.mutate({email, password});
   });
+
+  mutation.error?.code && form.setError('password', {message: AUTH_ERR_MSGS[mutation.error.code as keyof typeof AUTH_ERR_MSGS]});
 
   return {form, onSubmit, mutation};
 }
@@ -144,6 +143,8 @@ export const useSignin = () => {
       },
     );
   });
+
+  mutation.error?.code && form.setError('password', {message: AUTH_ERR_MSGS[mutation.error.code as keyof typeof AUTH_ERR_MSGS]});
 
   return {form, onSubmit, mutation};
 };

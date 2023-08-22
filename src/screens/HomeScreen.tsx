@@ -126,10 +126,7 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
         rightComponent={<Avatar label={initials} onPress={() => navigation.navigate('Settings')} />}
       />
       <Box flex={1} alignItems={'center'} py={'m'}>
-        <TrackerCalendar
-          currentDate={currentSelectedDate}
-          onPress={selectedPickerDate => setCurrentSelectedDate(selectedPickerDate)}
-        />
+        <TrackerCalendar currentDate={currentSelectedDate} onDayPress={setCurrentSelectedDate} />
         <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
         <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
         <Button

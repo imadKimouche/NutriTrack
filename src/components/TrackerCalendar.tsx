@@ -37,15 +37,15 @@ const CalendarItem: React.FC<CalendarItemProps> = ({date, selected, onPress}) =>
 
 type TrackerCalendarProps = {
   currentDate: string;
-  onPress: () => void;
+  onDayPress: (date: string) => void;
 };
-const TrackerCalendar: React.FC<TrackerCalendarProps> = ({currentDate, onPress}) => {
+const TrackerCalendar: React.FC<TrackerCalendarProps> = ({currentDate, onDayPress}) => {
   const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
 
   return (
     <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} p={'s'}>
       {dates.map(date => (
-        <CalendarItem key={date} date={date} selected={date === currentDate} onPress={onPress} />
+        <CalendarItem key={date} date={date} selected={date === currentDate} onPress={() => onDayPress(date)} />
       ))}
     </Box>
   );

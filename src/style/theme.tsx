@@ -236,7 +236,7 @@ const theme = createTheme({
   },
   listItemVariants: {
     defaults: {
-      backgroundColor: '$bgWeak',
+      backgroundColor: '$transparent',
       paddingVertical: 's',
       borderBottomWidth: 1,
       borderBottomColor: '$line',
@@ -247,7 +247,7 @@ const theme = createTheme({
   },
   listItemTitleVariants: {
     defaults: {
-      backgroundColor: '$bgWeak',
+      backgroundColor: '$transparent',
       color: '$header',
       paddingVertical: 'xs',
       textTransform: 'capitalize',
@@ -259,7 +259,7 @@ const theme = createTheme({
   },
   listItemSubtitleVariants: {
     defaults: {
-      backgroundColor: '$bgWeak',
+      backgroundColor: '$transparent',
       color: '$body',
       ...textVariants.subtitle2,
     },

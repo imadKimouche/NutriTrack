@@ -16,7 +16,10 @@ export async function getFitnessData(userId: string) {
   }
 }
 
-export async function setFitnessData(userId: string, data: UserFitnessData) {
+export async function setFitnessData(userId: string | undefined, data: Partial<UserFitnessData>) {
+  if (!userId) {
+    return;
+  }
   try {
     const userDataSnap = await firestore().collection('users').doc(userId).get();
     if (userDataSnap.exists) {

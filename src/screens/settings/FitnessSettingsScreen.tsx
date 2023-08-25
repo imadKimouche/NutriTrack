@@ -8,7 +8,6 @@ import BaseHeader, {GoBackButton} from '../../components/Header';
 import {useOnBoardingStore} from '../../store/onboarding';
 import {HomeStackParamList} from '../HomeStackNavigator';
 import {FitnessGoalListItem, FITNESS_GOALS} from '../onboarding/GoalTab';
-import {ProfileSettingsItem, SaveButton} from './ProfileSettingsScreen';
 import {ActivityLevelListItem, ACTIVITY_LEVELS} from '../onboarding/ActivityLevelTab';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import LoadingModal from '../../components/LoadingModal';
@@ -17,7 +16,7 @@ import ListItem from '../../components/ListItem';
 type BottomSheetType = 'fitnessGoal' | 'activityLevel' | undefined;
 type FitnessSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigationProp}> = ({navigation}) => {
-  const {fitnessGoal, setFitnessGoal, activityLevel, setActivityLevel, ...onboardingState} = useOnBoardingStore(state => state);
+  const {fitnessGoal, setFitnessGoal, activityLevel, setActivityLevel} = useOnBoardingStore(state => state);
   const snapPointLow = useMemo(() => ['42%'], []);
   const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
@@ -26,11 +25,6 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
     storeUFDAsync({
       fitnessGoal,
       activityLevel,
-      age: onboardingState.age,
-      height: onboardingState.height,
-      weight: onboardingState.weight,
-      gender: onboardingState.gender,
-      allergies: onboardingState.allergies,
     }).finally(() => {
       bottomSheetRef.current?.close();
     });
@@ -48,27 +42,38 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
   }
 
   const fitnessSettings = [
-    {id: 'fitnessGoal', label: 'objectif fitness', value: fitnessGoal},
-    {id: 'activityLevel', label: "niveau d'activité", value: activityLevel},
+    {id: 'fitnessGoal', label: 'objectif fitness', value: fitnessGoal ?? 'Aucun'},
+    {id: 'activityLevel', label: "niveau d'activité", value: activityLevel ?? 'Aucun'},
   ];
 
   return (
-    <Box flex={1} bg={'$screenBackground'}>
+    <Box flex={1} bg={'$bgWeak'}>
       {storeUFDIsLoading && <LoadingModal label="Enregistrement en cours 🤞" />}
       <BaseHeader
-        title="Fitness"
+        title="Profile"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
-        rightComponent={<SaveButton onPress={saveSettings} />}
+        rightComponent={
+          <Text variant={'text-small'} color={'$primary'} onPress={saveSettings}>
+            Enregistrer
+          </Text>
+        }
       />
-      {fitnessSettings.map(setting => (
-        <ListItem
-          key={setting.id}
-          variant={bottomSheetType === setting.id ? 'active' : undefined}
-          title={setting.label}
-          rightComponent={<Text>{setting.value}</Text>}
-          onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
-        />
-      ))}
+      <Box p={'m'}>
+        {fitnessSettings.map(setting => (
+          <ListItem
+            key={setting.id}
+            variant={bottomSheetType === setting.id ? 'active' : undefined}
+            title={setting.label}
+            rightComponent={
+              <Text variant={'text-small-tight'} color={'$label'}>
+                {setting.value ?? ''}
+              </Text>
+            }
+            rightComponentProps={{flex: 0.5, alignItems: 'flex-end'}}
+            onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
+          />
+        ))}
+      </Box>
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -77,13 +82,13 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
         enablePanDownToClose={true}>
         {bottomSheetType === 'fitnessGoal' && (
           <Box px={'m'}>
-            <Text mb={'s'} variant={'subtitle2'}>
+            <Text py={'xs'} variant={'text-medium'}>
               Objectif Fitness
             </Text>
             <FlatList
               data={FITNESS_GOALS}
               renderItem={({item}) => (
-                <FitnessGoalListItem {...item} selectedItem={fitnessGoal} setSelectedItem={setFitnessGoal} />
+                <FitnessGoalListItem {...item} selectedItem={fitnessGoal} onPress={() => setFitnessGoal(item.id)} />
               )}
               keyExtractor={item => item.id}
             />
@@ -91,7 +96,7 @@ const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigati
         )}
         {bottomSheetType === 'activityLevel' && (
           <Box px={'m'}>
-            <Text mb={'s'} variant={'subtitle2'}>
+            <Text py={'xs'} variant={'text-medium'}>
               Votre niveau d'activité
             </Text>
             <FlatList

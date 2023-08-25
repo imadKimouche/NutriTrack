@@ -14,7 +14,7 @@ export const useUserFitnessData = () => {
     isLoading: storeUFDIsLoading,
     isError: storeUFDIsError,
     mutateAsync: storeUFDAsync,
-  } = useMutation((userData: UserFitnessData) => setFitnessData(user?.uid!, userData), {
+  } = useMutation((userData: Partial<UserFitnessData>) => setFitnessData(user?.uid, userData), {
     onSuccess: () => {
       queryClient.invalidateQueries('userFitnessData');
     },

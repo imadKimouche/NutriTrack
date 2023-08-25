@@ -43,7 +43,7 @@ const Picker = ({placeholder, children, containerStyle, ...rest}: PickerProps) =
         </Text>
       )}
       <PickerBase
-        itemStyle={{height: 50, margin: 0, padding: 0, color: colors.$header, ...textVariants['text-small']}}
+        itemStyle={{height: 60, margin: 0, padding: 0, color: colors.$header, ...textVariants['text-small']}}
         selectionColor={hex2rgba(colors.$input, 0.4)}
         {...rest}>
         {React.Children.map(children, child => {

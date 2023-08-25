@@ -10,10 +10,9 @@ import LoadingModal from '../../components/LoadingModal';
 import {useUserFitnessData} from '../../hooks/userFitnessData';
 import {useOnBoardingStore} from '../../store/onboarding';
 import {HomeStackParamList} from '../HomeStackNavigator';
-import {GenderListItem, GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
-import {ALLERGIES, AllergyListItem} from '../onboarding/NutritionPrefTab';
+import {GENDERS, HEIGHT_OPTIONS, WEIGHT_OPTIONS} from '../onboarding/AboutYouTab';
+import {ALLERGIES} from '../onboarding/NutritionPrefTab';
 import BottomSheetTextInput from '../../components/BottomSheetTextInput';
-import {FlatList} from 'react-native';
 import ListItem from '../../components/ListItem';
 import Picker from '../../components/Picker';
 
@@ -37,33 +36,15 @@ export const ProfileSettingsItem: React.FC<{label: string; value: string; onPres
 type ProfileSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigationProp}> = ({navigation}) => {
   const insets = useSafeAreaInsets();
-  const {
-    fitnessGoal,
-    activityLevel,
-    allergies,
-    toggleAllergy,
-    age,
-    setAge,
-    gender,
-    setGender,
-    height,
-    setHeight,
-    weight,
-    setWeight,
-  } = useOnBoardingStore(state => ({
-    fitnessGoal: state.fitnessGoal,
-    activityLevel: state.activityLevel,
-    age: state.age,
-    setAge: state.setAge,
-    gender: state.gender,
-    setGender: state.setGender,
-    height: state.height,
-    setHeight: state.setHeight,
-    weight: state.weight,
-    setWeight: state.setWeight,
+  const {allergies, toggleAllergy} = useOnBoardingStore(state => ({
     allergies: state.allergies,
     toggleAllergy: state.toggleAllergy,
   }));
+  const {height, setHeight} = useOnBoardingStore(state => ({height: state.height, setHeight: state.setHeight}));
+  const {weight, setWeight} = useOnBoardingStore(state => ({weight: state.weight, setWeight: state.setWeight}));
+  const {age, setAge} = useOnBoardingStore(state => ({age: state.age, setAge: state.setAge}));
+  const {gender, setGender} = useOnBoardingStore(state => ({gender: state.gender, setGender: state.setGender}));
+
   const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -80,8 +61,6 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
 
   function saveSettings() {
     storeUFDAsync({
-      fitnessGoal,
-      activityLevel,
       age,
       height,
       weight,
@@ -104,7 +83,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
   const profileSettings = [
     {id: 'height', label: 'taille', value: `${height} cm`},
     {id: 'weight', label: 'poids', value: `${weight} kg`},
-    {id: 'age', label: 'age', value: `${age} ans`},
+    {id: 'age', label: 'age', value: `${age ? age + ' ans' : ''}`},
     {id: 'gender', label: 'genre', value: gender},
     {id: 'allergies', label: 'allérgies', value: ''},
   ];
@@ -129,9 +108,10 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
             title={setting.label}
             rightComponent={
               <Text variant={'text-small-tight'} color={'$label'}>
-                {setting.value}
+                {setting.value ?? ''}
               </Text>
             }
+            rightComponentProps={{flex: 0.5, alignItems: 'flex-end'}}
             onPress={() => openBottomSheetFor(setting.id as BottomSheetType)}
           />
         ))}
@@ -145,8 +125,10 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         snapPoints={snapPoint}
         bottomInset={insets.bottom}>
         {bottomSheetType === 'age' && (
-          <Box p={'m'} flex={1} justifyContent={'flex-start'}>
-            <Text variant={'subtitle2'}>Age</Text>
+          <Box px={'m'} flex={1} justifyContent={'flex-start'}>
+            <Text py={'xs'} variant={'text-medium'}>
+              Age
+            </Text>
             <BottomSheetTextInput
               value={ageStr}
               onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
@@ -157,18 +139,27 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
           </Box>
         )}
         {bottomSheetType === 'gender' && (
-          <Box p={'m'}>
-            <Text variant={'subtitle2'}>Genre</Text>
+          <Box px={'m'}>
+            <Text py={'xs'} variant={'text-medium'}>
+              Genre
+            </Text>
             {GENDERS.map(item => (
-              <GenderListItem key={item.id} {...item} selectedItem={gender} setSelectedItem={setGender} />
+              <ListItem
+                key={item.id}
+                onPress={() => setGender(item.id)}
+                variant={item.id === gender ? 'active' : undefined}
+                title={item.label}
+              />
             ))}
           </Box>
         )}
         {bottomSheetType === 'height' && (
-          <Box p={'m'}>
-            <Text variant={'subtitle2'}>Renseignez votre taille</Text>
+          <Box px={'m'}>
+            <Text py={'xs'} variant={'text-medium'}>
+              Renseignez votre taille
+            </Text>
             <Picker
-              placeholder={'Taille'}
+              itemStyle={{height: 110}}
               selectedValue={height}
               onValueChange={itemValue => setHeight(itemValue as typeof height)}>
               {HEIGHT_OPTIONS.map(option => {
@@ -179,8 +170,10 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         )}
 
         {bottomSheetType === 'weight' && (
-          <Box p={'m'}>
-            <Text variant={'subtitle2'}>Poids</Text>
+          <Box px={'m'}>
+            <Text py={'xs'} variant={'text-medium'}>
+              Renseignez votre poids
+            </Text>
             <Picker
               itemStyle={{height: 110}}
               selectedValue={weight}
@@ -192,17 +185,22 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
           </Box>
         )}
         {bottomSheetType === 'allergies' && (
-          <Box p={'m'}>
-            <Text variant={'subtitle2'} mb={'m'}>
+          <Box px={'m'}>
+            <Text py={'xs'} variant={'text-medium'}>
               Allérgies
             </Text>
-            <FlatList
-              data={ALLERGIES}
-              renderItem={({item}) => (
-                <AllergyListItem key={item.id} {...item} selectedItems={allergies} onPress={toggleAllergy} />
-              )}
-              keyExtractor={item => item.id}
-            />
+            {ALLERGIES.map(item => {
+              const added = allergies.includes(item.id);
+              return (
+                <ListItem
+                  key={item.id}
+                  onPress={() => toggleAllergy(item.id)}
+                  title={item.label}
+                  variant={added ? 'active' : undefined}
+                  leftComponent={<item.icon width={30} height={30} />}
+                />
+              );
+            })}
           </Box>
         )}
       </BottomSheet>

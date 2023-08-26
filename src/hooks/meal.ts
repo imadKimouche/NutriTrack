@@ -202,14 +202,15 @@ export function usePostMeal(meal: Meal) {
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
   const {user} = useAuth();
+  const currentDateISO = currentSelectedDate.toISOString().split('T')[0];
 
   const queryClient = useQueryClient();
   const {isLoading, error, mutate, mutateAsync} = useMutation(
     ({portion, unit}: {portion: number; unit: string}) =>
-      pushUserMeal(user?.uid ?? '', currentSelectedDate, currentMealType, meal, portion, unit),
+      pushUserMeal(user?.uid ?? '', currentDateISO, currentMealType, meal, portion, unit),
     {
       onSuccess: async () => {
-        await updateUserDailyMacros(user?.uid ?? '', currentSelectedDate, meal.calories, meal.proteins, meal.carbs, meal.fat);
+        await updateUserDailyMacros(user?.uid ?? '', currentDateISO, meal.calories, meal.proteins, meal.carbs, meal.fat);
         queryClient.invalidateQueries('userDailyMeals');
       },
     },
@@ -222,10 +223,10 @@ export function usePostMeal(meal: Meal) {
   };
 }
 
-export function useUserDailyMeals(date: string) {
+export function useUserDailyMeals(date: Date) {
   const {user} = useAuth();
   const {data, isLoading, error, isError} = useQuery(['userDailyMeals', user, date], () =>
-    fetchUserDailyMeals(user?.uid ?? '', date),
+    fetchUserDailyMeals(user?.uid ?? '', date.toISOString().split('T')[0]),
   );
   return {data, isLoading, error, isError};
 }
@@ -237,7 +238,7 @@ export function useDeleteDailyMeal() {
 
   const queryClient = useQueryClient();
   const {isLoading, isError, error, mutate} = useMutation(
-    (mealId: number) => deleteUserMeal(user?.uid ?? '', currentSelectedDate, currentMealType, mealId),
+    (mealId: number) => deleteUserMeal(user?.uid ?? '', currentSelectedDate.toISOString().split('T')[0], currentMealType, mealId),
     {
       onSuccess: async () => {
         queryClient.invalidateQueries('userDailyMeals');

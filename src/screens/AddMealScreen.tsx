@@ -7,7 +7,6 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import {HomeStackParamList} from './HomeStackNavigator';
 import Picker from '../components/Picker';
-import Input from '../atoms/Input';
 import {usePostMeal} from '../hooks/meal';
 import BaseHeader, {GoBackButton} from '../components/Header';
 import LoadingModal from '../components/LoadingModal';

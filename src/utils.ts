@@ -1,46 +1,19 @@
 import {Gender} from './store/onboarding';
 
-export function dateToString(date: Date): string {
-  const dayInWeek = date.toLocaleDateString('default', {weekday: 'short'}).split('.')[0];
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${dayInWeek}-${day}-${month}-${year}`;
-}
+export function getSurroundingDates(date: Date, datesBefore: number, datesAfter: number) {
+  const surroundingDates: Date[] = [];
 
-export function convertDateStringToDate(dateString: string): Date | null {
-  const [_, day, month, year] = dateString.split('-').map(Number);
-
-  if (isNaN(day) || isNaN(month) || isNaN(year)) {
-    return null;
+  for (let i = datesBefore; i > 0; i--) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() - i);
+    surroundingDates.push(newDate);
   }
-  const date = new Date(year, month - 1, day);
-
-  if (isNaN(date.getTime())) {
-    return null;
+  surroundingDates.push(date);
+  for (let i = 1; i <= datesAfter; i++) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + i);
+    surroundingDates.push(newDate);
   }
-
-  return date;
-}
-
-export function getSurroundingDates(dateStr: string, datesBefore: number, datesAfter: number): string[] {
-  const date = convertDateStringToDate(dateStr);
-
-  if (!date) {
-    return [];
-  }
-
-  const surroundingDates: string[] = [];
-  const millisecondsInADay = 24 * 60 * 60 * 1000;
-
-  const startDate = new Date(date.getTime() - datesBefore * millisecondsInADay);
-
-  for (let i = 0; i < datesBefore + datesAfter + 1; i++) {
-    const currentDate = new Date(startDate.getTime() + i * millisecondsInADay);
-    const formattedDate = dateToString(currentDate);
-    surroundingDates.push(formattedDate);
-  }
-
   return surroundingDates;
 }
 

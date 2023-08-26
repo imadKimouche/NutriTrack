@@ -16,7 +16,7 @@ const TIIcon = createRestyleComponent<TIIconProps, Theme>([createVariant({themeK
 type TIHintProps = Omit<TextProps, 'variant'> & VariantProps<Theme, 'tiHintVariants'>;
 const TIHint = createRestyleComponent<TIHintProps, Theme>([createVariant({themeKey: 'tiHintVariants'})], FIcon);
 
-type TextInputProps = TIContainerProps & {
+export type TextInputProps = TIContainerProps & {
   placeholder?: string;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -28,6 +28,7 @@ type TextInputProps = TIContainerProps & {
   returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
   inputPropPresets?: keyof typeof defaultInputProps;
   containerStyle?: BoxProps;
+  clearMode?: boolean;
 };
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -43,6 +44,7 @@ const TextInput: React.FC<TextInputProps> = ({
   hint,
   containerStyle,
   returnKeyType,
+  clearMode,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -80,7 +82,7 @@ const TextInput: React.FC<TextInputProps> = ({
           returnKeyType={returnKeyType}
           {...presetProps}
         />
-        {value && value.length !== 0 && (
+        {clearMode && value && value.length !== 0 && (
           <FIcon name="x-circle" color={'$label'} size={14} onPress={() => onChangeText && onChangeText('')} />
         )}
       </TIContainer>

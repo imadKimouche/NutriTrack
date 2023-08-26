@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '../atoms/Box';
-import Text from '../atoms/Text';
 import TextInput from '../components/TextInput';
 import {Controller} from 'react-hook-form';
 import {useSignin, useSignInWithGoogle} from '../hooks/auth';
@@ -8,7 +7,7 @@ import Button from '../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainNavigator';
-import {Image, KeyboardAvoidingView, Platform} from 'react-native';
+import {Image, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import Divider from '../components/Divider';
@@ -52,6 +51,7 @@ export const SignInScreen = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                returnKeyType={'next'}
               />
             )}
             name="email"
@@ -72,7 +72,7 @@ export const SignInScreen = () => {
             }}
             render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
               <TextInput
-                inputPropPresets={'newPassword'}
+                inputPropPresets={'password'}
                 hint={error?.message}
                 variant={error ? 'error' : undefined}
                 icon={'lock'}
@@ -80,7 +80,9 @@ export const SignInScreen = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                onSubmitEditing={onSubmit}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                returnKeyType={'done'}
+                clearMode={true}
               />
             )}
             name="password"

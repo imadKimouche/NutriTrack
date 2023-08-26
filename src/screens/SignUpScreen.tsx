@@ -8,7 +8,7 @@ import {useSignup} from '../hooks/auth';
 import Button from '../components/Button';
 import {RootStackParamList} from '../navigation/MainNavigator';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {Dimensions, Image, KeyboardAvoidingView, Platform} from 'react-native';
+import {Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../style/theme';
 import {useKeyboardIsVisible} from '../hooks/keyboard';
@@ -82,7 +82,8 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                onSubmitEditing={onSubmit}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                returnKeyType={'next'}
               />
             )}
             name="password"
@@ -103,8 +104,9 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                onSubmitEditing={onSubmit}
                 placeholder="Confirmer mot de passe"
+                onSubmitEditing={() => Keyboard.dismiss()}
+                returnKeyType={'done'}
               />
             )}
             name="confirmPassword"

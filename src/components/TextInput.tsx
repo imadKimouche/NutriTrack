@@ -71,7 +71,6 @@ const TextInput: React.FC<TextInputProps> = ({
           variant={isFocused ? 'selected' : variant}
           placeholder={placeholder}
           placeholderTextColor={theme.colors.$placehold}
-          clearButtonMode="while-editing"
           value={value}
           onChangeText={onChangeText}
           onBlur={handleBlur}
@@ -81,6 +80,9 @@ const TextInput: React.FC<TextInputProps> = ({
           returnKeyType={returnKeyType}
           {...presetProps}
         />
+        {value && value.length !== 0 && (
+          <FIcon name="x-circle" color={'$label'} size={14} onPress={() => onChangeText && onChangeText('')} />
+        )}
       </TIContainer>
       {(variant === 'caption' || variant === 'success' || variant === 'error') && hint && (
         <TIHint variant={variant}>{hint}</TIHint>

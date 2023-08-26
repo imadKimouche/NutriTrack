@@ -12,14 +12,15 @@ import {usePostMeal} from '../hooks/meal';
 import BaseHeader, {GoBackButton} from '../components/Header';
 import LoadingModal from '../components/LoadingModal';
 import ListItem from '../components/ListItem';
+import TextInput from '../components/TextInput';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
 
 const SaveMealButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
-    <Pressable onPress={onPress} px={'s'}>
-      <Text variant={'text-small'} color={'$primary'}>
+    <Pressable onPress={onPress}>
+      <Text variant={'text-small-tight'} color={'$primary'}>
         Enregistrer
       </Text>
     </Pressable>
@@ -58,7 +59,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   ];
 
   return (
-    <Box flex={1} bg={'$screenBackground'}>
+    <Box flex={1} bg={'$bgWeak'}>
       <BaseHeader
         title="Aliment"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
@@ -73,10 +74,12 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
       </Box>
       <Box flex={0.2} px={'m'}>
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} py={'s'}>
-          <Text variant={'text-medium'} color={'$header'}>
+          <Text variant={'text-large-tight'} color={'$header'} mr={'s'}>
             Portion
           </Text>
-          <Input
+          <TextInput
+            containerStyle={{flex: 1}}
+            inputPropPresets={'posituveNumber'}
             value={portion.toString()}
             onChangeText={text => {
               if (text === '') {
@@ -88,16 +91,9 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
                 }
               }
             }}
-            height={50}
-            width={140}
-            marginLeft={'s'}
-            borderRadius={'xs'}
-            borderColor={'$inputBorder'}
-            keyboardType={'numeric'}
-            paddingHorizontal={'s'}
           />
           <Picker
-            itemStyle={{height: 50, width: 160}}
+            itemStyle={{height: 50, width: 150}}
             selectedValue={unit}
             onValueChange={itemValue => setUnit(itemValue.toString())}>
             {mealUnits.map(unitItem => {
@@ -107,7 +103,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
         </Box>
       </Box>
       <Box flex={1} p={'m'} bg={'$bgWeak'}>
-        <Text py={'s'} variant={'text-medium'} color={'$header'}>
+        <Text py={'s'} variant={'text-large-tight'} color={'$header'}>
           Macro-nutriments (100g)
         </Text>
         <Box bg={'$bgWeak'} borderRadius={'sm'} p={'xs'}>
@@ -116,10 +112,11 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
               key={item.id}
               title={item.label}
               rightComponent={
-                <Text variant={'text-small-tight'} color={'$textLabel'}>
+                <Text variant={'text-small-tight'} color={'$secondary'}>
                   {item.value}
                 </Text>
               }
+              rightComponentProps={{flex: 0.3, alignItems: 'flex-end'}}
             />
           ))}
         </Box>

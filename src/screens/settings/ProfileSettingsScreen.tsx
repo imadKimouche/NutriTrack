@@ -49,7 +49,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const snapPoint = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['30%', '70%'], []);
   const [ageStr, setAgeStr] = useState(age?.toString() ?? '');
 
   useEffect(() => {
@@ -76,7 +76,11 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
       bottomSheetRef.current?.close();
     } else {
       setBottomSheetType(type);
-      bottomSheetRef.current?.expand();
+      if (type === 'allergies') {
+        bottomSheetRef.current?.snapToIndex(1);
+      } else {
+        bottomSheetRef.current?.snapToIndex(0);
+      }
     }
   }
 
@@ -122,7 +126,7 @@ const ProfileSettingsScreen: React.FC<{navigation: ProfileSettingsScreenNavigati
         index={-1}
         enablePanDownToClose={true}
         onClose={() => setBottomSheetType(undefined)}
-        snapPoints={snapPoint}
+        snapPoints={snapPoints}
         bottomInset={insets.bottom}>
         {bottomSheetType === 'age' && (
           <Box px={'m'} flex={1} justifyContent={'flex-start'}>

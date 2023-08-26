@@ -17,7 +17,7 @@ type BottomSheetType = 'fitnessGoal' | 'activityLevel' | undefined;
 type FitnessSettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'ProfileSettings'>;
 const FitnessSettingsScreen: React.FC<{navigation: FitnessSettingsScreenNavigationProp}> = ({navigation}) => {
   const {fitnessGoal, setFitnessGoal, activityLevel, setActivityLevel} = useOnBoardingStore(state => state);
-  const snapPointLow = useMemo(() => ['42%'], []);
+  const snapPointLow = useMemo(() => ['55%'], []);
   const {storeUFDAsync, storeUFDIsLoading} = useUserFitnessData();
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(undefined);
 

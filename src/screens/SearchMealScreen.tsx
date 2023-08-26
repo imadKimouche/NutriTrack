@@ -12,6 +12,7 @@ import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 import BaseHeader, {GoBackButton} from '../components/Header';
+import ListItem from '../components/ListItem';
 
 const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -21,57 +22,21 @@ const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   );
 };
 
-type MealListItemProps = {meal: Meal; onItemPressed: (meal: Meal) => void};
-const MealListItem: React.FC<MealListItemProps> = ({meal, onItemPressed}) => {
-  return (
-    <Pressable
-      onPress={() => onItemPressed(meal)}
-      alignSelf={'stretch'}
-      p={'m'}
-      borderRadius={'sm'}
-      borderBottomColor={'$divider'}
-      borderBottomWidth={1}
-      flexDirection={'row'}
-      alignItems={'center'}>
-      <Image source={{uri: meal.images.thumbUrl}} style={{width: 60, height: 60}} />
-      <Box alignItems={'flex-start'} px={'s'} flex={1}>
-        <Text variant={'body1'} ellipsizeMode={'tail'}>
-          {meal.name}
-        </Text>
-      </Box>
-    </Pressable>
-  );
-};
-
 export const SearchError: React.FC = () => {
   return (
     <Box>
-      <Text variant={'caption'}>Oups, je rencontre un problème 😬</Text>
-    </Box>
-  );
-};
-
-export const SearchLoader: React.FC = () => {
-  return (
-    <Box my={'s'}>
-      <Loader color="$primary" />
+      <Text variant={'text-small-tight'}>Oups, je rencontre un problème 😬</Text>
     </Box>
   );
 };
 
 const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: () => void}> = ({show, isLoading, onPress}) => {
   if (show) {
-    if (isLoading) {
-      return <SearchLoader />;
-    } else {
-      return (
-        <Pressable alignSelf={'center'} py={'s'} onPress={onPress}>
-          <Text variant={'subtitle1'} color={'$primary'}>
-            Charger plus
-          </Text>
-        </Pressable>
-      );
-    }
+    return (
+      <Pressable py={'s'} alignItems={'center'} onPress={() => !isLoading && onPress()}>
+        {isLoading ? <Loader color="$primary" /> : <FIcon name="chevron-down" color={'$primary'} size={24} />}
+      </Pressable>
+    );
   }
   return <></>;
 };
@@ -90,15 +55,22 @@ const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNav
   }
 
   if (isLoading) {
-    return <SearchLoader />;
+    return <Loader color="$primary" />;
   }
 
   if (data !== undefined && data.length > 0) {
     return (
-      <Box flex={3} bg={'$cardBackground'} alignSelf={'stretch'} mx={'m'} borderRadius={'xs'}>
+      <Box bg={'$bg'} mx={'m'} px={'s'} borderRadius={'xs'} flexBasis={'55%'}>
         <FlatList
           data={data}
-          renderItem={item => <MealListItem meal={item.item} onItemPressed={onMealPressed} />}
+          renderItem={({item}) => (
+            <ListItem
+              leftComponent={<Image source={{uri: item.images.thumbUrl}} style={{width: 50, height: 50}} />}
+              leftComponentProps={{mr: 'm'}}
+              title={item.name}
+              onPress={() => onMealPressed(item)}
+            />
+          )}
           keyExtractor={item => `${item.id}-${item.name}`}
           ListFooterComponent={<SearchListFooter show={hasNextPage} isLoading={isFetching} onPress={fetchNextPage} />}
         />
@@ -117,36 +89,26 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
 
   return (
-    <Box flex={1} bg={'$screenBackground'} style={{paddingBottom: insets.bottom}}>
+    <Box flex={1} bg={'$bgWeak'} style={{paddingBottom: insets.bottom}}>
       <BaseHeader
         title="Trouver un aliment"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<BarCodeButton onPress={() => navigation.navigate('BarCodeScanner')} />}
       />
-      <Box flex={1} bg={'$screenBackground'} style={{paddingBottom: insets.bottom}}>
+      <Box flex={1} style={{paddingBottom: insets.bottom}}>
         <Box p={'s'}>
           <Searchbar onSubmitEditing={setSearchMeal} placeholder={'Riz, lentilles ...'} />
         </Box>
         <SearchList searchValue={searchMeal} navigation={navigation} />
-        <Box flex={1} mx={'s'} my={'m'}>
+        <Box flex={1} m={'m'}>
           <Box flexDirection={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
             <Text variant={'h6'}>Historique</Text>
-            <Text onPress={clearMealSearchHistory} variant={'subtitle1'} color={'$link'}>
+            <Text onPress={clearMealSearchHistory} variant={'text-small'} color={'$primary'}>
               Tout effacer
             </Text>
           </Box>
           {mealSearchHistory.map((meal: Meal) => {
-            return (
-              <Pressable
-                key={meal.id}
-                onPress={() => navigation.navigate('AddMeal', {meal})}
-                alignSelf={'stretch'}
-                p={'m'}
-                borderBottomWidth={1}
-                borderColor={'$divider'}>
-                <Text variant={'body2'}>{meal.name}</Text>
-              </Pressable>
-            );
+            return <ListItem key={meal.id} title={meal.name} onPress={() => navigation.navigate('AddMeal', {meal})} />;
           })}
         </Box>
       </Box>

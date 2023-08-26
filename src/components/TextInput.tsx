@@ -25,6 +25,7 @@ type TextInputProps = TIContainerProps & {
   onFocus?: (event: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   icon?: string;
   hint?: string;
+  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send';
   inputPropPresets?: keyof typeof defaultInputProps;
   containerStyle?: BoxProps;
 };
@@ -41,6 +42,7 @@ const TextInput: React.FC<TextInputProps> = ({
   onSubmitEditing,
   hint,
   containerStyle,
+  returnKeyType,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -76,6 +78,7 @@ const TextInput: React.FC<TextInputProps> = ({
           onFocus={handleFocus}
           onSubmitEditing={onSubmitEditing}
           editable={variant !== 'disabled'}
+          returnKeyType={returnKeyType}
           {...presetProps}
         />
       </TIContainer>

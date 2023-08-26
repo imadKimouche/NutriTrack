@@ -15,6 +15,8 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from '../../style/theme';
+import bottomSheet from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheet';
+import Pressable from '../../atoms/Pressable';
 
 // TODO useMemo
 export const HEIGHT_OPTIONS = generateHeightOptions(120, 230, 1);
@@ -86,7 +88,10 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
           {GENDERS.map(item => (
             <ListItem
               key={item.id}
-              onPress={() => setGender(item.id)}
+              onPress={() => {
+                openBottomSheetFor(undefined);
+                setGender(item.id);
+              }}
               variant={item.id === gender ? 'active' : undefined}
               title={item.label}
             />
@@ -99,7 +104,9 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
               placeholder="Entrez votre age"
               value={ageStr}
               onChangeText={value => setAgeStr(value.replace(/[^0-9]/g, ''))}
+              onFocus={() => openBottomSheetFor(undefined)}
               inputPropPresets={'positiveNumber'}
+              returnKeyType={'done'}
             />
           </KeyboardAvoidingView>
         </Section>
@@ -142,14 +149,19 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
         ref={bottomSheetRef}
         index={-1}
         enablePanDownToClose={true}
-        onClose={() => setBottomSheetType(undefined)}
+        onClose={() => openBottomSheetFor(undefined)}
         snapPoints={snapPoints}
         bottomInset={insets.bottom}>
         {bottomSheetType === 'height' && (
           <Box px={'m'}>
-            <Text py={'xs'} variant={'text-medium'}>
-              Renseignez votre taille
-            </Text>
+            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              <Text py={'xs'} variant={'text-medium'}>
+                Renseignez votre taille
+              </Text>
+              <Text onPress={() => openBottomSheetFor(undefined)} py={'xs'} variant={'text-small'} color={'$secondary'}>
+                Done
+              </Text>
+            </Box>
             <Picker
               itemStyle={{height: '90%'}}
               selectedValue={height}
@@ -163,9 +175,14 @@ const AboutYouTab: React.FC<AboutYouTabProps> = ({navigation}) => {
 
         {bottomSheetType === 'weight' && (
           <Box px={'m'}>
-            <Text py={'xs'} variant={'text-medium'}>
-              Renseignez votre poids
-            </Text>
+            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+              <Text py={'xs'} variant={'text-medium'}>
+                Renseignez votre poids
+              </Text>
+              <Text onPress={() => openBottomSheetFor(undefined)} py={'xs'} variant={'text-small'} color={'$secondary'}>
+                Done
+              </Text>
+            </Box>
             <Picker
               itemStyle={{height: '90%'}}
               selectedValue={weight}

@@ -32,6 +32,28 @@ const UNITS: Record<string, string[]> = {
   default: ['g', 'kg', 'oz', 'mg', 'ml', 'l', 'cl', 'floz'],
 };
 
+const yieldPortionValue = (portion: number, unit: string, calories: number): number => {
+  let result = 0;
+  if (unit === 'g') {
+    result = (portion / 100) * calories;
+  } else if (unit === 'kg') {
+    result = (portion * 1000) / 100;
+  } else if (unit === 'oz') {
+    result = (portion * 28.3495) / 100;
+  } else if (unit === 'mg') {
+    result = (portion / 1000000) * calories;
+  } else if (unit === 'ml') {
+    result = (portion / 100) * calories;
+  } else if (unit === 'l') {
+    result = (portion * 1000) / 100;
+  } else if (unit === 'cl') {
+    result = (portion * 10) / 100;
+  } else if (unit === 'floz') {
+    result = (portion * 29.5735) / 100;
+  }
+  return result;
+};
+
 const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMealScreenNavigationProp}> = ({
   route,
   navigation,
@@ -39,11 +61,15 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const {meal} = route.params;
   const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
   const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
-  const {saveUserMealAsync, isLoading: saveMealIsLoading} = usePostMeal(meal);
+  const {saveUserMealAsync, isLoading: saveMealIsLoading} = usePostMeal();
   //TODO handle save meal loading & error state
 
   function saveMealPortion() {
-    saveUserMealAsync({portion, unit}).finally(() => {
+    meal.calories = yieldPortionValue(portion, unit, meal.calories);
+    meal.proteins = yieldPortionValue(portion, unit, meal.proteins);
+    meal.carbs = yieldPortionValue(portion, unit, meal.carbs);
+    meal.fat = yieldPortionValue(portion, unit, meal.fat);
+    saveUserMealAsync({meal, portion, unit}).finally(() => {
       navigation.navigate('SearchMeal');
     });
   }
@@ -51,10 +77,10 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const mealUnits = meal.unit in UNITS ? UNITS[meal.unit] : UNITS.default;
 
   const nutrimentItems = [
-    {id: 'calories', label: 'calories', value: `${meal.calories} kcal`},
-    {id: 'proteins', label: 'protéines', value: `${meal.proteins} g`},
-    {id: 'carbs', label: 'glucides', value: `${meal.carbs} g`},
-    {id: 'fat', label: 'lipides', value: `${meal.fat} g`},
+    {id: 'calories', label: 'calories', value: `${yieldPortionValue(portion, unit, meal.calories).toFixed(2)} kcal`},
+    {id: 'proteins', label: 'protéines', value: `${yieldPortionValue(portion, unit, meal.proteins).toFixed(2)} g`},
+    {id: 'carbs', label: 'glucides', value: `${yieldPortionValue(portion, unit, meal.carbs).toFixed(2)} g`},
+    {id: 'fat', label: 'lipides', value: `${yieldPortionValue(portion, unit, meal.fat).toFixed(2)} g`},
   ];
 
   return (
@@ -103,7 +129,8 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
       </Box>
       <Box flex={1} p={'m'} bg={'$bgWeak'}>
         <Text py={'s'} variant={'text-large-tight'} color={'$header'}>
-          Macro-nutriments (100g)
+          Macro-nutriments ({portion}
+          {unit})
         </Text>
         <Box bg={'$bgWeak'} borderRadius={'sm'} p={'xs'}>
           {nutrimentItems.map(item => (
@@ -115,7 +142,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
                   {item.value}
                 </Text>
               }
-              rightComponentProps={{flex: 0.3, alignItems: 'flex-end'}}
+              rightComponentProps={{flex: 0.5, alignItems: 'flex-end'}}
             />
           ))}
         </Box>

@@ -198,7 +198,7 @@ export function useSearchOFFMealBC(barcode: string) {
   return {data, isLoading, error, isError};
 }
 
-export function usePostMeal(meal: Meal) {
+export function usePostMeal() {
   const currentSelectedDate = useDashboardStore(state => state.selectedDate);
   const currentMealType = useDashboardStore(state => state.selectedMealType);
   const {user} = useAuth();
@@ -206,10 +206,10 @@ export function usePostMeal(meal: Meal) {
 
   const queryClient = useQueryClient();
   const {isLoading, error, mutate, mutateAsync} = useMutation(
-    ({portion, unit}: {portion: number; unit: string}) =>
+    ({meal, portion, unit}: {meal: Meal; portion: number; unit: string}) =>
       pushUserMeal(user?.uid ?? '', currentDateISO, currentMealType, meal, portion, unit),
     {
-      onSuccess: async () => {
+      onSuccess: async (_, {meal}) => {
         await updateUserDailyMacros(user?.uid ?? '', currentDateISO, meal.calories, meal.proteins, meal.carbs, meal.fat);
         queryClient.invalidateQueries('userDailyMeals');
       },

@@ -13,8 +13,9 @@ import {useDebounce} from '../../hooks/utility';
 import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
 import {useSearchMealStore} from '../../store/ingredients';
 import {Theme} from '../../style/theme';
-import {SearchError, SearchLoader} from '../SearchMealScreen';
+import {SearchError} from '../SearchMealScreen';
 import {RecipeListItem} from './RecipesResultsScreen';
+import Loader from '../../components/Loader';
 
 type IngredientListItemProps = {
   ingredient: Ingredient;
@@ -40,20 +41,15 @@ const IngredientListItem: React.FC<IngredientListItemProps> = ({ingredient, onIt
   );
 };
 
-const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
+const SearchList: React.FC<{searchValue?: string; onItemPressed: (ing: Ingredient) => void}> = ({searchValue, onItemPressed}) => {
   const {data: foundIngredients, isLoading, isError} = useSearchIngredient(searchValue);
-  const {add} = useSearchMealStore(state => ({add: state.addIngredient}));
-
-  function onIngredientPressed(ingredient: Ingredient) {
-    add(ingredient);
-  }
 
   if (isError) {
     return <SearchError />;
   }
 
   if (isLoading) {
-    return <SearchLoader />;
+    return <Loader color="$primary" />;
   }
 
   if (foundIngredients.length > 0) {
@@ -61,7 +57,7 @@ const SearchList: React.FC<{searchValue?: string}> = ({searchValue}) => {
       <Box flex={1} alignSelf={'stretch'} mx={'m'} my={'xs'}>
         <FlatList
           data={foundIngredients}
-          renderItem={item => <IngredientListItem ingredient={item.item} onItemPressed={onIngredientPressed} />}
+          renderItem={item => <IngredientListItem ingredient={item.item} onItemPressed={onItemPressed} />}
           keyExtractor={item => `${item.id}-${item.name}`}
         />
       </Box>
@@ -108,12 +104,18 @@ const AddedIngredientListItem: React.FC<AddedIngredientListItemProps> = ({ingred
 
 const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps<'ingredientSearch'>}> = ({navigation}) => {
   const [ingredient, setIngredient] = useState<string | undefined>(undefined);
-  const debouncedSearchIngredient = useDebounce(ingredient);
-  const {addedIngredients, removeIngredient} = useSearchMealStore(state => ({
+  const {debouncedValue: debouncedSearchIngredient, setDebouncedValue} = useDebounce(ingredient);
+  const {addedIngredients, addIgnredient, removeIngredient} = useSearchMealStore(state => ({
     addedIngredients: state.addedIngredients,
+    addIgnredient: state.addIngredient,
     removeIngredient: state.removeIngredient,
   }));
   const {data: favoriteRecipes} = useFavoriteRecipes();
+
+  function onIngredientPressed(ing: Ingredient) {
+    addIgnredient(ing);
+    setDebouncedValue('');
+  }
 
   return (
     <Box bg={'$screenBackground'} flex={1} alignItems={'center'}>
@@ -121,7 +123,7 @@ const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps
       <Box px={'s'} alignSelf={'stretch'}>
         <Searchbar onUpdateValue={text => setIngredient(text)} placeholder="Miel, Poulet, Citron..." />
       </Box>
-      <SearchList searchValue={debouncedSearchIngredient} />
+      <SearchList searchValue={debouncedSearchIngredient} onItemPressed={onIngredientPressed} />
       <Box flex={1} my={'m'} px={'s'} alignSelf={'stretch'}>
         {addedIngredients.length ? (
           <>

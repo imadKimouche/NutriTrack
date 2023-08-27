@@ -41,14 +41,8 @@ const SearchListFooter: React.FC<{show?: boolean; isLoading: boolean; onPress: (
   return <></>;
 };
 
-const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNavigationProp}> = ({searchValue, navigation}) => {
-  const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetching} = useSearchOFFMeal(searchValue);
-  const addMealToHistory = useMealSearchHistory(state => state.add);
-
-  function onMealPressed(meal: Meal) {
-    addMealToHistory(meal);
-    navigation.navigate('AddMeal', {meal});
-  }
+const SearchList: React.FC<{searchValue: string; onItemPress: (meal: Meal) => void}> = ({searchValue, onItemPress}) => {
+  let {data, isLoading, isError, fetchNextPage, hasNextPage, isFetching} = useSearchOFFMeal(searchValue);
 
   if (isError) {
     return <SearchError />;
@@ -68,7 +62,7 @@ const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNav
               leftComponent={<Image source={{uri: item.images.thumbUrl}} style={{width: 50, height: 50}} />}
               leftComponentProps={{mr: 'm'}}
               title={item.name}
-              onPress={() => onMealPressed(item)}
+              onPress={() => onItemPress(item)}
             />
           )}
           keyExtractor={item => `${item.id}-${item.name}`}
@@ -78,7 +72,7 @@ const SearchList: React.FC<{searchValue: string; navigation: SearchMealScreenNav
     );
   }
 
-  return <></>;
+  return null;
 };
 
 type SearchMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'SearchMeal'>;
@@ -87,6 +81,13 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   const insets = useSafeAreaInsets();
   const mealSearchHistory = useMealSearchHistory(state => state.history);
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
+  const addMealToHistory = useMealSearchHistory(state => state.add);
+
+  function onMealPress(meal: Meal) {
+    addMealToHistory(meal);
+    setSearchMeal('');
+    navigation.navigate('AddMeal', {meal});
+  }
 
   return (
     <Box flex={1} bg={'$bgWeak'} style={{paddingBottom: insets.bottom}}>
@@ -99,7 +100,7 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
         <Box p={'s'}>
           <Searchbar onSubmitEditing={setSearchMeal} placeholder={'Riz, lentilles ...'} />
         </Box>
-        <SearchList searchValue={searchMeal} navigation={navigation} />
+        <SearchList searchValue={searchMeal} onItemPress={onMealPress} />
         <Box flex={1} m={'m'}>
           <Box flexDirection={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
             <Text variant={'h6'}>Historique</Text>

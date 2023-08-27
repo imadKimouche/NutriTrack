@@ -13,7 +13,6 @@ import DishImage from '../assets/dish-illustration.svg';
 import {Dimensions, Image} from 'react-native';
 import StatusBar from '../components/StatusBar';
 import Button from '../components/Button';
-import {useOnBoardingStore} from '../store/onboarding';
 
 export type RootStackParamList = {
   landing: undefined;

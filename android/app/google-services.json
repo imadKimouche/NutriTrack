@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1086106979278",
+    "firebase_url": "https://leftover-fe99c.firebaseio.com",
+    "project_id": "leftover-fe99c",
+    "storage_bucket": "leftover-fe99c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086106979278:android:3c36cc37b7c62336adb99f",
+        "android_client_info": {
+          "package_name": "com.leftover"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc0o9ZeZa7il8mwtao8pbCar8WNosfyVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086106979278-hodb961ig9e20k0uet43mka4stf0nlrd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086106979278-0mcjifdrui3oc7chdmsv6ejf6h02qfp4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.LeftOver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

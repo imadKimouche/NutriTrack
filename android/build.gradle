@@ -3,12 +3,15 @@
 buildscript {
     ext {
         buildToolsVersion = "33.0.0"
-        minSdkVersion = 21
+        minSdkVersion = 23
         compileSdkVersion = 33
         targetSdkVersion = 33
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
+
+        // React native camera kit
+        kotlin_version = '1.7.20'
     }
     repositories {
         google()
@@ -17,5 +20,14 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version") // React native camera kit
+        classpath 'com.google.gms:google-services:4.3.15' // react native firebase
+    }
+}
+
+// React native camera kit
+allprojects {
+    repositories {
+        google()
     }
 }

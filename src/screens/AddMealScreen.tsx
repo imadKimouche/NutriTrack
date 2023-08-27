@@ -12,6 +12,7 @@ import BaseHeader, {GoBackButton} from '../components/Header';
 import LoadingModal from '../components/LoadingModal';
 import ListItem from '../components/ListItem';
 import TextInput from '../components/TextInput';
+import {useMealSearchHistory} from '../store/mealSearchHistory';
 
 type AddMealScreenRouteProp = RouteProp<HomeStackParamList, 'AddMeal'>;
 type AddMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'AddMeal'>;
@@ -62,6 +63,7 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
   const [unit, setUnit] = useState(meal.unit in UNITS ? meal.unit : '');
   const [portion, setPortion] = useState<number>(meal.portion !== undefined ? meal.portion : 1);
   const {saveUserMealAsync, isLoading: saveMealIsLoading} = usePostMeal();
+  const addMealToHistory = useMealSearchHistory(state => state.add);
   //TODO handle save meal loading & error state
 
   function saveMealPortion() {
@@ -69,8 +71,11 @@ const AddMealScreen: React.FC<{route: AddMealScreenRouteProp; navigation: AddMea
     meal.proteins = yieldPortionValue(portion, unit, meal.proteins);
     meal.carbs = yieldPortionValue(portion, unit, meal.carbs);
     meal.fat = yieldPortionValue(portion, unit, meal.fat);
+    meal.portion = portion;
+    meal.unit = unit;
     saveUserMealAsync({meal, portion, unit}).finally(() => {
       navigation.navigate('SearchMeal');
+      addMealToHistory(meal);
     });
   }
 

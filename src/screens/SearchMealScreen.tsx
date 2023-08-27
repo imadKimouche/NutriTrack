@@ -81,10 +81,8 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   const insets = useSafeAreaInsets();
   const mealSearchHistory = useMealSearchHistory(state => state.history);
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
-  const addMealToHistory = useMealSearchHistory(state => state.add);
 
   function onMealPress(meal: Meal) {
-    addMealToHistory(meal);
     setSearchMeal('');
     navigation.navigate('AddMeal', {meal});
   }
@@ -109,7 +107,19 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
             </Text>
           </Box>
           {mealSearchHistory.map((meal: Meal) => {
-            return <ListItem key={meal.id} title={meal.name} onPress={() => navigation.navigate('AddMeal', {meal})} />;
+            return (
+              <ListItem
+                key={meal.id}
+                title={meal.name}
+                onPress={() => navigation.navigate('AddMeal', {meal})}
+                rightComponent={
+                  <Text variant={'text-small-tight'} color={'$label'}>
+                    {meal.portion}
+                    {meal.unit}
+                  </Text>
+                }
+              />
+            );
           })}
         </Box>
       </Box>

@@ -1,3 +1,4 @@
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {useEffect, useState} from 'react';
 import {ResultSet} from 'react-native-sqlite-storage';
 import {InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
@@ -228,7 +229,7 @@ export function useUserDailyMeals(date: Date) {
   const {data, isLoading, error, isError} = useQuery(['userDailyMeals', user, date], () =>
     fetchUserDailyMeals(user?.uid ?? '', date.toISOString().split('T')[0]),
   );
-  return {data, isLoading, error, isError};
+  return {dailyMeals: data, isLoading, error, isError};
 }
 
 export function useDeleteDailyMeal() {

@@ -23,7 +23,7 @@ export const useUserFitnessData = () => {
     },
   });
   return {
-    userFitnessData: data,
+    fitnessData: data,
     storeUserFitnessData: mutate,
     storeUFDAsync,
     isLoading,

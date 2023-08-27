@@ -23,7 +23,18 @@ interface MealItemProps extends Meal {
 }
 
 const MealItem: React.FC<MealItemProps> = ({...meal}) => {
-  return <ListItem title={meal.name} subtitle={`${meal.calories} kcal`} />;
+  return (
+    <ListItem
+      title={meal.name}
+      subtitle={`${meal.calories} kcal`}
+      rightComponent={
+        <Text variant={'text-small-tight'} color={'$label'}>
+          {meal.portion}
+          {meal.unit}
+        </Text>
+      }
+    />
+  );
 };
 
 const MealTypeItem: React.FC<{label: string; selected?: boolean; onPress: () => void}> = ({label, selected = false, onPress}) => {
@@ -51,7 +62,7 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
     <Box
       flexDirection={'row'}
       alignItems={'stretch'}
-      bg={'$bgWeak'}
+      bg={'$bg'}
       borderRadius={'sm'}
       height={32}
       justifyContent={'space-between'}
@@ -65,16 +76,27 @@ const MealTypeSelector: React.FC<{currentMealType: MealType; onMealTypePress: (m
   );
 };
 
-const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> = ({currentCalories, maxCalories}) => {
-  const progressRatio = currentCalories <= maxCalories ? currentCalories / maxCalories : 1;
-  const normalizedMaxCalories = Math.ceil(maxCalories);
+const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs: number; currFat: number}> = ({
+  currCalories,
+  currProt,
+  currCarbs,
+  currFat,
+}) => {
+  const {fitnessData} = useUserFitnessData();
+  console.log(fitnessData);
+  if (!fitnessData || !fitnessData.tdee) {
+    return null;
+  }
+
+  const progressRatio = currCalories <= fitnessData.tdee ? currCalories / fitnessData.tdee : 1;
+  const normalizedMaxCalories = Math.ceil(fitnessData.tdee);
 
   return (
-    <Box alignSelf={'stretch'} py={'m'} px={'l'}>
-      <Text variant={'text-medium'} color={'$header'}>
+    <Box alignSelf={'stretch'} m={'s'}>
+      <Text variant={'text-medium'} color={'$header'} mb={'xs'}>
         Progression du jour
       </Text>
-      <Box bg={'$secondaryBg'} my={'m'} borderRadius={'sm'} height={8} width={'100%'}>
+      <Box bg={'$secondaryBg'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box
           bg={'$secondary'}
           borderTopLeftRadius={'sm'}
@@ -87,8 +109,37 @@ const TotalCalorieBar: React.FC<{currentCalories: number; maxCalories: number}> 
       </Box>
       <Box alignItems={'flex-end'}>
         <Text variant={'text-x-small'} color={'$label'}>
-          {currentCalories} kcal / {normalizedMaxCalories} kcal
+          {currCalories} kcal / {normalizedMaxCalories} kcal
         </Text>
+      </Box>
+
+      <Box flexDirection={'row'} alignSelf={'stretch'} justifyContent={'space-around'} py={'s'}>
+        <Box alignItems={'center'}>
+          <Text variant={'text-x-small'} color={'$header'}>
+            Protéines
+          </Text>
+          <Text variant={'text-x-small-tight'} color={'$body'}>
+            {currProt.toFixed()}g
+          </Text>
+        </Box>
+
+        <Box alignItems={'center'}>
+          <Text variant={'text-x-small'} color={'$header'}>
+            Glucides
+          </Text>
+          <Text variant={'text-x-small-tight'} color={'$body'}>
+            {currCarbs.toFixed()}g
+          </Text>
+        </Box>
+
+        <Box alignItems={'center'}>
+          <Text variant={'text-x-small'} color={'$header'}>
+            Lipides
+          </Text>
+          <Text variant={'text-x-small-tight'} color={'$body'}>
+            {currFat.toFixed()}g
+          </Text>
+        </Box>
       </Box>
     </Box>
   );
@@ -108,16 +159,8 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
     currentMealType: state.selectedMealType,
     setCurrentMealType: state.setSelectedMealType,
   }));
-  const {data} = useUserDailyMeals(currentSelectedDate);
+  const {dailyMeals} = useUserDailyMeals(currentSelectedDate);
   const {deleteDailyMeal} = useDeleteDailyMeal();
-  const {userFitnessData} = useUserFitnessData();
-
-  const currentDateMeals = data ?? {
-    currentCalories: 0,
-    currentCarbs: 0,
-    currentFat: 0,
-    currentProt: 0,
-  };
 
   return (
     <Box bg={'$bgWeak'} flex={1}>
@@ -127,7 +170,13 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
       />
       <Box flex={1} alignItems={'center'} py={'m'}>
         <TrackerCalendar currentDate={currentSelectedDate} onDayPress={setCurrentSelectedDate} />
-        <TotalCalorieBar currentCalories={currentDateMeals.currentCalories ?? 0} maxCalories={userFitnessData?.tdee ?? 0} />
+        <MacrosTracker
+          currCalories={dailyMeals?.currentCalories ?? 0}
+          currProt={dailyMeals?.currentProt ?? 0}
+          currCarbs={dailyMeals?.currentCarbs ?? 0}
+          currFat={dailyMeals?.currentFat ?? 0}
+        />
+
         <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
         <Button
           onPress={() => navigation.navigate('SearchMeal')}
@@ -139,16 +188,18 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
           right={15}
           zIndex={1}
         />
-        <Box flex={1} alignSelf={'stretch'}>
-          {currentMealType in currentDateMeals && currentDateMeals[currentMealType] && (
-            <FlatList
-              contentContainerStyle={{padding: spacing.m}}
-              data={currentDateMeals[currentMealType]}
-              renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
-              keyExtractor={item => item.name}
-            />
-          )}
-        </Box>
+        {dailyMeals && (
+          <Box flex={1} alignSelf={'stretch'}>
+            {currentMealType in dailyMeals && dailyMeals[currentMealType] && (
+              <FlatList
+                contentContainerStyle={{padding: spacing.m}}
+                data={dailyMeals[currentMealType]}
+                renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
+                keyExtractor={item => item.name}
+              />
+            )}
+          </Box>
+        )}
       </Box>
     </Box>
   );

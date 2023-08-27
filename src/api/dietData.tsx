@@ -128,7 +128,7 @@ export async function fetchUserDailyMeals(userId: string, date: string) {
     const docSnapshot = await dailyMealsRef.get();
 
     if (docSnapshot.exists) {
-      return docSnapshot.data();
+      return docSnapshot.data() as DailyMeals;
     }
     return undefined;
   } catch (err) {

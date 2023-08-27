@@ -32,6 +32,7 @@ const Searchbar: React.FC<Props> = ({onSubmitEditing, onUpdateValue, ...rest}) =
             onSubmitEditing && onSubmitEditing(e.nativeEvent.text);
           }}
           returnKeyType={'search'}
+          autoCorrect={false}
           {...rest}
         />
       </Box>

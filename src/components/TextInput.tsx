@@ -116,6 +116,7 @@ const defaultInputProps: {[id: string]: Partial<InputProps>} = {
     autoCorrect: false,
     autoComplete: 'password',
     textContentType: 'password',
+    secureTextEntry: true,
   },
   newPassword: {
     autoCapitalize: 'none',

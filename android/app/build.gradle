@@ -171,3 +171,10 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 apply plugin: "kotlin-android" // React native camera kit
 apply plugin: "kotlin-android-extensions" // React native camera kit
 apply plugin: 'com.google.gms.google-services' // react native firebase
+
+// react native vector icons
+project.ext.vectoricons = [
+    iconFontNames: [ 'Feather.ttf', 'FontAwesome5_Brands.ttf' ]
+]
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle"); // react native vector icons

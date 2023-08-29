@@ -79,7 +79,7 @@ const NutritionPrefTab: React.FC<NutritionPrefTabScreenProps> = ({navigation}) =
     <Box flex={1} bg={'$bgWeak'}>
       <BaseHeader title="Nutrition" leftComponent={<GoBackButton onPress={() => navigation.navigate('aboutYou')} />} />
       <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'text-medium'}>
+        <Text py={'l'} variant={'text-medium'} color={'$header'}>
           Avez-vous des allérgies ?
         </Text>
         <Box>

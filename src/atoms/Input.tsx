@@ -1,55 +1,63 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {
+  ColorProps,
+  useRestyle,
+  spacing,
+  border,
   backgroundColor,
+  BorderProps,
   BackgroundColorProps,
+  composeRestyleFunctions,
+  SpacingProps,
+  color,
   backgroundColorShorthand,
   BackgroundColorShorthandProps,
-  border,
-  BorderProps,
-  color,
-  ColorProps,
-  composeRestyleFunctions,
-  createVariant,
-  layout,
-  LayoutProps,
-  spacing,
-  SpacingProps,
-  SpacingShorthandProps,
   typography,
   TypographyProps,
-  useRestyle,
+  SpacingShorthandProps,
+  spacingShorthand,
+  LayoutProps,
+  layout,
+  useTheme,
+  createVariant,
   VariantProps,
 } from '@shopify/restyle';
-import {TextInput, TextInputProps} from 'react-native';
+import {TextInput as RNTextInput} from 'react-native';
 import {Theme} from '../style/theme';
 
-type RestyleProps = VariantProps<Theme, 'tiInputVariants'> &
-  SpacingProps<Theme> &
+type RestyleProps = SpacingProps<Theme> &
   SpacingShorthandProps<Theme> &
   BorderProps<Theme> &
-  LayoutProps<Theme> &
   BackgroundColorProps<Theme> &
   BackgroundColorShorthandProps<Theme> &
   ColorProps<Theme> &
-  TypographyProps<Theme>;
+  TypographyProps<Theme> &
+  LayoutProps<Theme> &
+  VariantProps<Theme, 'tiInputVariants'>;
 
 const restyleFunctions = composeRestyleFunctions<Theme, RestyleProps>([
+  color,
   spacing,
+  spacingShorthand,
   border,
   backgroundColor,
   backgroundColorShorthand,
-  color,
   typography,
   layout,
   createVariant({themeKey: 'tiInputVariants'}),
 ]);
 
-export type InputProps = RestyleProps & TextInputProps;
+export type InputProps = React.ComponentPropsWithRef<typeof RNTextInput> &
+  RestyleProps & {
+    placeholderColor?: keyof Theme['colors'];
+  };
 
-const Input = (inputProps: InputProps) => {
-  const props = useRestyle(restyleFunctions, inputProps);
-
-  return <TextInput {...props} />;
-};
+const Input = forwardRef<RNTextInput, InputProps>(({placeholderColor, ...rest}, ref) => {
+  const props = useRestyle(restyleFunctions, rest as any);
+  const theme = useTheme<Theme>();
+  const placeholderTextColorProp = placeholderColor;
+  const placeholderTextColorValue = placeholderTextColorProp && theme.colors[placeholderTextColorProp];
+  return <RNTextInput ref={ref} {...props} placeholderTextColor={placeholderTextColorValue} />;
+});
 
 export default Input;

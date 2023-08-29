@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import Input, {InputProps} from '../atoms/Input';
 import {NativeSyntheticEvent, Platform, TextInputFocusEventData} from 'react-native';
 import Box, {BoxProps} from '../atoms/Box';
@@ -31,69 +31,78 @@ export type TextInputProps = TIContainerProps & {
   clearMode?: boolean;
 };
 
-const TextInput: React.FC<TextInputProps> = ({
-  variant,
-  icon,
-  inputPropPresets,
-  value,
-  placeholder,
-  onChangeText,
-  onBlur,
-  onFocus,
-  onSubmitEditing,
-  hint,
-  containerStyle,
-  returnKeyType,
-  clearMode,
-  ...rest
-}) => {
-  const [isFocused, setIsFocused] = React.useState(false);
+const TextInput = forwardRef<typeof Input, TextInputProps>(
+  (
+    {
+      variant,
+      icon,
+      inputPropPresets,
+      value,
+      placeholder,
+      onChangeText,
+      onBlur,
+      onFocus,
+      onSubmitEditing,
+      hint,
+      containerStyle,
+      returnKeyType,
+      clearMode,
+      ...rest
+    },
+    ref,
+  ) => {
+    const [isFocused, setIsFocused] = React.useState(false);
 
-  const presetProps = inputPropPresets ? defaultInputProps[inputPropPresets] : {};
+    const presetProps = inputPropPresets ? defaultInputProps[inputPropPresets] : {};
 
-  const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    setIsFocused(false);
-    if (onBlur) {
-      onBlur(event);
-    }
-  };
+    const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(false);
+      if (onBlur) {
+        onBlur(event);
+      }
+    };
 
-  const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    setIsFocused(true);
-    if (onFocus) {
-      onFocus(event);
-    }
-  };
+    const handleFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(true);
+      if (onFocus) {
+        onFocus(event);
+      }
+    };
 
-  return (
-    <Box {...containerStyle}>
-      <TIContainer variant={isFocused ? 'selected' : variant} {...rest}>
-        {icon && <TIIcon name={icon} variant={isFocused ? 'selected' : variant} />}
-        <Input
-          variant={isFocused ? 'selected' : variant}
-          placeholder={placeholder}
-          placeholderTextColor={theme.colors.$placehold}
-          value={value}
-          onChangeText={onChangeText}
-          onBlur={handleBlur}
-          onFocus={handleFocus}
-          onSubmitEditing={onSubmitEditing}
-          editable={variant !== 'disabled'}
-          returnKeyType={returnKeyType}
-          {...presetProps}
-        />
-        {clearMode && value && value.length !== 0 && (
-          <FIcon name="x-circle" color={'$label'} size={14} onPress={() => onChangeText && onChangeText('')} />
+    return (
+      <Box {...containerStyle}>
+        <TIContainer variant={isFocused ? 'selected' : variant} {...rest}>
+          {icon && <TIIcon name={icon} variant={isFocused ? 'selected' : variant} />}
+          <Input
+            ref={ref}
+            style={{padding: 0}}
+            variant={isFocused ? 'selected' : variant}
+            bg={'$input'}
+            placeholder={placeholder}
+            placeholderTextColor={theme.colors.$placehold}
+            value={value}
+            onChangeText={onChangeText}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            onSubmitEditing={onSubmitEditing}
+            editable={variant !== 'disabled'}
+            returnKeyType={returnKeyType}
+            height={30}
+            {...presetProps}
+          />
+          {clearMode && value && value.length !== 0 && (
+            <FIcon name="x-circle" color={'$label'} size={14} onPress={() => onChangeText && onChangeText('')} />
+          )}
+        </TIContainer>
+        {(variant === 'caption' || variant === 'success' || variant === 'error') && hint && (
+          <TIHint variant={variant}>{hint}</TIHint>
         )}
-      </TIContainer>
-      {(variant === 'caption' || variant === 'success' || variant === 'error') && hint && (
-        <TIHint variant={variant}>{hint}</TIHint>
-      )}
-    </Box>
-  );
-};
+      </Box>
+    );
+  },
+);
 
-const defaultInputProps: {[id: string]: Partial<InputProps>} = {
+export const defaultInputProps: {[id: string]: Partial<InputProps>} = {
   firstName: {
     autoCapitalize: 'words',
     autoCorrect: false,

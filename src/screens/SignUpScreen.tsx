@@ -23,95 +23,93 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
   const {keyboardVisible} = useKeyboardIsVisible();
 
   return (
-    <Box bg={'$screenBackground'} flex={1}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'height' : undefined}
+      style={{flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl}}>
       <BaseHeader title="Céer un compte" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
       <Box justifyContent={'center'} alignItems={'center'}>
         <DishImage width={keyboardVisible ? 0 : Dimensions.get('window').width} />
       </Box>
       <Box flex={1} alignItems={'center'} justifyContent={'space-between'}>
         <Image source={require('../assets/logo-180x180.png')} />
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingHorizontal: spacing.xl}}>
-          <Controller
-            control={control}
-            rules={{
-              required: 'Email is required', // TODO add localization i18n
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-              <TextInput
-                mb={'s'}
-                inputPropPresets={'email'}
-                hint={error?.message}
-                variant={error ? 'error' : undefined}
-                icon={'mail'}
-                placeholder="Email"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="email"
-          />
+        <Controller
+          control={control}
+          rules={{
+            required: 'Email is required', // TODO add localization i18n
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          }}
+          render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
+            <TextInput
+              mb={'s'}
+              inputPropPresets={'email'}
+              hint={error?.message}
+              variant={error ? 'error' : undefined}
+              icon={'mail'}
+              placeholder="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="email"
+        />
 
-          <Controller
-            control={control}
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Password must not exceed 20 characters',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-              <TextInput
-                mb={'s'}
-                inputPropPresets={'newPassword'}
-                hint={error?.message}
-                variant={error ? 'error' : undefined}
-                icon={'lock'}
-                placeholder="Mot de passe"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                onSubmitEditing={() => Keyboard.dismiss()}
-                returnKeyType={'next'}
-              />
-            )}
-            name="password"
-          />
+        <Controller
+          control={control}
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 8,
+              message: 'Password must be at least 8 characters',
+            },
+            maxLength: {
+              value: 20,
+              message: 'Password must not exceed 20 characters',
+            },
+          }}
+          render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
+            <TextInput
+              mb={'s'}
+              inputPropPresets={'newPassword'}
+              hint={error?.message}
+              variant={error ? 'error' : undefined}
+              icon={'lock'}
+              placeholder="Mot de passe"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              onSubmitEditing={() => Keyboard.dismiss()}
+              returnKeyType={'next'}
+            />
+          )}
+          name="password"
+        />
 
-          <Controller
-            control={control}
-            rules={{
-              required: 'Confirm Password is required',
-              validate: value => value === password || 'Passwords do not match',
-            }}
-            render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-              <TextInput
-                inputPropPresets={'newPassword'}
-                hint={error?.message}
-                variant={error ? 'error' : undefined}
-                icon={'lock'}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Confirmer mot de passe"
-                onSubmitEditing={() => Keyboard.dismiss()}
-                returnKeyType={'done'}
-              />
-            )}
-            name="confirmPassword"
-          />
-        </KeyboardAvoidingView>
+        <Controller
+          control={control}
+          rules={{
+            required: 'Confirm Password is required',
+            validate: value => value === password || 'Passwords do not match',
+          }}
+          render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
+            <TextInput
+              inputPropPresets={'newPassword'}
+              hint={error?.message}
+              variant={error ? 'error' : undefined}
+              icon={'lock'}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              placeholder="Confirmer mot de passe"
+              onSubmitEditing={() => Keyboard.dismiss()}
+              returnKeyType={'done'}
+            />
+          )}
+          name="confirmPassword"
+        />
         {submitMutation.error && (
           <Box>
             <Text variant={'body2'}>{submitMutation.error.message}</Text>
@@ -127,6 +125,6 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
           loading={submitMutation.isLoading}
         />
       </Box>
-    </Box>
+    </KeyboardAvoidingView>
   );
 };

@@ -46,7 +46,7 @@ const ActivityLevelTab: React.FC<ActivityLevelTabProps> = ({navigation}) => {
     <Box flex={1} bg={'$bgWeak'}>
       <BaseHeader title="Niveau d'activité" leftComponent={<GoBackButton onPress={navigation.goBack} />} />
       <Box flex={1} px={'m'}>
-        <Text py={'l'} variant={'text-medium'}>
+        <Text py={'l'} variant={'text-medium'} color={'$header'}>
           Quel est votre niveau d'activité ?
         </Text>
         <FlatList

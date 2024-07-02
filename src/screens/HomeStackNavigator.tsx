@@ -79,7 +79,7 @@ const HomeTabNavigator = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        getComponent={() => HomeScreen}
         options={{
           tabBarActiveTintColor: colors.$iconActive,
           tabBarInactiveTintColor: colors.$iconRegular,
@@ -88,7 +88,7 @@ const HomeTabNavigator = () => {
       />
       <Tab.Screen
         name="Recipes"
-        component={RecipesStackNavigator}
+        getComponent={() => RecipesStackNavigator}
         options={{
           tabBarActiveTintColor: colors.$iconActive,
           tabBarInactiveTintColor: colors.$iconRegular,

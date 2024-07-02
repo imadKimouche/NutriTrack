@@ -5,7 +5,7 @@ import {Ingredient} from '../hooks/meal';
 type MealSearchState = {
   addedIngredients: Ingredient[];
   addIngredient: (ingredient: Ingredient) => void;
-  removeIngredient: (ingredient: Ingredient) => void;
+  removeIngredient: (id: number) => void;
   clearAddedIngredients: () => void;
 };
 
@@ -21,9 +21,9 @@ export const useSearchMealStore = create<MealSearchState>()(
           return {addedIngredients: [...state.addedIngredients, ingredient]};
         });
       },
-      removeIngredient: (ingredient: Ingredient) => {
+      removeIngredient: (id: number) => {
         set(state => ({
-          addedIngredients: state.addedIngredients.filter(item => item.id !== ingredient.id),
+          addedIngredients: state.addedIngredients.filter(item => item.id !== id),
         }));
       },
       clearAddedIngredients: () => {

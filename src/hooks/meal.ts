@@ -1,10 +1,7 @@
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {useEffect, useState} from 'react';
-import {ResultSet} from 'react-native-sqlite-storage';
-import {InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
+import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
 import {getFavoriteRecipes, getRecipe, searchIngredient, searchRecipe, toggleRecipeFavoriteStatus} from '../database/handler';
-import {Recipe, SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
 import {useDashboardStore} from '../store/dashboard';
 import {useAuth} from './auth';
 
@@ -262,134 +259,22 @@ export type Ingredient = {
   quantity?: number;
 };
 
-function parseRawIngredients(raw: ResultSet | [] | undefined): Ingredient[] {
-  if (!raw || Array.isArray(raw)) {
-    return [];
-  }
-  const parsedData = [];
-  const len = raw.rows.length;
-  for (let i = 0; i < len; i++) {
-    let row = raw.rows.item(i);
-    parsedData.push({id: row.id, name: row.name, image: row.image, unit: row.unit});
-  }
-  return parsedData;
-}
-
 export function useSearchIngredient(text?: string) {
-  const {data, isLoading, error, isError, refetch} = useQuery(['searchIngredient', text], () => searchIngredient(text), {
-    enabled: false,
+  return useQuery(['searchIngredient', text], () => searchIngredient(text), {
+    enabled: !!text,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [text, refetch]);
-
-  return {data: parseRawIngredients(data), isLoading, error, isError};
-}
-
-function parseRawRecipes(raw: InfiniteData<ResultSet | []> | undefined): SearchRecipe[] {
-  if (!raw) {
-    return [];
-  }
-
-  const parsedData: SearchRecipe[] = [];
-  raw.pages.forEach(page => {
-    if (Array.isArray(page)) {
-      return;
-    }
-    const len = page.rows.length;
-    for (let i = 0; i < len; i++) {
-      let row = page.rows.item(i);
-      parsedData.push({
-        id: row.id,
-        name: row.name,
-        image: row.image,
-        quantity: row.quantity,
-        time: row.time,
-        matching_ingredients_count: row.matching_ingredients_count,
-        missing_ingredients: row.missing_ingredients,
-        isFavorite: row.is_favorite === 1,
-      });
-    }
-  });
-  return parsedData;
 }
 
 export function useSearchRecipe(ingredients: Ingredient[]) {
-  const itemsPerPage = 20;
-  const [currentPage, setCurrentPage] = useState(1);
-  const {data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage} = useInfiniteQuery(
-    ['searchRecipe', ingredients, itemsPerPage],
-    ({pageParam = 1}) => searchRecipe(ingredients, pageParam, itemsPerPage),
-    {
-      getNextPageParam: lastPage => {
-        if (!Array.isArray(lastPage)) {
-          if (lastPage.rows.length === itemsPerPage) {
-            return currentPage + 1;
-          }
-        }
-        return undefined;
-      },
-    },
-  );
-
-  useEffect(() => {
-    if (hasNextPage && isFetchingNextPage) {
-      // Increment the current page when fetching the next page
-      setCurrentPage(prevPage => prevPage + 1);
-    }
-  }, [hasNextPage, isFetchingNextPage]);
-
-  return {data: parseRawRecipes(data), isLoading, isError, currentPage, fetchNextPage, hasNextPage, isFetchingNextPage};
-}
-
-export type CompleteRecipe = Recipe & {ingredients: Ingredient[]; steps: string[]};
-function parseRawRecipe(raw: ResultSet | undefined) {
-  if (!raw) {
-    return undefined;
-  }
-
-  let completeRecipe: CompleteRecipe = {
-    id: 0,
-    name: '',
-    image: '',
-    quantity: 0,
-    time: '',
-    ingredients: [],
-    steps: [],
-    isFavorite: false,
-  };
-  if (raw.rows.length) {
-    completeRecipe.id = raw.rows.item(0).recipe_id;
-    completeRecipe.name = raw.rows.item(0).recipe_name;
-    completeRecipe.image = raw.rows.item(0).recipe_image;
-    completeRecipe.quantity = raw.rows.item(0).recipe_quantity;
-    completeRecipe.isFavorite = raw.rows.item(0).recipe_is_favorite;
-    completeRecipe.time = raw.rows.item(0).recipe_time;
-    completeRecipe.steps = raw.rows
-      .item(0)
-      .recipe_instructions.split('\n')
-      .filter((s: string) => s.trim() !== '');
-
-    for (let i = 0; i < raw.rows.length; i++) {
-      const row = raw.rows.item(i);
-      completeRecipe.ingredients.push({
-        id: row.ingredient_id,
-        name: row.ingredient_name,
-        image: row.ingredient_image,
-        unit: row.ingredient_unit,
-        quantity: row.ingredient_quantity,
-      });
-    }
-    return completeRecipe;
-  }
-  return undefined;
+  return useInfiniteQuery(['searchRecipe', ingredients], ({pageParam}) => searchRecipe(ingredients, pageParam), {
+    getNextPageParam: lastPage => lastPage.offset + 1,
+  });
 }
 
 export function useRecipe(id: number) {
   const {data, isLoading, isError} = useQuery(['recipe', id], () => getRecipe(id));
 
-  return {data: parseRawRecipe(data), isError, isLoading};
+  return {data, isError, isLoading};
 }
 
 export function useFavoriteRecipes() {

@@ -42,17 +42,19 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             },
           }}
           render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-            <TextInput
-              mb={'s'}
-              inputPropPresets={'email'}
-              hint={error?.message}
-              variant={error ? 'error' : undefined}
-              icon={'mail'}
-              placeholder="Email"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
+            <Box width="100%">
+              <TextInput
+                mb={'s'}
+                inputPropPresets={'email'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
+                icon={'mail'}
+                placeholder="Email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            </Box>
           )}
           name="email"
         />
@@ -71,19 +73,21 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             },
           }}
           render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-            <TextInput
-              mb={'s'}
-              inputPropPresets={'newPassword'}
-              hint={error?.message}
-              variant={error ? 'error' : undefined}
-              icon={'lock'}
-              placeholder="Mot de passe"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              onSubmitEditing={() => Keyboard.dismiss()}
-              returnKeyType={'next'}
-            />
+            <Box width="100%">
+              <TextInput
+                mb={'s'}
+                inputPropPresets={'newPassword'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
+                icon={'lock'}
+                placeholder="Mot de passe"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                onSubmitEditing={() => Keyboard.dismiss()}
+                returnKeyType={'next'}
+              />
+            </Box>
           )}
           name="password"
         />
@@ -95,18 +99,20 @@ export const SignUpScreen = ({navigation}: {navigation: SignUpScreenNavigationPr
             validate: value => value === password || 'Passwords do not match',
           }}
           render={({field: {onChange, onBlur, value}, fieldState: {error}}) => (
-            <TextInput
-              inputPropPresets={'newPassword'}
-              hint={error?.message}
-              variant={error ? 'error' : undefined}
-              icon={'lock'}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Confirmer mot de passe"
-              onSubmitEditing={() => Keyboard.dismiss()}
-              returnKeyType={'done'}
-            />
+            <Box width="100%">
+              <TextInput
+                inputPropPresets={'newPassword'}
+                hint={error?.message}
+                variant={error ? 'error' : undefined}
+                icon={'lock'}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Confirmer mot de passe"
+                onSubmitEditing={() => Keyboard.dismiss()}
+                returnKeyType={'done'}
+              />
+            </Box>
           )}
           name="confirmPassword"
         />

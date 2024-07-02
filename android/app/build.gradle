@@ -91,7 +91,8 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.leftover"
     defaultConfig {
@@ -126,9 +127,13 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
-            minifyEnabled enableProguardInReleaseBuilds
+            minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     // applicationVariants are e.g. debug, release
@@ -153,6 +158,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+    implementation 'androidx.core:core-ktx:+'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -169,7 +175,8 @@ dependencies {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: "kotlin-android" // React native camera kit
-apply plugin: "kotlin-android-extensions" // React native camera kit
+// apply plugin: "kotlin-android-extensions" // React native camera kit
+apply plugin: "kotlin-parcelize" // React native camera kit
 apply plugin: 'com.google.gms.google-services' // react native firebase
 
 // react native vector icons
@@ -177,4 +184,5 @@ project.ext.vectoricons = [
     iconFontNames: [ 'Feather.ttf', 'FontAwesome5_Brands.ttf' ]
 ]
 
-apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle"); // react native vector icons
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+apply plugin: 'org.jetbrains.kotlin.android'; // react native vector icons

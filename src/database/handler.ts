@@ -1,49 +1,44 @@
 import SQLite from 'react-native-sqlite-storage';
 import {Ingredient} from '../hooks/meal';
-import {Recipe} from '../screens/Recipes/RecipesResultsScreen';
+import {Recipe, SearchRecipe} from '../screens/Recipes/RecipesResultsScreen';
 
-function onDatabaseOpenSuccess() {
-  console.log('database open');
-}
+export class Database {
+  private static instance: SQLite.SQLiteDatabase | null = null;
+  private static DATABASE_NAME = 'recipes.db';
 
-function onDatabaseOpenError(err: SQLite.SQLError) {
-  console.log(`database open error ${err.code}: ${err.message}`);
-}
-
-const databaseName = 'recipes.db';
-const db = SQLite.openDatabase({name: databaseName, createFromLocation: 1}, onDatabaseOpenSuccess, onDatabaseOpenError);
-
-export function searchIngredient(text?: string): Promise<SQLite.ResultSet | []> {
-  return new Promise((resolve, reject) => {
-    if (text === undefined || text.trim().length === 0) {
-      resolve([]);
-    }
-    db.transaction((tx: SQLite.Transaction) => {
-      tx.executeSql(
-        `
-		SELECT
-		  id,
-		  name,
-		  image,
-		  unit
-		FROM
-		  Ingredient
-		WHERE
-		  name LIKE '%' || ? || '%';
-	`,
-        [text],
-        (_, results) => {
-          resolve(results);
-        },
-        error => {
-          reject(error);
-        },
+  public static async getInstance() {
+    if (Database.instance === null) {
+      SQLite.enablePromise(true);
+      Database.instance = await SQLite.openDatabase(
+        {name: this.DATABASE_NAME, createFromLocation: 1},
+        () => console.log('database open'),
+        () => console.log('database open error'),
       );
-    });
-  });
+    }
+    return Database.instance;
+  }
 }
 
-export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPage: number = 10): Promise<SQLite.ResultSet | []> {
+export async function searchIngredient(text?: string) {
+  if (text === undefined || text.trim().length === 0) {
+    return;
+  }
+
+  const db = await Database.getInstance();
+  const ingredients: Ingredient[] = [];
+
+  const results = await db.executeSql("SELECT id, name, image, unit FROM Ingredient WHERE name LIKE '%' || ? || '%';", [text]);
+  results.forEach(result => {
+    for (let i = 0; i < result.rows.length; i++) {
+      const row = result.rows.item(i);
+      ingredients.push({id: row.id, name: row.name, image: row.image, unit: row.unit});
+    }
+  });
+
+  return ingredients;
+}
+
+export async function searchRecipe(ingredients: Ingredient[], offset: number = 0, limit: number = 10) {
   const ingredientsStr = ingredients.map(ingredient => `'${ingredient.name}'`).join(', ');
   const query = `
   				SELECT
@@ -74,30 +69,36 @@ export function searchRecipe(ingredients: Ingredient[], page: number, itemsPerPa
 					  r.id
 					ORDER BY
 					  matching_ingredients_count DESC
-	  LIMIT ${itemsPerPage} OFFSET ${(page - 1) * itemsPerPage};`;
+	  LIMIT ${limit} OFFSET ${offset * limit};`;
 
-  return new Promise((resolve, reject) => {
-    if (ingredients.length === 0) {
-      resolve([]);
+  const db = await Database.getInstance();
+  const results = await db.executeSql(query);
+
+  const recipes: SearchRecipe[] = [];
+  results.forEach(result => {
+    for (let i = 0; i < result.rows.length; i++) {
+      const row = result.rows.item(i);
+      recipes.push({
+        id: row.id,
+        name: row.name,
+        image: row.image,
+        quantity: row.quantity,
+        time: row.time,
+        matching_ingredients_count: row.matching_ingredients_count,
+        missing_ingredients: row.missing_ingredients,
+        isFavorite: row.is_favorite === 1,
+      });
     }
-    db.transaction((tx: SQLite.Transaction) => {
-      tx.executeSql(
-        query,
-        [],
-        (_, results) => {
-          resolve(results);
-        },
-        (_, err) => {
-          if (err) {
-            reject('searchRecipe' + err.message);
-          }
-        },
-      );
-    });
   });
+
+  return {recipes, offset};
 }
 
-export function getRecipe(id: number): Promise<SQLite.ResultSet> {
+export async function getRecipe(id: number) {
+  if (!id) {
+    return;
+  }
+
   const query = `
 			SELECT
 				r.id AS recipe_id,
@@ -121,20 +122,48 @@ export function getRecipe(id: number): Promise<SQLite.ResultSet> {
 			WHERE
 				r.id = ${id};`;
 
-  return new Promise((resolve, reject) => {
-    db.transaction((tx: SQLite.Transaction) => {
-      tx.executeSql(
-        query,
-        [],
-        (_, results) => resolve(results),
-        (_, err) => {
-          if (err) {
-            reject('getRecipe' + err.message);
-          }
-        },
-      );
-    });
-  });
+  // TODO: protect id here: potential sql injections ?
+
+  const db = await Database.getInstance();
+
+  const results = await db.executeSql(query);
+  // const recipe: CompleteRecipe;
+  if (results && results[0]) {
+    const data = results[0].rows.raw();
+    return data;
+    // let completeRecipe: CompleteRecipe = {
+    //   id: 0,
+    //   name: '',
+    //   image: '',
+    //   quantity: 0,
+    //   time: '',
+    //   ingredients: [],
+    //   steps: [],
+    //   isFavorite: false,
+    // };
+    // if (raw.rows.length) {
+    //   completeRecipe.id = raw.rows.item(0).recipe_id;
+    //   completeRecipe.name = raw.rows.item(0).recipe_name;
+    //   completeRecipe.image = raw.rows.item(0).recipe_image;
+    //   completeRecipe.quantity = raw.rows.item(0).recipe_quantity;
+    //   completeRecipe.isFavorite = raw.rows.item(0).recipe_is_favorite;
+    //   completeRecipe.time = raw.rows.item(0).recipe_time;
+    //   completeRecipe.steps = raw.rows
+    //     .item(0)
+    //     .recipe_instructions.split('\n')
+    //     .filter((s: string) => s.trim() !== '');
+
+    //   for (let i = 0; i < raw.rows.length; i++) {
+    //     const row = raw.rows.item(i);
+    //     completeRecipe.ingredients.push({
+    //       id: row.ingredient_id,
+    //       name: row.ingredient_name,
+    //       image: row.ingredient_image,
+    //       unit: row.ingredient_unit,
+    //       quantity: row.ingredient_quantity,
+    //     });
+    //   }
+  }
 }
 
 export async function getFavoriteRecipes() {

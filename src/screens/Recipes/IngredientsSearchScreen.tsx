@@ -1,172 +1,76 @@
-import {useTheme} from '@shopify/restyle';
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList, Image} from 'react-native';
-import Box from '../../atoms/Box';
-import Pressable from '../../atoms/Pressable';
-import Text from '../../atoms/Text';
-import Button from '../../components/Button';
-import BaseHeader from '../../components/Header';
-import FIcon from '../../components/FIcon';
-import Searchbar from '../../components/Searchbar';
-import {Ingredient, useFavoriteRecipes, useSearchIngredient} from '../../hooks/meal';
-import {useDebounce} from '../../hooks/utility';
+
+import Box from '#/atoms/Box';
+import Button from '#/components/Button';
+import BaseHeader from '#/components/Header';
+import {SearchInput} from '#/components/SearchInput';
+import ListItem from '#/components/ListItem';
 import {RecipesStackNavigationProps} from '../../navigation/RecipesStackNavigator';
-import {useSearchMealStore} from '../../store/ingredients';
-import {Theme} from '../../style/theme';
-import {SearchError} from '../SearchMealScreen';
-import {RecipeListItem} from './RecipesResultsScreen';
-import Loader from '../../components/Loader';
+import {useSearchMealStore} from '#/store/ingredients';
+import {Ingredient, useSearchIngredient} from '#/hooks/meal';
 
-type IngredientListItemProps = {
-  ingredient: Ingredient;
-  onItemPressed: (ingredient: Ingredient) => void;
-};
-
-const IngredientListItem: React.FC<IngredientListItemProps> = ({ingredient, onItemPressed}) => {
-  return (
-    <Pressable
-      onPress={() => onItemPressed(ingredient)}
-      alignSelf={'stretch'}
-      p={'xs'}
-      borderBottomColor={'$divider'}
-      bg={'$cardBackground'}
-      borderBottomWidth={1}
-      flexDirection={'row'}
-      alignItems={'center'}>
-      <Image source={{uri: ingredient.image}} style={{width: 50, height: 50}} />
-      <Text ml={'s'} variant={'body1'} ellipsizeMode={'tail'} textTransform={'capitalize'}>
-        {ingredient.name}
-      </Text>
-    </Pressable>
-  );
-};
-
-const SearchList: React.FC<{searchValue?: string; onItemPressed: (ing: Ingredient) => void}> = ({searchValue, onItemPressed}) => {
-  const {data: foundIngredients, isLoading, isError} = useSearchIngredient(searchValue);
-
-  if (isError) {
-    return <SearchError />;
-  }
-
-  if (isLoading) {
-    return <Loader color="$primary" />;
-  }
-
-  if (foundIngredients.length > 0) {
-    return (
-      <Box flex={1} alignSelf={'stretch'} mx={'m'} my={'xs'}>
-        <FlatList
-          data={foundIngredients}
-          renderItem={item => <IngredientListItem ingredient={item.item} onItemPressed={onItemPressed} />}
-          keyExtractor={item => `${item.id}-${item.name}`}
-        />
-      </Box>
-    );
-  }
-  return <></>;
-};
-
-type AddedIngredientListItemProps = {
-  ingredient: Ingredient;
-  onCrossPressed: (ingredient: Ingredient) => void;
-};
-const AddedIngredientListItem: React.FC<AddedIngredientListItemProps> = ({ingredient, onCrossPressed}) => {
-  const label = ingredient.name.length > 6 ? ingredient.name.slice(0, 6) + '...' : ingredient.name;
-  const {borderRadii} = useTheme<Theme>();
-  return (
-    <Pressable
-      alignSelf={'stretch'}
-      p={'s'}
-      m={'s'}
-      borderRadius={'sm'}
-      borderBottomColor={'$divider'}
-      bg={'$cardBackground'}
-      borderBottomWidth={1}
-      alignItems={'center'}>
-      <Image source={{uri: ingredient.image}} style={{width: 80, height: 70, borderRadius: borderRadii.sm}} />
-      <Text mt={'s'} variant={'subtitle1'} ellipsizeMode={'tail'} textTransform={'capitalize'}>
-        {label}
-      </Text>
-      <Pressable
-        onPressIn={() => onCrossPressed(ingredient)}
-        bg={'$cardBackground'}
-        borderRadius={'lg'}
-        borderWidth={1}
-        borderColor={'$primary'}
-        position={'absolute'}
-        top={-8}
-        right={-8}>
-        <FIcon name="x" color={'$iconActive'} size={18} />
-      </Pressable>
-    </Pressable>
-  );
-};
-
-const IngredientsSearchScreen: React.FC<{navigation: RecipesStackNavigationProps<'ingredientSearch'>}> = ({navigation}) => {
-  const [ingredient, setIngredient] = useState<string | undefined>(undefined);
-  const {debouncedValue: debouncedSearchIngredient, setDebouncedValue} = useDebounce(ingredient);
-  const {addedIngredients, addIgnredient, removeIngredient} = useSearchMealStore(state => ({
-    addedIngredients: state.addedIngredients,
-    addIgnredient: state.addIngredient,
-    removeIngredient: state.removeIngredient,
+function IngredientsSearchScreen({navigation}: {navigation: RecipesStackNavigationProps<'ingredientSearch'>}) {
+  const [search, setSearch] = React.useState('');
+  const {data: results} = useSearchIngredient(search);
+  const {ingredients, add, remove} = useSearchMealStore(state => ({
+    ingredients: state.addedIngredients,
+    add: state.addIngredient,
+    remove: state.removeIngredient,
   }));
-  const {data: favoriteRecipes} = useFavoriteRecipes();
 
-  function onIngredientPressed(ing: Ingredient) {
-    addIgnredient(ing);
-    setDebouncedValue('');
-  }
+  const onPressIngredient = (item: Ingredient) => {
+    add(item);
+    setSearch('');
+  };
 
   return (
     <Box bg={'$screenBackground'} flex={1} alignItems={'center'}>
       <BaseHeader title="Recettes" />
-      <Box px={'s'} alignSelf={'stretch'}>
-        <Searchbar onUpdateValue={text => setIngredient(text)} placeholder="Miel, Poulet, Citron..." />
-      </Box>
-      <SearchList searchValue={debouncedSearchIngredient} onItemPressed={onIngredientPressed} />
-      <Box flex={1} my={'m'} px={'s'} alignSelf={'stretch'}>
-        {addedIngredients.length ? (
-          <>
-            <Text variant={'h6'}>Vos ingrédients</Text>
-            <Box p={'m'} flex={1}>
-              <FlatList
-                numColumns={3}
-                data={addedIngredients}
-                renderItem={({item}) => <AddedIngredientListItem ingredient={item} onCrossPressed={removeIngredient} />}
-                keyExtractor={item => `${item.id}-${item.name}`}
+      <Box p={'m'} alignSelf={'stretch'}>
+        <SearchInput
+          query={search}
+          onChangeQuery={setSearch}
+          onPressCancelSearch={() => setSearch('')}
+          onSubmitQuery={() => {}}
+          placeholder="Miel, Poulet, Citron..."
+        />
+
+        {results?.length !== 0 && (
+          <FlatList
+            data={results}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({item}) => (
+              <ListItem
+                title={item.name}
+                leftComponent={
+                  <Box width={50} height={50} borderRadius="xs" alignItems={'center'} justifyContent={'center'} bg="$bg" mr={'s'}>
+                    <Image width={48} height={48} resizeMode="contain" source={{uri: item.image}} />
+                  </Box>
+                }
+                onPress={() => onPressIngredient(item)}
               />
-            </Box>
-          </>
-        ) : (
-          <>
-            <Text variant={'h6'}>Vos recettes favorites</Text>
-            <Box p={'xs'} flex={1}>
-              <FlatList
-                numColumns={3}
-                data={favoriteRecipes}
-                renderItem={({item}) => (
-                  <RecipeListItem
-                    recipe={item}
-                    onRecipePress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})}
-                  />
-                )}
-                keyExtractor={item => `${item.id}-${item.name}`}
-              />
-            </Box>
-          </>
+            )}
+          />
         )}
+
+        <FlatList
+          data={ingredients}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => <ListItem title={item.name} onPress={() => remove(item.id)} />}
+        />
       </Box>
       <Box alignSelf={'stretch'} px={'xl'} my={'m'}>
         <Button
           label="Rechercher"
-          variant={addedIngredients.length ? 'primary-left' : 'primary-left-disabled'}
+          variant={ingredients.length ? 'primary-left' : 'primary-left-disabled'}
           icon="search"
-          disabled={addedIngredients.length === 0}
+          disabled={ingredients.length === 0}
           onPress={() => navigation.navigate('recipesSearchResult')}
         />
       </Box>
     </Box>
   );
-};
+}
 
 export default IngredientsSearchScreen;

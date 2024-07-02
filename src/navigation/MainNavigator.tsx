@@ -8,7 +8,7 @@ import HomeStackNavigator from '../screens/HomeStackNavigator';
 import {OnboardingNavigator} from './OnboardingNavigator';
 import {SignUpScreen} from '../screens/SignUpScreen';
 import {SignInScreen} from '../screens/SignInScreen';
-import {useAuth, useSignup} from '../hooks/auth';
+import {useAuth} from '../hooks/auth';
 import DishImage from '../assets/dish-illustration.svg';
 import {Dimensions, Image} from 'react-native';
 import StatusBar from '../components/StatusBar';
@@ -24,22 +24,6 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-// type ResetPasswordScreenRouteProp = RouteProp<
-//   RootStackParamList,
-//   'ResetPassword'
-// >;
-// type ResetPasswordScreenNavigationProp = NativeStackNavigationProp<
-//   RootStackParamList,
-//   'ResetPassword'
-// >;
-// const SplashScreen = () => {
-//   return (
-//     <Box>
-//       <Text>Splash</Text>
-//     </Box>
-//   );
-// };
 
 const ResetPassword = () => {
   return (
@@ -85,7 +69,7 @@ export const MainNavigator = () => {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {user ? (
             <>
-              <Stack.Screen name="home" component={HomeStackNavigator} />
+              <Stack.Screen name="home" getComponent={() => HomeStackNavigator} />
             </>
           ) : (
             <>

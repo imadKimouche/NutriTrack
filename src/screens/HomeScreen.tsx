@@ -147,7 +147,7 @@ const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeTabNavigator'>;
 
-const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigation}) => {
+function HomeScreen({navigation}: {navigation: HomeScreenNavigationProp}) {
   const {spacing} = useTheme<Theme>();
   const {user} = useAuth();
   const initials = useMemo(() => {
@@ -203,6 +203,6 @@ const HomeScreen: React.FC<{navigation: HomeScreenNavigationProp}> = ({navigatio
       </Box>
     </Box>
   );
-};
+}
 
 export default HomeScreen;

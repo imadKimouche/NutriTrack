@@ -77,6 +77,15 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
   const insets = useSafeAreaInsets();
   const bottomTabBarHeight = useBottomTabBarHeight();
 
+  const recipes = React.useMemo(() => {
+    if (data) {
+      return data.pages.map(page => page.recipes).flat();
+    }
+    return [];
+  }, [data]);
+
+  console.log('recipes reloading');
+
   return (
     <Box flex={1} style={{paddingBottom: insets.bottom + bottomTabBarHeight}}>
       <BaseHeader leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} title={'Recettes trouvées'} />
@@ -86,14 +95,14 @@ const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationPr
         <Box alignSelf={'stretch'} alignItems={'center'}>
           <FlatList
             numColumns={2}
-            data={data}
+            data={recipes}
             onEndReached={() => fetchNextPage()}
             onEndReachedThreshold={0.2}
             ListFooterComponent={isFetchingNextPage ? <Loader color="$primary" /> : undefined}
             renderItem={({item}) => (
               <RecipeListItem recipe={item} onRecipePress={() => navigation.navigate('recipeDetails', {recipe_id: item.id})} />
             )}
-            keyExtractor={item => `${item.id}-${item.name}`}
+            keyExtractor={item => item.id.toString()}
           />
         </Box>
       )}

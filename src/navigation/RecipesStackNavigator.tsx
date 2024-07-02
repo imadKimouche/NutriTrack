@@ -1,8 +1,9 @@
 import React from 'react';
 import {createNativeStackNavigator, NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+
 import IngredientsSearchScreen from '../screens/Recipes/IngredientsSearchScreen';
 import RecipesSearchResultsScreen from '../screens/Recipes/RecipesResultsScreen';
-import {RouteProp} from '@react-navigation/native';
 import RecipeDetailsScreen from '../screens/Recipes/RecipeDetailsScreen';
 
 export type RecipesStackParamList = {
@@ -22,9 +23,9 @@ const Stack = createNativeStackNavigator<RecipesStackParamList>();
 const RecipesStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="ingredientSearch" component={IngredientsSearchScreen} />
-      <Stack.Screen name="recipesSearchResult" component={RecipesSearchResultsScreen} />
-      <Stack.Screen name="recipeDetails" component={RecipeDetailsScreen} />
+      <Stack.Screen name="ingredientSearch" getComponent={() => IngredientsSearchScreen} />
+      <Stack.Screen name="recipesSearchResult" getComponent={() => RecipesSearchResultsScreen} />
+      <Stack.Screen name="recipeDetails" getComponent={() => RecipeDetailsScreen} />
     </Stack.Navigator>
   );
 };

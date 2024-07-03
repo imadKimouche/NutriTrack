@@ -20,13 +20,3 @@ module.exports = {
     'react-native-reanimated/plugin',
   ],
 };
-
-// module.exports = api => {
-//   api.cache(true);
-//   // const isTestEnv = process.env.NODE_ENV === 'test';
-//   return {
-//     presets: ['module:metro-react-native-babel-preset', '@babel/preset-typescript'],
-
-//     plugins: ['react-native-reanimated/plugin'],
-//   };
-// };

@@ -3,31 +3,31 @@ import {devtools} from 'zustand/middleware';
 import {Ingredient} from '../hooks/meal';
 
 type MealSearchState = {
-  addedIngredients: Ingredient[];
-  addIngredient: (ingredient: Ingredient) => void;
-  removeIngredient: (id: number) => void;
-  clearAddedIngredients: () => void;
+  ingredients: Ingredient[];
+  add: (ingredient: Ingredient) => void;
+  remove: (id: number) => void;
+  clear: () => void;
 };
 
 export const useSearchMealStore = create<MealSearchState>()(
   devtools(
     set => ({
-      addedIngredients: [],
-      addIngredient: (ingredient: Ingredient) => {
+      ingredients: [],
+      add: (ingredient: Ingredient) => {
         set(state => {
-          if (state.addedIngredients.find(ing => ing.id === ingredient.id)) {
+          if (state.ingredients.find(ing => ing.id === ingredient.id)) {
             return state;
           }
-          return {addedIngredients: [...state.addedIngredients, ingredient]};
+          return {ingredients: [...state.ingredients, ingredient]};
         });
       },
-      removeIngredient: (id: number) => {
+      remove: (id: number) => {
         set(state => ({
-          addedIngredients: state.addedIngredients.filter(item => item.id !== id),
+          ingredients: state.ingredients.filter(item => item.id !== id),
         }));
       },
-      clearAddedIngredients: () => {
-        set({addedIngredients: []});
+      clear: () => {
+        set({ingredients: []});
       },
     }),
     {

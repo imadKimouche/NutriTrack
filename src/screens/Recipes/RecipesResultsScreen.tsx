@@ -71,7 +71,7 @@ export type SearchRecipe = Recipe & {matching_ingredients_count: number; missing
 
 const RecipesSearchResultsScreen: React.FC<{navigation: RecipesStackNavigationProps<'recipesSearchResult'>}> = ({navigation}) => {
   const {addedIngredients} = useSearchMealStore(state => ({
-    addedIngredients: state.addedIngredients,
+    addedIngredients: state.ingredients,
   }));
   const {data, isLoading, fetchNextPage, isFetchingNextPage} = useSearchRecipe(addedIngredients);
   const insets = useSafeAreaInsets();

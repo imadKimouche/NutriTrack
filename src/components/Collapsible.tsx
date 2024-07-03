@@ -4,11 +4,14 @@ import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import FIcon from './FIcon';
+import {useTheme} from '@shopify/restyle';
+import {Theme} from '#/style/theme';
 
 const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}> = ({title, open = false, children}) => {
+  const {spacing} = useTheme<Theme>();
   const [isCollapsed, setIsCollapsed] = useState(!open);
   const animationValue = new Animated.Value(isCollapsed ? 0 : 1);
-  const windowHeight = Dimensions.get('window').height;
+  const windowHeight = Dimensions.get('screen').height;
 
   const toggleCollapsible = () => {
     setIsCollapsed(!isCollapsed);
@@ -32,7 +35,10 @@ const Collapsible: React.FC<{title: string; open?: boolean; children: ReactNode}
         </Text>
         <FIcon mr={'m'} name={'plus'} size={18} color={'$header'} />
       </Pressable>
-      <Animated.View style={{height: interpolatedHeight, overflow: 'hidden'}}>{children}</Animated.View>
+      <Animated.View
+        style={{height: interpolatedHeight, overflow: 'hidden', paddingVertical: spacing.s, paddingHorizontal: spacing.m}}>
+        {children}
+      </Animated.View>
     </Box>
   );
 };

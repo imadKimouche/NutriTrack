@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from 'react-query';
 import {deleteUserMeal, fetchUserDailyMeals, pushUserMeal, updateUserDailyMacros} from '../api/dietData';
-import {getFavoriteRecipes, getRecipe, searchIngredient, searchRecipe, toggleRecipeFavoriteStatus} from '../database/handler';
+import {getFavoriteRecipes, getRecipe, searchIngredient, findRecipe, toggleRecipeFavoriteStatus} from '../database/handler';
 import {useDashboardStore} from '../store/dashboard';
 import {useAuth} from './auth';
 
@@ -266,15 +266,13 @@ export function useSearchIngredient(text?: string) {
 }
 
 export function useSearchRecipe(ingredients: Ingredient[]) {
-  return useInfiniteQuery(['searchRecipe', ingredients], ({pageParam}) => searchRecipe(ingredients, pageParam), {
+  return useInfiniteQuery(['searchRecipe', ingredients], ({pageParam}) => findRecipe(ingredients, pageParam), {
     getNextPageParam: lastPage => lastPage.offset + 1,
   });
 }
 
 export function useRecipe(id: number) {
-  const {data, isLoading, isError} = useQuery(['recipe', id], () => getRecipe(id));
-
-  return {data, isError, isLoading};
+  return useQuery(['recipe', id], () => getRecipe(id));
 }
 
 export function useFavoriteRecipes() {

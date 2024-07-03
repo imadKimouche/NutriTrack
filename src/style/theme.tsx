@@ -152,7 +152,7 @@ const theme = createTheme({
     $buttonBgOutlineDisabled: p.black100,
     $buttonBorderOutlineDisabled: p.orange,
     //----Icon
-    $iconRegular: p.grey,
+    $iconRegular: p.grey100,
     $iconActive: p.orange,
     $iconDisabled: p.grey300,
     //----Divider

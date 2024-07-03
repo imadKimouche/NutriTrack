@@ -77,7 +77,11 @@ const RecipeDetailsScreen: React.FC<{
               {recipe.ingredients.map(ing => (
                 <ListItem
                   key={ing.id}
-                  leftComponent={<Image source={{uri: ing.image}} style={{width: 50, height: 50}} />}
+                  leftComponent={
+                    <Box width={50} height={50} borderRadius={'sm'} mr={'m'}>
+                      <Image source={{uri: ing.image}} height={48} width={48} resizeMode="contain" />
+                    </Box>
+                  }
                   title={ing.name}
                   rightComponent={
                     <Text variant={'subtitle2'} color={'$textLabel'}>

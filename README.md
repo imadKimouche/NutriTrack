@@ -9,7 +9,8 @@
 <p align="center"> Stay balanced</p>
 
 <p align="center">
-    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/imadKimouche/leftoverFit">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/imadKimouche/NutriTrack">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/imadKimouche/NutriTrack">
 </p>
 
 <p align="center">

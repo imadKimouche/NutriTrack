@@ -9,14 +9,7 @@
 <p align="center"> Stay balanced</p>
 
 <p align="center">
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/EliasGcf/readme-template">
-
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/EliasGcf/readme-template">
-  
-  <a href="https://github.com/EliasGcf/readme-template/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/EliasGcf/readme-template">
-  </a>
-  
+    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/t/imadKimouche/leftoverFit">
 </p>
 
 <p align="center">

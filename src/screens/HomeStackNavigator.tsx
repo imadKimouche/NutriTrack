@@ -72,15 +72,12 @@ const HomeTabNavigator = () => {
   const {colors} = useTheme<Theme>();
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-      }}>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Home"
         getComponent={() => HomeScreen}
         options={{
+          tabBarLabel: 'Suivi',
           tabBarActiveTintColor: colors.$iconActive,
           tabBarInactiveTintColor: colors.$iconRegular,
           tabBarIcon: props => <BottomTabIcon name="calendar" {...props} />,
@@ -90,6 +87,7 @@ const HomeTabNavigator = () => {
         name="Recipes"
         getComponent={() => RecipesStackNavigator}
         options={{
+          tabBarLabel: 'Recettes',
           tabBarActiveTintColor: colors.$iconActive,
           tabBarInactiveTintColor: colors.$iconRegular,
           tabBarIcon: props => <BottomTabIcon name="book" {...props} />,

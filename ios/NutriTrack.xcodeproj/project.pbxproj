@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* LeftOverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LeftOverTests.m */; };
+		00E356F31AD99517003FC87E /* NutriTrackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* NutriTrackTests.m */; };
 		0225F8FEC7514A7CBD349EE1 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF679B0056964DB188E25F83 /* Poppins-SemiBold.ttf */; };
 		08D7AE690EDE4E72A49406D2 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F790E4F8FFA48A2818FC1CD /* Poppins-Regular.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -28,16 +28,16 @@
 		81D890102A82DC1B00474312 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 81D8900F2A82DC1B00474312 /* www */; };
 		81D890122A8A793600474312 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81D890112A8A793600474312 /* FontAwesome5_Brands.ttf */; };
 		8B7DAF6D38644EB7B38D8C88 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BD687F5E6214BEA90865CD0 /* Poppins-ExtraLight.ttf */; };
+		8FAAC89845865569B7E7066C /* Pods_NutriTrack_NutriTrackTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F07554F1C9B8FB7726CFD083 /* Pods_NutriTrack_NutriTrackTests.framework */; };
+		A02A827C39DD184C1871BD35 /* Pods_NutriTrack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16DC4FF79E8C32C3E20A34E1 /* Pods_NutriTrack.framework */; };
 		AC9117A0D5F94C06B9598834 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9545E4320D60466E9BCEDB1E /* Poppins-MediumItalic.ttf */; };
 		B2EC4A1AF7AB4BCD84CF7401 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB24DA90B9184268BE56DF65 /* Poppins-ExtraLightItalic.ttf */; };
-		BADF4162437A35ACE9486C78 /* Pods_LeftOver_LeftOverTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7348A7E70D097555209CD267 /* Pods_LeftOver_LeftOverTests.framework */; };
 		CAEFBAD8A6BC4A3FADBDFDE6 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78F051EDC8AB4B52AB35E67A /* Poppins-Light.ttf */; };
 		CB4335E4F2C04803AFF83193 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 937C7EE53E4C4D72B4D6376C /* Poppins-ThinItalic.ttf */; };
 		D8385455FBE04D80995DE01C /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4177617B2F5347C182B90CB5 /* Poppins-BoldItalic.ttf */; };
 		D959A05B83F941A7B7E61902 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B5263154E56D4D099F739620 /* OFL.txt */; };
 		E06E76A46FCA47318C0F4381 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7CBB5E7DB36470CA9621D72 /* Poppins-LightItalic.ttf */; };
 		FE365F278EA24713A1BE45B0 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFA1A75738404A3B959772D3 /* Poppins-SemiBoldItalic.ttf */; };
-		FF25538E3AD85340089A7700 /* Pods_LeftOver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 705C5A69CDC5A7BF521CBE0F /* Pods_LeftOver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,36 +46,35 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = LeftOver;
+			remoteInfo = NutriTrack;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* LeftOverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeftOverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* NutriTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutriTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* LeftOverTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LeftOverTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* LeftOver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeftOver.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = LeftOver/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = LeftOver/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LeftOver/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = LeftOver/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LeftOver/main.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* NutriTrackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NutriTrackTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* NutriTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NutriTrack/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NutriTrack/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NutriTrack/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NutriTrack/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NutriTrack/main.m; sourceTree = "<group>"; };
+		16DC4FF79E8C32C3E20A34E1 /* Pods_NutriTrack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutriTrack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BBFAC0A1DE8443ABA84010E /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
 		20A6392199BB4711806D3111 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		22F0D944EB1F4D1D807E7BCE /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
 		2F790E4F8FFA48A2818FC1CD /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		325BCAE626BC422EAF53EF05 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
-		37F5CF6E4672568E27FDF0D8 /* Pods-LeftOver-LeftOverTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeftOver-LeftOverTests.release.xcconfig"; path = "Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests.release.xcconfig"; sourceTree = "<group>"; };
+		37F5CF6E4672568E27FDF0D8 /* Pods-NutriTrack-NutriTrackTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutriTrack-NutriTrackTests.release.xcconfig"; path = "Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests.release.xcconfig"; sourceTree = "<group>"; };
 		4177617B2F5347C182B90CB5 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4BD687F5E6214BEA90865CD0 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLight.ttf"; path = "../src/assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
-		60C61F6A4C4AE5A7352146C0 /* Pods-LeftOver-LeftOverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeftOver-LeftOverTests.debug.xcconfig"; path = "Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests.debug.xcconfig"; sourceTree = "<group>"; };
-		705C5A69CDC5A7BF521CBE0F /* Pods_LeftOver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeftOver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7348A7E70D097555209CD267 /* Pods_LeftOver_LeftOverTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeftOver_LeftOverTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		74DFDE034ACE874937B5EF8F /* Pods-LeftOver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeftOver.release.xcconfig"; path = "Target Support Files/Pods-LeftOver/Pods-LeftOver.release.xcconfig"; sourceTree = "<group>"; };
+		60C61F6A4C4AE5A7352146C0 /* Pods-NutriTrack-NutriTrackTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutriTrack-NutriTrackTests.debug.xcconfig"; path = "Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests.debug.xcconfig"; sourceTree = "<group>"; };
+		74DFDE034ACE874937B5EF8F /* Pods-NutriTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutriTrack.release.xcconfig"; path = "Target Support Files/Pods-NutriTrack/Pods-NutriTrack.release.xcconfig"; sourceTree = "<group>"; };
 		78F051EDC8AB4B52AB35E67A /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../src/assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
 		812CFDF62A6478F700A00285 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		816A932B2A2359640036550A /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LeftOver/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NutriTrack/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81D8900F2A82DC1B00474312 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		81D890112A8A793600474312 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		842247A8769842B48246BA17 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
@@ -89,9 +88,10 @@
 		D3249D261C264B43933BB05C /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		DFA1A75738404A3B959772D3 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F218ACC2F3686E8107AE8E23 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = LeftOver/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F07554F1C9B8FB7726CFD083 /* Pods_NutriTrack_NutriTrackTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutriTrack_NutriTrackTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F218ACC2F3686E8107AE8E23 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = NutriTrack/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F7CBB5E7DB36470CA9621D72 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
-		FA72DF8B7136F024C8E8CA8A /* Pods-LeftOver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeftOver.debug.xcconfig"; path = "Target Support Files/Pods-LeftOver/Pods-LeftOver.debug.xcconfig"; sourceTree = "<group>"; };
+		FA72DF8B7136F024C8E8CA8A /* Pods-NutriTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutriTrack.debug.xcconfig"; path = "Target Support Files/Pods-NutriTrack/Pods-NutriTrack.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BADF4162437A35ACE9486C78 /* Pods_LeftOver_LeftOverTests.framework in Frameworks */,
+				8FAAC89845865569B7E7066C /* Pods_NutriTrack_NutriTrackTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,20 +107,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF25538E3AD85340089A7700 /* Pods_LeftOver.framework in Frameworks */,
+				A02A827C39DD184C1871BD35 /* Pods_NutriTrack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* LeftOverTests */ = {
+		00E356EF1AD99517003FC87E /* NutriTrackTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* LeftOverTests.m */,
+				00E356F21AD99517003FC87E /* NutriTrackTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = LeftOverTests;
+			path = NutriTrackTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -131,7 +131,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* LeftOver */ = {
+		13B07FAE1A68108700A75B9A /* NutriTrack */ = {
 			isa = PBXGroup;
 			children = (
 				81D8900F2A82DC1B00474312 /* www */,
@@ -144,15 +144,15 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				F218ACC2F3686E8107AE8E23 /* PrivacyInfo.xcprivacy */,
 			);
-			name = LeftOver;
+			name = NutriTrack;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				705C5A69CDC5A7BF521CBE0F /* Pods_LeftOver.framework */,
-				7348A7E70D097555209CD267 /* Pods_LeftOver_LeftOverTests.framework */,
+				16DC4FF79E8C32C3E20A34E1 /* Pods_NutriTrack.framework */,
+				F07554F1C9B8FB7726CFD083 /* Pods_NutriTrack_NutriTrackTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -203,9 +203,9 @@
 			isa = PBXGroup;
 			children = (
 				812CFDF62A6478F700A00285 /* GoogleService-Info.plist */,
-				13B07FAE1A68108700A75B9A /* LeftOver */,
+				13B07FAE1A68108700A75B9A /* NutriTrack */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* LeftOverTests */,
+				00E356EF1AD99517003FC87E /* NutriTrackTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -219,8 +219,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* LeftOver.app */,
-				00E356EE1AD99517003FC87E /* LeftOverTests.xctest */,
+				13B07F961A680F5B00A75B9A /* NutriTrack.app */,
+				00E356EE1AD99517003FC87E /* NutriTrackTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -228,10 +228,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FA72DF8B7136F024C8E8CA8A /* Pods-LeftOver.debug.xcconfig */,
-				74DFDE034ACE874937B5EF8F /* Pods-LeftOver.release.xcconfig */,
-				60C61F6A4C4AE5A7352146C0 /* Pods-LeftOver-LeftOverTests.debug.xcconfig */,
-				37F5CF6E4672568E27FDF0D8 /* Pods-LeftOver-LeftOverTests.release.xcconfig */,
+				FA72DF8B7136F024C8E8CA8A /* Pods-NutriTrack.debug.xcconfig */,
+				74DFDE034ACE874937B5EF8F /* Pods-NutriTrack.release.xcconfig */,
+				60C61F6A4C4AE5A7352146C0 /* Pods-NutriTrack-NutriTrackTests.debug.xcconfig */,
+				37F5CF6E4672568E27FDF0D8 /* Pods-NutriTrack-NutriTrackTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -239,9 +239,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* LeftOverTests */ = {
+		00E356ED1AD99517003FC87E /* NutriTrackTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "LeftOverTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "NutriTrackTests" */;
 			buildPhases = (
 				F7F890FC0E8AB05E27A19709 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -255,14 +255,13 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = LeftOverTests;
-			productName = LeftOverTests;
-			productReference = 00E356EE1AD99517003FC87E /* LeftOverTests.xctest */;
+			name = NutriTrackTests;
+			productReference = 00E356EE1AD99517003FC87E /* NutriTrackTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* LeftOver */ = {
+		13B07F861A680F5B00A75B9A /* NutriTrack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "LeftOver" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NutriTrack" */;
 			buildPhases = (
 				10AB2EE19E42E522EA5F6E94 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -278,9 +277,9 @@
 			);
 			dependencies = (
 			);
-			name = LeftOver;
-			productName = LeftOver;
-			productReference = 13B07F961A680F5B00A75B9A /* LeftOver.app */;
+			name = NutriTrack;
+			productName = NutriTrack;
+			productReference = 13B07F961A680F5B00A75B9A /* NutriTrack.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -300,7 +299,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "LeftOver" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "NutriTrack" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -313,8 +312,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* LeftOver */,
-				00E356ED1AD99517003FC87E /* LeftOverTests */,
+				13B07F861A680F5B00A75B9A /* NutriTrack */,
+				00E356ED1AD99517003FC87E /* NutriTrackTests */,
 			);
 		};
 /* End PBXProject section */
@@ -385,15 +384,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		10AB2EE19E42E522EA5F6E94 /* [CP] Check Pods Manifest.lock */ = {
@@ -411,7 +410,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LeftOver-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NutriTrack-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -424,15 +423,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LeftOver-LeftOverTests/Pods-LeftOver-LeftOverTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NutriTrack-NutriTrackTests/Pods-NutriTrack-NutriTrackTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1B308F7E5D943CF0F253F6D5 /* [CP] Copy Pods Resources */ = {
@@ -441,15 +440,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2BFD0162BD49DE00FD5D2ACD /* [CP] Embed Pods Frameworks */ = {
@@ -458,15 +457,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LeftOver/Pods-LeftOver-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NutriTrack/Pods-NutriTrack-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8199EA162325DF9C26B49216 /* [CP-User] [RNFB] Core Configuration */ = {
@@ -497,7 +496,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LeftOver-LeftOverTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-NutriTrack-NutriTrackTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -530,7 +529,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* LeftOverTests.m in Sources */,
+				00E356F31AD99517003FC87E /* NutriTrackTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,7 +547,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* LeftOver */;
+			target = 13B07F861A680F5B00A75B9A /* NutriTrack */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -556,7 +555,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60C61F6A4C4AE5A7352146C0 /* Pods-LeftOver-LeftOverTests.debug.xcconfig */;
+			baseConfigurationReference = 60C61F6A4C4AE5A7352146C0 /* Pods-NutriTrack-NutriTrackTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 25USC7ADC9;
@@ -564,7 +563,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = LeftOverTests/Info.plist;
+				INFOPLIST_FILE = NutriTrackTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -576,20 +575,20 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ignite.nutritrack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LeftOver.app/LeftOver";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriTrack.app/NutriTrack";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 37F5CF6E4672568E27FDF0D8 /* Pods-LeftOver-LeftOverTests.release.xcconfig */;
+			baseConfigurationReference = 37F5CF6E4672568E27FDF0D8 /* Pods-NutriTrack-NutriTrackTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 25USC7ADC9;
-				INFOPLIST_FILE = LeftOverTests/Info.plist;
+				INFOPLIST_FILE = NutriTrackTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -601,22 +600,22 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ignite.nutritrack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LeftOver.app/LeftOver";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriTrack.app/NutriTrack";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA72DF8B7136F024C8E8CA8A /* Pods-LeftOver.debug.xcconfig */;
+			baseConfigurationReference = FA72DF8B7136F024C8E8CA8A /* Pods-NutriTrack.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 25USC7ADC9;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = LeftOver/Info.plist;
+				INFOPLIST_FILE = NutriTrack/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LeftOverFit;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -629,8 +628,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = LeftOver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ignite.nutritrack;
+				PRODUCT_NAME = NutriTrack;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -639,13 +638,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74DFDE034ACE874937B5EF8F /* Pods-LeftOver.release.xcconfig */;
+			baseConfigurationReference = 74DFDE034ACE874937B5EF8F /* Pods-NutriTrack.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 25USC7ADC9;
-				INFOPLIST_FILE = LeftOver/Info.plist;
+				INFOPLIST_FILE = NutriTrack/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LeftOverFit;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -658,8 +657,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = LeftOver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ignite.nutritrack;
+				PRODUCT_NAME = NutriTrack;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -723,6 +722,9 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
 					" ${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
 					" ${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
 					" ${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
@@ -830,6 +832,9 @@
 					" ${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
 					" ${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
 					" ${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					" ${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD = "";
@@ -865,7 +870,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "LeftOverTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "NutriTrackTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -874,7 +879,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "LeftOver" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NutriTrack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -883,7 +888,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "LeftOver" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "NutriTrack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "LeftOver.app"
-               BlueprintName = "LeftOver"
-               ReferencedContainer = "container:LeftOver.xcodeproj">
+               BuildableName = "NutriTrack.app"
+               BlueprintName = "NutriTrack"
+               ReferencedContainer = "container:NutriTrack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "LeftOverTests.xctest"
-               BlueprintName = "LeftOverTests"
-               ReferencedContainer = "container:LeftOver.xcodeproj">
+               BuildableName = "NutriTrackTests.xctest"
+               BlueprintName = "NutriTrackTests"
+               ReferencedContainer = "container:NutriTrack.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "LeftOver.app"
-            BlueprintName = "LeftOver"
-            ReferencedContainer = "container:LeftOver.xcodeproj">
+            BuildableName = "NutriTrack.app"
+            BlueprintName = "NutriTrack"
+            ReferencedContainer = "container:NutriTrack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "LeftOver.app"
-            BlueprintName = "LeftOver"
-            ReferencedContainer = "container:LeftOver.xcodeproj">
+            BuildableName = "NutriTrack.app"
+            BlueprintName = "NutriTrack"
+            ReferencedContainer = "container:NutriTrack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

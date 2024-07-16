@@ -92,13 +92,18 @@ const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs
   const normalizedMaxCalories = Math.ceil(fitnessData.tdee);
 
   return (
-    <Box alignSelf={'stretch'} m={'s'}>
-      <Text variant={'text-medium'} color={'$header'} mb={'xs'}>
-        Progression du jour
-      </Text>
-      <Box bg={'$secondaryBg'} borderRadius={'sm'} height={8} width={'100%'}>
+    <Box width={'100%'} m={'s'} bg={'$bg'} borderRadius={'sm'} py="s" px="m">
+      <Box flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} mb={'s'}>
+        <Text variant={'text-small-bold'} color={'$header'}>
+          Progression du jour
+        </Text>
+        <Text variant={'text-x-small'} color={'$label'}>
+          {currCalories} kcal / {normalizedMaxCalories} kcal
+        </Text>
+      </Box>
+      <Box bg={'$caloriesBg'} borderRadius={'sm'} height={8} width={'100%'}>
         <Box
-          bg={'$secondary'}
+          bg={'$calories'}
           borderTopLeftRadius={'sm'}
           borderBottomLeftRadius={'sm'}
           borderTopRightRadius={progressRatio >= 1 ? 'sm' : undefined}
@@ -107,18 +112,13 @@ const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs
           width={`${progressRatio * 100}%`}
         />
       </Box>
-      <Box alignItems={'flex-end'}>
-        <Text variant={'text-x-small'} color={'$label'}>
-          {currCalories} kcal / {normalizedMaxCalories} kcal
-        </Text>
-      </Box>
 
       <Box flexDirection={'row'} alignSelf={'stretch'} justifyContent={'space-around'} py={'s'}>
         <Box alignItems={'center'}>
           <Text variant={'text-x-small'} color={'$header'}>
             Protéines
           </Text>
-          <Text variant={'text-x-small-tight'} color={'$body'}>
+          <Text variant={'link-x-small-tight'} color={'$protein'}>
             {currProt.toFixed()}g
           </Text>
         </Box>
@@ -127,7 +127,7 @@ const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs
           <Text variant={'text-x-small'} color={'$header'}>
             Glucides
           </Text>
-          <Text variant={'text-x-small-tight'} color={'$body'}>
+          <Text variant={'link-x-small-tight'} color={'$carbs'}>
             {currCarbs.toFixed()}g
           </Text>
         </Box>
@@ -136,7 +136,7 @@ const MacrosTracker: React.FC<{currCalories: number; currProt: number; currCarbs
           <Text variant={'text-x-small'} color={'$header'}>
             Lipides
           </Text>
-          <Text variant={'text-x-small-tight'} color={'$body'}>
+          <Text variant={'link-x-small-tight'} color={'$fat'}>
             {currFat.toFixed()}g
           </Text>
         </Box>
@@ -166,9 +166,13 @@ function HomeScreen({navigation}: {navigation: HomeScreenNavigationProp}) {
     <Box bg={'$bgWeak'} flex={1}>
       <BaseHeader
         title="Suivi journalier"
-        rightComponent={<Avatar label={initials} onPress={() => navigation.navigate('Settings')} />}
+        rightComponent={
+          <Box width={'100%'} alignItems={'flex-end'}>
+            <Avatar label={initials} onPress={() => navigation.navigate('Settings')} />
+          </Box>
+        }
       />
-      <Box flex={1} alignItems={'center'} py={'m'}>
+      <Box flex={1} alignItems={'center'} p={'m'}>
         <TrackerCalendar currentDate={currentSelectedDate} onDayPress={setCurrentSelectedDate} />
         <MacrosTracker
           currCalories={dailyMeals?.currentCalories ?? 0}
@@ -177,29 +181,31 @@ function HomeScreen({navigation}: {navigation: HomeScreenNavigationProp}) {
           currFat={dailyMeals?.currentFat ?? 0}
         />
 
-        <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
-        <Button
-          onPress={() => navigation.navigate('SearchMeal')}
-          icon={'plus'}
-          width={55}
-          height={55}
-          position="absolute"
-          bottom={15}
-          right={15}
-          zIndex={1}
-        />
-        {dailyMeals && (
-          <Box flex={1} alignSelf={'stretch'}>
-            {currentMealType in dailyMeals && dailyMeals[currentMealType] && (
-              <FlatList
-                contentContainerStyle={{padding: spacing.m}}
-                data={dailyMeals[currentMealType]}
-                renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
-                keyExtractor={item => item.name}
-              />
-            )}
-          </Box>
-        )}
+        <Box width={'100%'} flex={1} m={'s'} bg={'$bg'} borderRadius={'sm'} py="s" px="m">
+          <MealTypeSelector currentMealType={currentMealType} onMealTypePress={setCurrentMealType} />
+          <Button
+            onPress={() => navigation.navigate('SearchMeal')}
+            icon={'plus'}
+            width={55}
+            height={55}
+            position="absolute"
+            bottom={15}
+            right={15}
+            zIndex={1}
+          />
+          {dailyMeals && (
+            <Box flex={1} alignSelf={'stretch'}>
+              {currentMealType in dailyMeals && dailyMeals[currentMealType] && (
+                <FlatList
+                  contentContainerStyle={{padding: spacing.m}}
+                  data={dailyMeals[currentMealType]}
+                  renderItem={({item}) => <MealItem {...item} onLongPress={deleteDailyMeal} />}
+                  keyExtractor={item => item.name}
+                />
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );

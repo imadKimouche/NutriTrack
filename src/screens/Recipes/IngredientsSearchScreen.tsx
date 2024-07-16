@@ -68,7 +68,17 @@ function IngredientsSearchScreen({navigation}: {navigation: RecipesStackNavigati
         <FlatList
           data={ingredients}
           keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => <ListItem title={item.name} onPress={() => remove(item.id)} />}
+          renderItem={({item}) => (
+            <ListItem
+              title={item.name}
+              onPress={() => remove(item.id)}
+              leftComponent={
+                <Box width={50} height={50} borderRadius="xs" alignItems={'center'} justifyContent={'center'} bg="$bg" mr={'m'}>
+                  <Image width={48} height={48} resizeMode="contain" source={{uri: item.image}} />
+                </Box>
+              }
+            />
+          )}
         />
       </Box>
       <Box alignSelf={'stretch'} px={'xl'} my={'m'}>

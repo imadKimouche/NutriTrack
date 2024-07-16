@@ -43,6 +43,12 @@ export const textVariants = {
     lineHeight: 32,
     letterSpacing: 0.75,
   },
+  'text-large-bold': {
+    fontSize: 20,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+    fontFamily: 'Poppins Bold',
+  },
   'text-large-tight': {
     fontSize: 20,
     lineHeight: 24,
@@ -53,6 +59,12 @@ export const textVariants = {
     lineHeight: 28,
     letterSpacing: 0.75,
   },
+  'text-medium-bold': {
+    fontSize: 17,
+    lineHeight: 28,
+    letterSpacing: 0.75,
+    fontFamily: 'Poppins Bold',
+  },
   'text-medium-tight': {
     fontSize: 17,
     lineHeight: 24,
@@ -62,6 +74,12 @@ export const textVariants = {
     fontSize: 14,
     lineHeight: 24,
     letterSpacing: 0.75,
+  },
+  'text-small-bold': {
+    fontSize: 14,
+    lineHeight: 24,
+    letterSpacing: 0.75,
+    fontFamily: 'Poppins Bold',
   },
   'text-small-tight': {
     fontSize: 14,

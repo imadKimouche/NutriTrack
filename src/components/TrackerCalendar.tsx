@@ -49,7 +49,7 @@ const TrackerCalendar: React.FC<TrackerCalendarProps> = ({currentDate, onDayPres
   const dates = getSurroundingDates(currentDate, 2, 2); // get 2 days before, 2 days after
 
   return (
-    <Box flexDirection={'row'} justifyContent={'space-around'} alignSelf={'stretch'} mb={'s'}>
+    <Box flexDirection={'row'} justifyContent={'space-around'} mb={'s'} bg={'$bg'} py="m" px="s" borderRadius={'sm'}>
       {dates.map((date, idx) => (
         <CalendarItem key={idx} date={date} selected={date === currentDate} onPress={() => onDayPress(date)} />
       ))}

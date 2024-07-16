@@ -94,9 +94,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.leftover"
+    namespace "com.ignite.nutritrack"
     defaultConfig {
-        applicationId "com.leftover"
+        applicationId "com.ignite.nutritrack"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

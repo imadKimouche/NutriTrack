@@ -24,7 +24,7 @@ type SettingsScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList
 const SettingsScreen: React.FC<{navigation: SettingsScreenNavigationProp}> = ({navigation}) => {
   return (
     <Box flex={1} bg={'$screenBackground'}>
-      <BaseHeader title="Paramètres" leftComponent={<GoBackButton onPress={() => navigation.goBack()} />} />
+      <BaseHeader title="Paramètres" leftComponent={<GoBackButton onPress={navigation.goBack} />} />
       <SettingsItem
         label="Profil"
         bg={'$cardBackground'}

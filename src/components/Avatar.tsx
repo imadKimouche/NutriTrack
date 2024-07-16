@@ -12,9 +12,11 @@ const Avatar: React.FC<AvatarProps> = ({label, onPress}) => {
     <Pressable
       onPress={onPress}
       bg={'$primary'}
-      width={48}
-      height={48}
+      width={40}
+      height={40}
       borderRadius={'hg'}
+      borderWidth={1}
+      borderColor={'$divider'}
       alignItems={'center'}
       justifyContent={'center'}>
       <Text variant={'link-x-small'} textAlign={'center'} color={'$buttonTextPrimary'}>

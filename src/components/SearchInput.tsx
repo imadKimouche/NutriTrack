@@ -35,8 +35,8 @@ export function SearchInput({
     <Pressable
       onPress={() => inputRef.current?.focus()}
       flexDirection="row"
-      borderRadius="lg"
-      bg={isFocused ? '$screenBackground' : '$inputBg'}
+      borderRadius="sm"
+      bg={'$bg'}
       borderWidth={isFocused ? 2 : 0}
       borderColor={isFocused ? '$inputBorder' : undefined}
       alignItems="center"

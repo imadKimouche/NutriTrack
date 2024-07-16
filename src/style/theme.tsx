@@ -107,6 +107,12 @@ const theme = createTheme({
     $body: p.grey600,
     $header: p.grey700,
 
+    $calories: p.orange500,
+    $caloriesBg: p.orange100,
+    $protein: p.blue500,
+    $carbs: p.yellow600,
+    $fat: p.green500,
+
     $secondary: p.blue,
     $secondaryWeak: p.blue300,
     $secondaryBg: p.blue100,
@@ -152,7 +158,7 @@ const theme = createTheme({
     $buttonBgOutlineDisabled: p.black100,
     $buttonBorderOutlineDisabled: p.orange,
     //----Icon
-    $iconRegular: p.grey100,
+    $iconRegular: p.grey900,
     $iconActive: p.orange,
     $iconDisabled: p.grey300,
     //----Divider

@@ -10,7 +10,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'LeftOver' do
+target 'NutriTrack' do
   config = use_native_modules!
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true
@@ -21,7 +21,7 @@ target 'LeftOver' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'LeftOverTests' do
+  target 'NutriTrackTests' do
     inherit! :complete
     # Pods for testing
   end

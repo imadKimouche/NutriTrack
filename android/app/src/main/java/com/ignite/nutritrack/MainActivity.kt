@@ -1,4 +1,4 @@
-package com.leftover
+package com.ignite.nutritrack
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

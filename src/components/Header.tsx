@@ -4,7 +4,7 @@ import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import {Theme} from '../style/theme';
 import FIcon from './FIcon';
-import StatusBar from './StatusBar';
+import SafeAreaView from '#/atoms/SafeAreaView';
 
 export const GoBackButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -21,15 +21,23 @@ export type HeaderProps = {
   rightComponent?: React.ReactNode;
 };
 
-const BaseHeader: React.FC<HeaderProps> = ({bg = '$transparent', leftComponent, title, rightComponent}) => {
+const BaseHeader: React.FC<HeaderProps> = ({bg = '$bg', leftComponent, title, rightComponent}) => {
   return (
-    <Box bg={bg}>
-      <StatusBar backgroundColor={bg} />
-      <Box bg={bg} height={50} flexDirection={'row'} alignItems={'center'} alignSelf={'flex-start'}>
+    <SafeAreaView bg={bg}>
+      <Box
+        bg={bg}
+        flexDirection={'row'}
+        alignItems={'center'}
+        width="100%"
+        px="m"
+        pt="s"
+        pb="m"
+        borderBottomWidth={1}
+        borderBottomColor={'$divider'}>
         <Box flex={0.5}>{leftComponent}</Box>
         <Box flex={1} justifyContent={'center'} alignItems={'center'}>
           {title && (
-            <Text variant={'text-large'} textAlign={'center'} color={'$header'}>
+            <Text variant={'text-large-bold'} textAlign={'center'} color={'$header'}>
               {title}
             </Text>
           )}
@@ -38,7 +46,7 @@ const BaseHeader: React.FC<HeaderProps> = ({bg = '$transparent', leftComponent, 
           {rightComponent}
         </Box>
       </Box>
-    </Box>
+    </SafeAreaView>
   );
 };
 

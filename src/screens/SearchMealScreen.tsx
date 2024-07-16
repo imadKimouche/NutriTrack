@@ -1,18 +1,18 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FlatList, Image} from 'react-native';
 import Box from '../atoms/Box';
 import Pressable from '../atoms/Pressable';
 import Text from '../atoms/Text';
 import FIcon from '../components/FIcon';
-import Searchbar from '../components/Searchbar';
 import Loader from '../components/Loader';
 import {Meal, useSearchOFFMeal} from '../hooks/meal';
 import {HomeStackParamList} from './HomeStackNavigator';
 import {useMealSearchHistory} from '../store/mealSearchHistory';
 import BaseHeader, {GoBackButton} from '../components/Header';
 import ListItem from '../components/ListItem';
+import SafeAreaView from '#/atoms/SafeAreaView';
+import {SearchInput} from '#/components/SearchInput';
 
 const BarCodeButton: React.FC<{onPress: () => void}> = ({onPress}) => {
   return (
@@ -78,7 +78,6 @@ const SearchList: React.FC<{searchValue: string; onItemPress: (meal: Meal) => vo
 type SearchMealScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'SearchMeal'>;
 const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> = ({navigation}) => {
   const [searchMeal, setSearchMeal] = useState('');
-  const insets = useSafeAreaInsets();
   const mealSearchHistory = useMealSearchHistory(state => state.history);
   const clearMealSearchHistory = useMealSearchHistory(state => state.clear);
 
@@ -88,18 +87,24 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
   }
 
   return (
-    <Box flex={1} bg={'$bgWeak'} style={{paddingBottom: insets.bottom}}>
+    <SafeAreaView flex={1} bg={'$bg'}>
       <BaseHeader
         title="Trouver un aliment"
         leftComponent={<GoBackButton onPress={() => navigation.goBack()} />}
         rightComponent={<BarCodeButton onPress={() => navigation.navigate('BarCodeScanner')} />}
       />
-      <Box flex={1} style={{paddingBottom: insets.bottom}}>
-        <Box p={'s'}>
-          <Searchbar onSubmitEditing={setSearchMeal} placeholder={'Riz, lentilles ...'} />
+      <Box flex={1} bg={'$bgWeak'} px="m">
+        <Box py={'s'}>
+          <SearchInput
+            query={searchMeal}
+            onChangeQuery={query => setSearchMeal(query)}
+            onPressCancelSearch={() => setSearchMeal('')}
+            onSubmitQuery={() => {}}
+            placeholder="Riz, lentilles ..."
+          />
         </Box>
         <SearchList searchValue={searchMeal} onItemPress={onMealPress} />
-        <Box flex={1} m={'m'}>
+        <Box mt="m" bg={'$bg'} p="m" borderRadius={'sm'}>
           <Box flexDirection={'row'} alignItems={'baseline'} justifyContent={'space-between'}>
             <Text variant={'h6'}>Historique</Text>
             <Text onPress={clearMealSearchHistory} variant={'text-small'} color={'$primary'}>
@@ -123,7 +128,7 @@ const SearchMealScreen: React.FC<{navigation: SearchMealScreenNavigationProp}> =
           })}
         </Box>
       </Box>
-    </Box>
+    </SafeAreaView>
   );
 };
 
